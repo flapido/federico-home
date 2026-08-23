@@ -132,7 +132,7 @@ export default function ProjectDetail() {
             {preview}
           </div>
           <div className="px-6 py-3 bg-white border-t hairline text-[11px] text-stone flex flex-col sm:flex-row gap-2 justify-between">
-            <span className="flex gap-2"><span>◎</span> <span>{isLocal ? "Preview marketing del hub. La demo completa está lista localmente; publicación pendiente." : isLive ? "La demo completa ya está publicada y disponible en " + p.demoUrl : "Preview marketing del hub. La demo completa vivirá en " + p.publicUrl + " cuando el proyecto " + {p.id}-demo + " estará listo."}</span></span>
+            <span className="flex gap-2"><span>◎</span> <span>{isLocal ? "Preview marketing del hub. La demo completa está lista localmente; publicación pendiente." : isLive ? "La demo completa ya está publicada y disponible en " + p.demoUrl : "Preview marketing del hub. La demo completa vivirá en " + p.publicUrl + " cuando el proyecto " + p.id + "-demo + " estará listo."}</span></span>
             {isLive ? (
               <a href={getDemoUrl(p, p.href)} target="_blank" rel="noopener noreferrer" className="shrink-0 px-3 py-1 rounded-full bg-ink text-paper text-center">Abrir demo pública ↗</a>
             ) : (
