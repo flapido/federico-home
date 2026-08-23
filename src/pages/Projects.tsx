@@ -19,7 +19,7 @@ export default function Projects() {
                 <div className="font-mono text-[10px] tracking-[0.14em] uppercase" style={{color: p.color}}>{p.subtitle}</div>
                 <div className="font-display text-[22px] tracking-[-0.02em] mt-1">{p.title}</div>
                 <div className="mt-3 inline-flex items-center gap-1 text-[11px] border hairline bg-white rounded-full px-3 py-1">
-                  {p.demoStatus === "LOCAL_DEMO" ? "Demo lista · publicación pendiente" : <>{p.publicUrl} <span className="opacity-50 text-[10px]">(no publicado)</span></>}
+                  {p.demoStatus === "LOCAL_DEMO" ? "Demo lista · publicación pendiente" : p.demoStatus === "LIVE_DEMO" ? "Demo publicada" : <>{p.publicUrl} <span className="opacity-50 text-[10px]">(no publicado)</span></>}
                 </div>
               </div>
             </div>

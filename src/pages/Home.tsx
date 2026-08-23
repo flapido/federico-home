@@ -107,10 +107,10 @@ export default function Home() {
               <div className="flex items-center gap-2 text-[11px]">
                 <span className="w-2 h-2 rounded-full" style={{background: projects[0].color}} />
                 <span className="tracking-[0.12em] uppercase text-stone">Subastas · Lotes, oferta, historial, tiempo</span>
-                <span className="ml-auto font-mono text-[10px] px-2 py-0.5 rounded-full border hairline">LOCAL_DEMO</span>
+                <span className="ml-auto font-mono text-[10px] px-2 py-0.5 rounded-full border hairline">{projects[0].demoStatus}</span>
               </div>
               <h3 className="font-display text-[26px] md:text-[30px] tracking-[-0.02em] mt-2 leading-none">Sistema de Subastas</h3>
-              <p className="text-[13px] text-ink-light mt-2 max-w-[38ch] leading-relaxed">De planilla caótica a subasta clara. Preview con puja y cierre simulado · demo lista, publicación pendiente.</p>
+              <p className="text-[13px] text-ink-light mt-2 max-w-[38ch] leading-relaxed">De planilla caótica a subasta clara. Preview con puja y cierre simulado · demo publicada.</p>
               <div className="mt-auto pt-5">
                 <div className="rounded-[14px] border hairline bg-paper-2 p-3 flex gap-2 overflow-hidden">
                   <div className="flex-1 bg-white rounded-[10px] border hairline p-3">

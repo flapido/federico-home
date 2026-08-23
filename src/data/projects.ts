@@ -43,9 +43,9 @@ export const projects: Project[] = [
     bg: "#FDF6EE",
     href: "/proyectos/subastas",
     preview: "auction",
-    // La demo completa vive en stock-subastas-demo. Hasta tener URL pública,
-    // el hub conserva solo su preview interno y no expone ningún enlace externo.
-    demoStatus: "LOCAL_DEMO",
+    // La demo completa vive en stock-subastas-demo. URL pública verificada.
+    demoStatus: "LIVE_DEMO",
+    demoUrl: "https://stock-subastas-demo.pages.dev",
     publicUrl: "subastas.midominio.com",
     externalPlaceholder: "subastas.midominio.com",
     featured: true,
@@ -111,9 +111,9 @@ export const projects: Project[] = [
     bg: "#F0EFEA",
     href: "/proyectos/legacy-web",
     preview: "legacy",
-    // La demo completa vive en legacy-app-explorer-demo. Hasta tener URL
-    // pública, el hub conserva solamente esta preview interna.
-    demoStatus: "LOCAL_DEMO",
+    // La demo completa vive en legacy-app-explorer-demo. URL pública verificada.
+    demoStatus: "LIVE_DEMO",
+    demoUrl: "https://legacy-app-explorer-demo.pages.dev",
     publicUrl: "legacy.midominio.com",
     externalPlaceholder: "legacy.midominio.com",
   },
