@@ -1,0 +1,6 @@
+{
+  "api_base_url": "<API V1 integration base URL>",
+  "expected_project_id": "<ticketProjectId UUID real>",
+  "project_slug": "<informational project slug>",
+  "credential_env": "TICKETS_MCP_CREDENTIAL_<PROJECT_NAME>"
+}
