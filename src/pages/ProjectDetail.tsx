@@ -29,6 +29,13 @@ export default function ProjectDetail() {
   const isLive = p.demoStatus === "LIVE_DEMO"
   const isLocal = p.demoStatus === "LOCAL_DEMO"
 
+  // Texto del preview: evita concatenaciones anidadas en JSX que causan TS1005
+  const previewPreviewText = isLocal
+    ? "Preview marketing del hub. La demo completa está lista localmente; publicación pendiente."
+    : isLive
+    ? `La demo completa ya está disponible en ${p.demoUrl}`
+    : `Preview marketing del hub. La demo completa vivirá en ${p.publicUrl} cuando el proyecto ${p.id}-demo esté listo.`
+
   return (
     <div>
       <div className="max-w-[1280px] mx-auto px-6 md:px-8 pt-8">
@@ -132,7 +139,7 @@ export default function ProjectDetail() {
             {preview}
           </div>
           <div className="px-6 py-3 bg-white border-t hairline text-[11px] text-stone flex flex-col sm:flex-row gap-2 justify-between">
-            <span className="flex gap-2"><span>◎</span> <span>{isLocal ? "Preview marketing del hub. La demo completa está lista localmente; publicación pendiente." : isLive ? "La demo completa ya está publicada y disponible en " + p.demoUrl : "Preview marketing del hub. La demo completa vivirá en " + p.publicUrl + " cuando el proyecto " + p.id + "-demo + " estará listo."}</span></span>
+            <span className="flex gap-2"><span>◎</span> <span>{previewPreviewText}</span></span>
             {isLive ? (
               <a href={getDemoUrl(p, p.href)} target="_blank" rel="noopener noreferrer" className="shrink-0 px-3 py-1 rounded-full bg-ink text-paper text-center">Abrir demo pública ↗</a>
             ) : (
