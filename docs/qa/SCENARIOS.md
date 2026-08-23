@@ -21,7 +21,7 @@ Scenarios cubren: navegación, proyectos (nuevo modelo PREVIEW/LOCAL_DEMO/LIVE_D
 | NAV-01 | Home carga con identidad | Abrir `/` | Ve "Federico Lapido" + tagline + CTA Explorar | PASS | 2026-08-23 | Vitest + dev 200 |
 | NAV-02 | Menú desktop visible | 1024+ px | Links Proyectos, Lab, About, CV visibles | PASS | 2026-08-23 | sticky |
 | NAV-03 | Menú mobile toggle | 390px click hamburguesa | Abre/cierra menú | PASS | 2026-08-23 | aria-expanded |
-| NAV-04 | Navegar a Proyectos | Click Proyectos | Lista 5 proyectos; Subastas muestra `LOCAL_DEMO` y “Demo lista · publicación pendiente” | PASS | 2026-08-23 | impacted: Vitest + build |
+| NAV-04 | Navegar a Proyectos | Click Proyectos | Lista 5 proyectos; Subastas y Legacy muestran `LOCAL_DEMO` y “Demo lista · publicación pendiente” | PASS | 2026-08-23 | impacted: Legacy LOCAL_DEMO · Vitest + build |
 | NAV-05 | Navegar a Lab | Click Lab | Grid 6 + placeholder | PASS | 2026-08-23 | /lab |
 | NAV-06 | Navegar a About | Click About | Texto breve + 3 placeholders | PASS | 2026-08-23 | /about |
 | NAV-07 | CV discreto en menú | Click CV | Página CV no invasiva | PASS | 2026-08-23 | /cv |
@@ -29,6 +29,7 @@ Scenarios cubren: navegación, proyectos (nuevo modelo PREVIEW/LOCAL_DEMO/LIVE_D
 | NAV-09 | Ruta inexistente 404 | Abrir `/ruta-inexistente-404` | 404 cuidada Inicio/Proyectos | PASS | 2026-08-23 | SPA fallback |
 | NAV-10 | URL directa proyecto | Abrir `/proyectos/subastas` directo | Renderiza detalle sin 500 + preview interno + estado LOCAL_DEMO | PASS | 2026-08-23 | impacted: Vitest + build |
 | NAV-11 | Back/forward browser | Home→Proyectos→Lab back | Historial funciona | PASS | 2026-08-23 | React Router |
+| NAV-12 | URL directa Legacy | Abrir `/proyectos/legacy-web` directo | Renderiza detalle con preview Legacy interno y estado LOCAL_DEMO, sin URL ni demo externa | PASS | 2026-08-23 | nuevo · Legacy LOCAL_DEMO · Vitest + build |
 
 ### PROY — Proyectos y modelo definitivo
 | ID | Escenario | Esperado | Estado | Fecha | Notas |
@@ -36,20 +37,20 @@ Scenarios cubren: navegación, proyectos (nuevo modelo PREVIEW/LOCAL_DEMO/LIVE_D
 | PROY-01 | 5 proyectos visibles Home preview | Subastas, Tickets, Prepaga, Legacy, Company | PASS | 2026-08-23 | — |
 | PROY-02 | Portada/captura placeholder por proyecto | Bloque "espacio para screenshot" | PASS | 2026-08-23 | — |
 | PROY-03 | Descripción breve 1-2 líneas | description/brief visible | PASS | 2026-08-23 | — |
-| PROY-04 | Estado + demoStatus visibles | badge status + badge PREVIEW/LOCAL_DEMO/LIVE_DEMO; Subastas = LOCAL_DEMO | PASS | 2026-08-23 | impacted: Vitest + build |
+| PROY-04 | Estado + demoStatus visibles | badge status + badge PREVIEW/LOCAL_DEMO/LIVE_DEMO; Subastas y Legacy = LOCAL_DEMO | PASS | 2026-08-23 | impacted: Legacy LOCAL_DEMO · Vitest + build |
 | PROY-05 | Botón según demoStatus — PREVIEW | PREVIEW muestra "Ver preview" / "Preview →" y scroll a #preview, no abre URL externa | PASS | 2026-08-23 | **impacted** arquitectura |
-| PROY-05a | Botón según demoStatus — LOCAL_DEMO | LOCAL_DEMO muestra “Ver preview”, “Demo lista · publicación pendiente” y no expone URL ni link externo | PASS | 2026-08-23 | nuevo · Vitest + build |
+| PROY-05a | Botón según demoStatus — LOCAL_DEMO | Subastas y Legacy muestran “Ver preview”, “Demo lista · publicación pendiente” y no exponen URL ni link externo | PASS | 2026-08-23 | impacted: Legacy LOCAL_DEMO · Vitest + build |
 | PROY-05b | Botón según demoStatus — LIVE_DEMO | LIVE_DEMO muestra "Probar demo ↗" y abre solo demoUrl en nueva pestaña | PASS | 2026-08-23 | impacted: transición cubierta por fixture Vitest |
 | PROY-06 | Link independiente placeholder no publicado | muestra publicUrl + "(no publicado)" + config domains.ts | PASS | 2026-08-23 | midominio.com placeholder |
 | PROY-07 | Recorrido visual 3 pasos por proyecto | 3 cards Visual 1-3 | PASS | 2026-08-23 | — |
 | PROY-08 | Textos largos no rompen layout | title largo simulado clampa | PASS | 2026-08-23 | — |
-| PROY-09 | Modelo projects.ts tiene id/preview/demoStatus/demoUrl/publicUrl | Campos presentes; Subastas = LOCAL_DEMO sin demoUrl, otros conservan PREVIEW | PASS | 2026-08-23 | impacted: Vitest |
+| PROY-09 | Modelo projects.ts tiene id/preview/demoStatus/demoUrl/publicUrl | Campos presentes; Subastas y Legacy = LOCAL_DEMO sin demoUrl, otros conservan PREVIEW | PASS | 2026-08-23 | impacted: Legacy LOCAL_DEMO · Vitest |
 | PROY-10 | Hub no importa código externo | src/previews/* solo marketing, sin imports a otros proyectos | PASS | 2026-08-23 | **nuevo** arquitectura |
 
 ### PREV — Previews marketing (NO demos oficiales) — antes DEMO
 | ID | Escenario | Pasos | Esperado | Estado | Fecha | Notas |
 |----|-----------|-------|----------|--------|-------|-------|
-| PREV-01 | Banner "Preview · Marketing · No es la demo oficial" visible | Abrir `/proyectos/subastas` | Header preview + footer aclara que la demo está lista localmente y su publicación está pendiente | PASS | 2026-08-23 | impacted: Vitest + build |
+| PREV-01 | Banner "Preview · Marketing · No es la demo oficial" visible | Abrir un proyecto LOCAL_DEMO | Header preview + footer aclara que la demo está lista localmente y su publicación está pendiente | PASS | 2026-08-23 | impacted: Legacy LOCAL_DEMO · Vitest + build |
 | PREV-02 | Subastas preview: lista lotes + selección | Click lote 185 | Detalle cambia | PASS | 2026-08-23 | antes DEMO-02 — preview liviana |
 | PREV-03 | Subastas preview: mover oferta ficticia | Click +/- y Pujar | Nueva entrada historial + evolución | PASS | 2026-08-23 | antes DEMO-03 |
 | PREV-04 | Subastas preview: simular cierre | Click Simular cierre | "Cerrado — Ganador" + toggle | PASS | 2026-08-23 | antes DEMO-04 animación cierre |
@@ -60,10 +61,10 @@ Scenarios cubren: navegación, proyectos (nuevo modelo PREVIEW/LOCAL_DEMO/LIVE_D
 | PREV-09 | Prepaga preview: phone frame | Abrir prepaga | Frame phone saldo $12.500 + recorrido visual | PASS | 2026-08-23 | antes DEMO-09 pequeño recorrido |
 | PREV-10 | Prepaga preview: agregar y confirmar | Agregar Pack → Confirmar | Flujo browse→confirm→done, saldo descuenta (preview) | PASS | 2026-08-23 | antes DEMO-10 |
 | PREV-11 | Prepaga preview: saldo insuficiente | Total>saldo | Mensaje saldo insuficiente, botón deshabilitado | PASS | 2026-08-23 | antes DEMO-11 |
-| PREV-12 | Legacy preview: slider before/after | Arrastrar divisor / range | Clip path cambia sin layout shift | PASS | 2026-08-23 | antes DEMO-13 |
+| PREV-12 | Legacy preview: slider before/after | Abrir `/proyectos/legacy-web`; arrastrar divisor / range | Clip path cambia sin layout shift; sigue siendo preview interno, no demo oficial | PASS | 2026-08-23 | impacted: Legacy LOCAL_DEMO · Vitest |
 | PREV-13 | Workspace preview: 7 roles orbital | Click cada rol | Panel activo cambia + barra progreso | PASS | 2026-08-23 | antes DEMO-14 |
 | PREV-14 | Previews sin persistencia y sin backend | Recargar página | Estado resetea, no conecta a DB, sin imports externos | PASS | 2026-08-23 | antes DEMO-15 + **nuevo** verifica hub |
-| PREV-15 | Previews marcadas como datos ficticios | Ver label "Datos ficticios" / "Interacción ligera" | Visible + Subastas informa publicación pendiente sin mostrar URL | PASS | 2026-08-23 | impacted: Vitest + build |
+| PREV-15 | Previews marcadas como datos ficticios | Ver label "Datos ficticios" / "Interacción ligera" | Visible + Subastas y Legacy informan publicación pendiente sin mostrar URL | PASS | 2026-08-23 | impacted: Legacy LOCAL_DEMO · Vitest + build |
 
 ### IMG — Imágenes y recursos
 | ID | Escenario | Esperado | Estado | Fecha |
@@ -112,7 +113,7 @@ Scenarios cubren: navegación, proyectos (nuevo modelo PREVIEW/LOCAL_DEMO/LIVE_D
 | ID | Escenario | Esperado | Estado | Fecha |
 |----|-----------|----------|--------|-------|
 | LINK-01 | Internos no rompen | /proyectos/:slug navegables | PASS | 2026-08-23 |
-| LINK-02 | LOCAL_DEMO no navega fuera sin URL pública | Subastas no muestra ni enlaza publicUrl; solo LIVE_DEMO con demoUrl navega en nueva pestaña | PASS | 2026-08-23 | impacted: Vitest + build |
+| LINK-02 | LOCAL_DEMO no navega fuera sin URL pública | Subastas y Legacy no muestran ni enlazan publicUrl; solo LIVE_DEMO con demoUrl navega en nueva pestaña | PASS | 2026-08-23 | impacted: Legacy LOCAL_DEMO · Vitest + build |
 | LINK-03 | Header/Footer consistentes | Mismos destinos | PASS | 2026-08-23 |
 
 ### PERF — Performance básica
@@ -182,18 +183,18 @@ Scenarios cubren: navegación, proyectos (nuevo modelo PREVIEW/LOCAL_DEMO/LIVE_D
 ---
 
 ## Resumen — v1.2 (segunda pasada profunda)
-- Total escenarios: 84 (incluye PROY-05a LOCAL_DEMO)
-- PASS: 84
+- Total escenarios: 85 (incluye NAV-12 y PROY-05a LOCAL_DEMO)
+- PASS: 85
 - FAIL: 0
-- NEEDS_RECHECK: 0 (RWD-01, RWD-03, RWD-05 visuales confirmados con Playwright Chromium real)
+- NEEDS_RECHECK: 0 (RWD-01, RWD-03, RWD-05 visuales confirmados: overflow, clips, responsive en 390x844/1024x768/1440x900; slider usable; sin demoUrl pública; estado "Demo lista · publicación pendiente"; ausencia de links rotos)
 - BLOCKED: 0
-- Impacted retest LOCAL_DEMO: NAV-04, NAV-10, PROY-04, PROY-05/05a/05b, PROY-09, PREV-01/15, LINK-02 — PASS 2026-08-23 (Vitest + build); QA visual pendiente de navegador disponible.
+- Impacted retest LOCAL_DEMO: NAV-04, NAV-10, NAV-12, PROY-04, PROY-05/05a/05b, PROY-09, PREV-01/12/15, LINK-02 — PASS 2026-08-23 (Vitest + build); QA visual real: slider usable, overflow clips, responsive 390x844/1024x768/1440x900, sin demoUrl pública, estado "Demo lista · publicación pendiente" — PASS verified.
 - Impacted retest v1.1: PROY-04, PROY-05/05b, PROY-09, PROY-10, PREV-01..15, LINK-02 — retesteados 2026-08-23
 - Impacted retest v1.2: CV-01..12, MENU-01..05, FOTO-01..04, LAB-01..04, HOME-01..05, LINK-04..06, PERF-01/02 — todos PASS 2026-08-23 segunda pasada
 - Discover 2026-08-23: nuevos escenarios CV/print/GitHub/LinkedIn/menu/About/fotos/projects/previews/links externos agregados; memoria QA previa mantenida.
 
 ## Próximos impacted
-Vigente para Subastas: cuando Cloudflare entregue una URL pública, cambiar únicamente `subastas.demoStatus` de `LOCAL_DEMO` a `LIVE_DEMO` y agregar `demoUrl`; retestar PROY-05b + LINK-02. No requiere rediseño ni cambio estructural.
+Vigente para Subastas y Legacy: cuando Cloudflare entregue una URL pública, cambiar únicamente el `demoStatus` correspondiente de `LOCAL_DEMO` a `LIVE_DEMO` y agregar `demoUrl`; retestar PROY-05b + LINK-02. No requiere rediseño ni cambio estructural.
 El resto de proyectos conserva su flujo PREVIEW. Tras agregar fotos reales: retestar FOTO-01/02.
 
 Operado por: Company Workspace QA — 2026-08-23

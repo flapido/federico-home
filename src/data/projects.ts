@@ -105,13 +105,15 @@ export const projects: Project[] = [
     problem: "Sistema viejo acoplado → experiencia moderna y mantenible.",
     try: "Deslizá el antes/después — es protagonista.",
     year: "2022 — 2024",
-    status: "Transformación · Preview visual",
+    status: "Transformación · Demo lista",
     statusTone: "archive",
     color: "#2D2F2D",
     bg: "#F0EFEA",
     href: "/proyectos/legacy-web",
     preview: "legacy",
-    demoStatus: "PREVIEW",
+    // La demo completa vive en legacy-app-explorer-demo. Hasta tener URL
+    // pública, el hub conserva solamente esta preview interna.
+    demoStatus: "LOCAL_DEMO",
     publicUrl: "legacy.midominio.com",
     externalPlaceholder: "legacy.midominio.com",
   },
