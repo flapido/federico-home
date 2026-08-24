@@ -1,5 +1,5 @@
 export default function About(){
-  const hasProfile = false // cambia a true cuando exista /fotos/federico-profile.webp — el img hará fallback automático
+  const hasProfile = true // cambia a true cuando exista la fotografía real — el img hará fallback automático
   return (
     <div className="max-w-[980px] mx-auto px-6 md:px-8 py-10">
       <div className="grid md:grid-cols-[1.15fr_.85fr] gap-8 items-start">
@@ -17,7 +17,7 @@ export default function About(){
         <div className="rounded-[20px] border hairline bg-white overflow-hidden">
           <div className="aspect-[4/3] bg-paper-2 grid place-items-center relative overflow-hidden">
             {/* placeholder elegante — reemplazar con /fotos/federico-profile.webp */}
-            <img src="/fotos/federico-profile.webp" alt="Federico Lapido" className="absolute inset-0 w-full h-full object-cover" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
+            <img src="/fotos/federico-profile.jpg" alt="Federico Lapido" className="absolute inset-0 w-full h-full object-cover" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
             {!hasProfile && <div className="relative text-center p-6">
               <div className="w-14 h-14 rounded-full border hairline bg-white grid place-items-center mx-auto font-display text-stone">FL</div>
               <div className="font-mono text-[11px] tracking-widest uppercase text-stone mt-3">Foto real — placeholder</div>

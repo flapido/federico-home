@@ -49,9 +49,9 @@ export default function Home() {
             <div className="relative bg-white border hairline rounded-[20px] overflow-hidden">
               {/* Foto placeholder elegante */}
               <div className="h-[168px] bg-paper-2 border-b hairline relative overflow-hidden flex items-center gap-4 px-6">
-                <div className="w-[88px] h-[88px] rounded-[18px] border-2 border-white bg-white shadow-sm grid place-items-center overflow-hidden shrink-0">
-                  <img src="/fotos/federico-profile.webp" alt="Federico Lapido" className="w-full h-full object-cover" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
-                  <span className="font-display text-[18px] tracking-[-0.02em] text-stone">FL</span>
+<div className="w-[88px] h-[88px] rounded-[18px] border-2 border-white bg-white shadow-sm grid place-items-center overflow-hidden shrink-0">
+              <img src="/fotos/federico-profile.jpg" alt="Federico Lapido" className="w-full h-full object-cover object-bottom" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
+              <span className="font-display text-[18px] tracking-[-0.02em] text-stone">FL</span>
                 </div>
                 <div className="text-[12px] leading-tight">
                   <div className="font-display text-[13px]">Persona real detrás</div>
@@ -267,10 +267,11 @@ export default function Home() {
             <div className="font-display text-[22px] mt-1">Hablemos</div>
             <div className="text-[13px] opacity-70 mt-1 max-w-[40ch] leading-relaxed">Sin marketing desesperado. Si algo de acá te sirve, escribí.</div>
           </div>
-          <div className="flex flex-wrap gap-2 self-start md:self-center">
-            <a href="https://www.linkedin.com/in/federico-lapido" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full bg-white text-ink text-[13px] font-medium hover:bg-paper-2 transition">LinkedIn ↗</a>
-            <a href="https://github.com/flapido" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-[13px] hover:bg-white/10 transition">GitHub ↗</a>
-            <a href="/cv" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-[13px] hover:bg-white/10 transition">CV</a>
+<div className="flex flex-wrap gap-2 self-start md:self-center">
+              <a href="https://www.linkedin.com/in/federico-lapido" target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full bg-white text-ink text-[13px] font-medium hover:bg-paper-2 transition" aria-label="LinkedIn de Federico Lapido">LinkedIn</a>
+              <a href="https://github.com/flapido" target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full border border-white/20 text-white text-[13px] hover:bg-white/10 transition" aria-label="GitHub de Federico Lapido">GitHub</a>
+              <a href="https://wa.me/5491157642626?text=Hola%20Federico,%20vengo%20de%20tu%20página%20y%20quería%20contactarte%20por..." target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full bg-white text-ink text-[13px] hover:bg-paper-2 transition" aria-label="WhatsApp de Federico Lapido">WhatsApp</a>
+              <a href="/cv" className="px-4 py-2 rounded-full border border-white/20 text-white text-[13px] hover:bg-white/10 transition">CV</a>
           </div>
         </div>
         <div className="mt-3 text-center text-[11px] font-mono text-stone">Hecho a mano en Buenos Aires · Hospedable en tu propia PC · Sin neón</div>
