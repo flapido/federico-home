@@ -16,8 +16,7 @@ export default function About(){
 
         <div className="rounded-[20px] border hairline bg-white overflow-hidden">
           <div className="aspect-[4/3] bg-paper-2 grid place-items-center relative overflow-hidden">
-            {/* placeholder elegante — reemplazar con /fotos/federico-profile.webp */}
-            <img src="/fotos/federico-profile.jpg" alt="Federico Lapido" className="absolute inset-0 w-full h-full object-cover" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
+            <img src="/fotos/federico-profile.jpg" alt="Federico Lapido" className="absolute inset-0 w-full h-full object-cover object-position-50% 40%" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
             {!hasProfile && <div className="relative text-center p-6">
               <div className="w-14 h-14 rounded-full border hairline bg-white grid place-items-center mx-auto font-display text-stone">FL</div>
               <div className="font-mono text-[11px] tracking-widest uppercase text-stone mt-3">Foto real — placeholder</div>
@@ -33,23 +32,21 @@ export default function About(){
 
       <div className="mt-8 grid md:grid-cols-3 gap-4">
         {[
-          { title:"Intereses", desc:"Sistemas, herramientas que ahorran tiempo, IA aplicada con criterio.", img:"/fotos/federico-about-01.webp" },
-          { title:"Lugares", desc:"Cafés para trabajar, calles para caminar, ciudades para volver.", img:"/fotos/federico-about-02.webp" },
-          { title:"Objetos", desc:"Pequeñas historias — no biografía inventada.", img:"/fotos/federico-about-03.webp" },
+          { title:"Intereses", desc:"Sistemas, herramientas que ahorran tiempo, IA aplicada con criterio." },
+          { title:"Lugares", desc:"Cafés para trabajar, calles para caminar, ciudades para volver." },
+          { title:"Objetos", desc:"Pequeñas historias — no biografía inventada." },
         ].map(card=>(
-          <div key={card.title} className="rounded-[16px] border hairline bg-white overflow-hidden">
-            <div className="h-[160px] bg-paper-2 grid place-items-center relative overflow-hidden">
-              <img src={card.img} alt="" className="absolute inset-0 w-full h-full object-cover" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
-              <div className="relative text-center p-4">
-                <div className="font-mono text-[10px] tracking-widest uppercase text-stone">{card.title}</div>
-                <div className="w-8 h-px bg-line mx-auto mt-2" />
+          <div key={card.title} className="rounded-[16px] border hairline bg-white overflow-hidden flex flex-col">
+            <div className="h-[140px] bg-paper-2 border-b hairline relative flex items-center justify-center px-4">
+              <div className="font-mono text-[10px] tracking-widest uppercase text-stone" style={{color: '#6B4B3A'}}>
+                {card.title.substring(0,2)}
               </div>
             </div>
-            <div className="p-4">
-              <div className="font-display text-[14px]">{card.title}</div>
+            <div className="p-4 flex-1">
+              <div className="font-display text-[14px] leading-relaxed">{card.title}</div>
               <div className="text-[12px] text-ink-light mt-1 leading-relaxed">{card.desc}</div>
-              <div className="text-[10px] font-mono text-stone mt-2">→ {card.img}</div>
             </div>
+            <div className="border-t hairline border-white/10"></div>
           </div>
         ))}
       </div>
