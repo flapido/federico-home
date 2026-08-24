@@ -16,7 +16,7 @@ export default function About(){
 
         <div className="rounded-[20px] border hairline bg-white overflow-hidden">
           <div className="aspect-[4/3] bg-paper-2 grid place-items-center relative overflow-hidden">
-            <img src="/fotos/federico-profile.jpg" alt="Federico Lapido" className="absolute inset-0 w-full h-full object-cover object-position-50% 40%" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
+            <img src="/fotos/federico-profile.jpg" alt="Federico Lapido" className="absolute inset-0 w-full h-full object-cover object-position-50% 35%" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
             {!hasProfile && <div className="relative text-center p-6">
               <div className="w-14 h-14 rounded-full border hairline bg-white grid place-items-center mx-auto font-display text-stone">FL</div>
               <div className="font-mono text-[11px] tracking-widest uppercase text-stone mt-3">Foto real — placeholder</div>
@@ -37,10 +37,7 @@ export default function About(){
           { title:"Objetos", desc:"Pequeñas historias — no biografía inventada." },
         ].map(card=>(
           <div key={card.title} className="rounded-[16px] border hairline bg-white overflow-hidden flex flex-col">
-            <div className="h-[140px] bg-paper-2 border-b hairline relative flex items-center justify-center px-4">
-              <div className="font-mono text-[10px] tracking-widest uppercase text-stone" style={{color: '#6B4B3A'}}>
-                {card.title.substring(0,2)}
-              </div>
+            <div className="h-[120px] bg-paper-2 border-b hairline relative flex items-center justify-center px-4">
             </div>
             <div className="p-4 flex-1">
               <div className="font-display text-[14px] leading-relaxed">{card.title}</div>

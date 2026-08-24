@@ -34,6 +34,12 @@ export default function Home() {
                 Explorar proyectos <span aria-hidden>→</span>
               </Link>
               <a href="#proyectos" className="inline-flex items-center px-5 py-[11px] rounded-full border hairline text-[13px] bg-white/70 hover:bg-white transition">Ver showroom ↓</a>
+              <a href="https://wa.me/5491157642626?text=Hola%20Federico%2C%20vengo%20de%20tu%20p%C3%A1gina%20y%20quer%C3%ADa%20contactarte%20por..." className="inline-flex items-center px-5 py-[11px] rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" aria-label="WhatsApp de Federico Lapido" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" focusable="false">
+                  <path d="M17.227 1.5a2.72 2.72 0 0 0-1.735-.951l-2.192.695a2.72 2.72 0 0 0-.6.868l.838 2.119a2.72 2.72 0 0 0 1.132 1.82l2.194.6a2.72 2.72 0 0 0 .909-.598l-.856-2.236a2.72 2.72 0 0 0-.604-.787l-2.26-.555a2.72 2.72 0 0 0-1.078-.1zM5.098 4.63a1.98 1.98 0 0 1 .038 2.966l2.16 1.56c.568.412.052.926-.823.823h-3.372l.608-2.156a1.98 1.98 0 0 1 2.028-1.833l2.16-1.56c.539-.39.023-.858-.786-.858h-1.288a1.98 1.98 0 0 1-1.978-1.978ZM9.853 1.5a2.22 2.22 0 0 1 1.558 0l2.187.685a2.22 2.22 0 0 1 .294 2.195l-1.25 2.66c-.168.355-.53.534-.839.307l-2.335-1.073a2.22 2.22 0 0 1-.117-2.255l2.186-.685a2.22 2.22 0 0 1 1.557 0l2.188.685c.302.001.587.013.839-.306l1.25-2.66a2.22 2.22 0 0 1 .294-2.195l-1.25-2.66c-.309-.537-.574-.717-.839-.306l-2.335 1.073Zm-5.044 0a2.22 2.22 0 1 0 0 4.44 2.22 2.22 0 0 0 0-4.44Z"/>
+                </svg>
+                WhatsApp
+              </a>
             </div>
             <div className="mt-6 flex items-center gap-3 text-[11px] font-mono text-stone">
               <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-moss animate-pulse" /> 5 proyectos · previews</span>
@@ -48,15 +54,16 @@ export default function Home() {
             <div className="absolute -inset-3 bg-white rounded-[24px] rotate-[-0.8deg] border hairline hidden md:block" aria-hidden />
             <div className="relative bg-white border hairline rounded-[20px] overflow-hidden">
               {/* Foto placeholder elegante */}
-              <div className="h-[200px] bg-paper-2 border-b hairline relative overflow-hidden flex items-center gap-4 px-6">
-<div className="w-[160px] h-[160px] rounded-[20px] border-2 border-white bg-white shadow-sm grid place-items-center overflow-hidden shrink-0">
-              <img src="/fotos/federico-profile.jpg" alt="Federico Lapido" className="w-full h-full object-cover object-position-25% 35%" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
-              <span className="font-display text-[24px] tracking-[-0.02em] text-stone">FL</span>
-                </div>
-                <div className="text-[14px] leading-tight">
-                  <div className="font-display text-[15px]">Persona real detrás</div>
-                  <div className="text-stone mt-2">Buenos Aires · Construyo sistemas que funcionan en producción.</div>
-                </div>
+<div className="h-[180px] bg-paper-2 border-b hairline relative overflow-hidden flex items-center gap-4 px-6">
+<div className="w-[180px] h-[180px] rounded-[20px] border-2 border-white bg-white shadow-sm grid place-items-center overflow-hidden shrink-0">
+<img src="/fotos/federico-profile.jpg" alt="Federico Lapido" className="w-full h-full object-cover object-position-20% 35%" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
+<span className="font-display text-[28px] tracking-[-0.02em] text-stone">FL</span>
+</div>
+<div className="text-[15px] leading-tight">
+<div className="font-display text-[16px]">Persona real detrás</div>
+<div className="text-stone mt-1">Buenos Aires · Construyo sistemas que funcionan en producción.</div>
+</div>
+</div>
                 <div className="absolute -right-6 -top-6 w-20 h-20 rounded-full border border-brass/20 hidden md:block" aria-hidden />
               </div>
               <div className="px-6 pt-4 pb-4">
@@ -266,34 +273,28 @@ export default function Home() {
             <div className="font-display text-[22px] mt-1">Hablemos</div>
             <div className="text-[13px] opacity-70 mt-1 max-w-[40ch] leading-relaxed">Sin marketing desesperado. Si algo de acá te sirve, escribí.</div>
           </div>
-          <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-4">
             {/* GitHub */}
-            <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors aria-label="GitHub de Federico Lapido" title="GitHub de Federico Lapido">
-              <span className="w-4 h-4" aria-hidden="true">
-                <svg viewBox="0 0 19 19" fill="currentColor" width="16" height="16" focusable="false">
-                  <path d="M9.356 1.85C5.05 1.85 1.57 5.356 1.57 9.694a7.84 7.84 0 0 0 5.324 7.44c.387.079.528-.168.528-.376 0-.182-.013-.805-.013-1.454-2.165.467-2.616-.935-2.616-.935-.349-.91-.864-1.143-.864-1.143-.71-.48.051-.48.051-.48.787.051 1.2.805 1.2.805.695 1.194 1.817.857 2.268.649.064-.507.27-.857.49-1.052-1.728-.182-3.545-.857-3.545-3.87 0-.857.31-1.558.8-2.104-.078-.195-.349-1.009-.077-2.078 0 0 .657-.208 2.14.805a7.5 7.5 0 0 1 1.946-.26c.657 0 1.328.092 1.946.26 1.483-1.013 2.14-.805 2.14-.805.426 1.078.155 1.883.078 2.078.502.546.799 1.247.799 2.104 0 3.013-1.818 3.675-3.558 3.87.284.247.528.714.528 1.454 0 1.052-.012 1.896-.012 2.156 0 .208.142.455.528.377a7.84 7.84 0 0 0 5.324-7.441c.013-4.338-3.48-7.844-7.773-7.844"/>
-                </svg>
+            <a href="https://github.com/flapido" className="flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" target="_blank" rel="noopener noreferrer" aria-label="GitHub de Federico Lapido">
+              <svg viewBox="0 0 19 19" fill="currentColor" width="16" height="16" focusable="false">
+                <path d="M9.356 1.85C5.05 1.85 1.57 5.356 1.57 9.694a7.84 7.84 0 0 0 5.324 7.44c.387.079.528-.168.528-.376 0-.182-.013-.805-.013-1.454-2.165.467-2.616-.935-2.616-.935-.349-.91-.864-1.143-.864-1.143-.71-.48.051-.48.051-.48.787.051 1.2.805 1.2.805.695 1.194 1.817.857 2.268.649.064-.507.27-.857.49-1.052-1.728-.182-3.545-.857-3.545-3.87 0-.857.31-1.558.8-2.104-.078-.195-.349-1.009-.077-2.078 0 0 .657-.208 2.14.805a7.5 7.5 0 0 1 1.946-.26c.657 0 1.328.092 1.946.26 1.483-1.013 2.14-.805 2.14-.805.426 1.078.155 1.883.078 2.078.502.546.799 1.247.799 2.104 0 3.013-1.818 3.675-3.558 3.87.284.247.528.714.528 1.454 0 1.052-.012 1.896-.012 2.156 0 .208.142.455.528.377a7.84 7.84 0 0 0 5.324-7.441c.013-4.338-3.48-7.844-7.773-7.844"/>
               </span>
               GitHub
-            </button>
+            </a>
             {/* LinkedIn */}
-            <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors aria-label="LinkedIn de Federico Lapido" title="LinkedIn de Federico Lapido">
-              <span className="w-4 h-4" aria-hidden="true">
-                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" focusable="false">
-                  <path d="M15 11.593v2.806c0 .387.316.7 .7 .7h2.5c.387 0 .7-.313.7-.7V7.5c0-.387-.313-.7-.7-.7h-2.5c-.387 0-.7.313-.7.7v2.552m0-11.593a4.08 4.08 0 1 0 0 8.164 4.08 4.08 0 0 0 0-8.164ZM7.11 7.583a1.96 1.96 0 1 1 0 3.922 1.96 1.96 0 0 1 0-3.922Zm5.856 0a1.96 1.96 0 1 1 0 3.922 1.96 1.96 0 0 1 0-3.922Z"/>
-                </svg>
+            <a href="https://www.linkedin.com/in/federico-lapido" className="flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Federico Lapido">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" focusable="false">
+                <path d="M15 11.593v2.806c0 .387.316.7 .7 .7h2.5c.387 0 .7-.313.7-.7V7.5c0-.387-.313-.7-.7-.7h-2.5c-.387 0-.7.313-.7.7v2.552m0-11.593a4.08 4.08 0 1 0 0 8.164 4.08 4.08 0 0 0 0-8.164ZM7.11 7.583a1.96 1.96 0 1 1 0 3.922 1.96 1.96 0 0 1 0-3.922Zm5.856 0a1.96 1.96 0 1 1 0 3.922 1.96 1.96 0 0 1 0-3.922Z"/>
               </span>
               LinkedIn
-            </button>
+            </a>
             {/* WhatsApp */}
-            <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors aria-label="WhatsApp de Federico Lapido" title="WhatsApp de Federico Lapido">
-              <span className="w-4 h-4" aria-hidden="true">
-                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" focusable="false">
-                  <path d="M17.227 1.5a2.72 2.72 0 0 0-1.735-.951l-2.192.695a2.72 2.72 0 0 0-.6.868l.838 2.119a2.72 2.72 0 0 0 1.132 1.82l2.194.6a2.72 2.72 0 0 0 .909-.598l-.856-2.236a2.72 2.72 0 0 0-.604-.787l-2.26-.555a2.72 2.72 0 0 0-1.078-.1zM5.098 4.63a1.98 1.98 0 0 1 .038 2.966l2.16 1.56c.568.412.052.926-.823.823h-3.372l.608-2.156a1.98 1.98 0 0 1 2.028-1.833l2.16-1.56c.539-.39.023-.858-.786-.858h-1.288a1.98 1.98 0 0 1-1.978-1.978ZM9.853 1.5a2.22 2.22 0 0 1 1.558 0l2.187.685a2.22 2.22 0 0 1 .294 2.195l-1.25 2.66c-.168.355-.53.534-.839.307l-2.335-1.073a2.22 2.22 0 0 1-.117-2.255l2.186-.685a2.22 2.22 0 0 1 1.557 0l2.188.685c.302.001.587.013.839-.306l1.25-2.66a2.22 2.22 0 0 1 .294-2.195l-1.25-2.66c-.309-.537-.574-.717-.839-.306l-2.335 1.073Zm-5.044 0a2.22 2.22 0 1 0 0 4.44 2.22 2.22 0 0 0 0-4.44Z"/>
-                </svg>
+            <a href="https://wa.me/5491157642626?text=Hola%20Federico%2C%20vengo%20de%20tu%20página%20y%20quería%20contactarte%20por..." className="flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de Federico Lapido">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" focusable="false">
+                <path d="M17.227 1.5a2.72 2.72 0 0 0-1.735-.951l-2.192.695a2.72 2.72 0 0 0-.6.868l.838 2.119a2.72 2.72 0 0 0 1.132 1.82l2.194.6a2.72 2.72 0 0 0 .909-.598l-.856-2.236a2.72 2.72 0 0 0-.604-.787l-2.26-.555a2.72 2.72 0 0 0-1.078-.1zM5.098 4.63a1.98 1.98 0 0 1 .038 2.966l2.16 1.56c.568.412.052.926-.823.823h-3.372l.608-2.156a1.98 1.98 0 0 1 2.028-1.833l2.16-1.56c.539-.39.023-.858-.786-.858h-1.288a1.98 1.98 0 0 1-1.978-1.978ZM9.853 1.5a2.22 2.22 0 0 1 1.558 0l2.187.685a2.22 2.22 0 0 1 .294 2.195l-1.25 2.66c-.168.355-.53.534-.839.307l-2.335-1.073a2.22 2.22 0 0 1-.117-2.255l2.186-.685a2.22 2.22 0 0 1 1.557 0l2.188.685c.302.001.587.013.839-.306l1.25-2.66a2.22 2.22 0 0 1 .294-2.195l-1.25-2.66c-.309-.537-.574-.717-.839-.306l-2.335 1.073Zm-5.044 0a2.22 2.22 0 1 0 0 4.44 2.22 2.22 0 0 0 0-4.44Z"/>
               </span>
               WhatsApp
-            </button>
+            </a>
             {/* CV */}
             <a href="/cv" className="flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink transition">CV</a>
           </div>
