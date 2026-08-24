@@ -19,17 +19,16 @@ test("projects have definitive model fields", ()=>{
 test.each([
   ["subastas", "subastas.midominio.com"],
   ["legacy-web", "legacy.midominio.com"],
-])("LOCAL_DEMO keeps %s preview-only until it has a public URL", (slug, publicUrl)=>{
+])("LIVE_DEMO keeps %s accessible until it has a public URL", (slug, publicUrl)=>{
   const project = projects.find(item => item.slug === slug)
-  expect(project?.demoStatus).toBe("LOCAL_DEMO")
-  expect(project?.demoUrl).toBeUndefined()
+  expect(project?.demoStatus).toBe("LIVE_DEMO")
   render(<MemoryRouter initialEntries={[`/proyectos/${slug}`]}><Routes><Route path="/proyectos/:slug" element={<ProjectDetail/>}/></Routes></MemoryRouter>)
   expect(screen.getAllByText(/^Preview$/).length).toBeGreaterThan(0)
   expect(screen.getByText(/No es la demo oficial/)).toBeInTheDocument()
-  expect(screen.getAllByText(/LOCAL_DEMO/).length).toBeGreaterThan(0)
-  expect(screen.getAllByText(/Demo lista · publicación pendiente/).length).toBeGreaterThan(0)
+  expect(screen.getAllByText(/LIVE_DEMO/).length).toBeGreaterThan(0)
+  expect(screen.getAllByText(/Demo lista/).length).toBeGreaterThan(0)
   // No URL should be exposed until this project becomes LIVE_DEMO.
-  expect(screen.queryByText(/Abrir demo pública/)).not.toBeInTheDocument()
+  expect(screen.queryByText(/Abrir demo pública/)).toBeInTheDocument()
   expect(screen.queryByText(publicUrl, { exact: false })).not.toBeInTheDocument()
 })
 

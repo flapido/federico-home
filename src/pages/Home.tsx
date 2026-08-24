@@ -73,13 +73,12 @@ export default function Home() {
               {/* Foto placeholder elegante */}
               <div className="h-[168px] bg-paper-2 border-b hairline relative overflow-hidden flex items-center gap-4 px-6">
                 <div className="w-[88px] h-[88px] rounded-[18px] border-2 border-white bg-white shadow-sm grid place-items-center overflow-hidden shrink-0">
-                  <img src="/fotos/federico-profile.webp" alt="Federico Lapido" className="w-full h-full object-cover" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
-                  <span className="font-display text-[18px] tracking-[-0.02em] text-stone">FL</span>
+                  <img src="/fotos/federico-profile.jpg" alt="Federico Lapido" className="w-full h-full object-cover" style={{objectPosition:"50% 30%"}} />
                 </div>
                 <div className="text-[12px] leading-tight">
                   <div className="font-display text-[13px]">Persona real detrás</div>
                   <div className="text-stone mt-1">Buenos Aires · Construyo sistemas que funcionan en producción.</div>
-                  <div className="font-mono text-[10px] text-stone mt-2">→ /fotos/federico-profile.webp</div>
+                  <div className="font-mono text-[10px] text-stone mt-2">Buenos Aires · sistemas y producto.</div>
                 </div>
                 <div className="absolute -right-6 -top-6 w-20 h-20 rounded-full border border-brass/20 hidden md:block" aria-hidden />
               </div>
