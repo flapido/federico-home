@@ -27,14 +27,31 @@ export default function Home() {
               <span className="w-7 h-px bg-line" />
               <span>Software Engineer · Backend · Integraciones</span>
               <span className="opacity-40">·</span>
-              <span className="hidden sm:inline">Más de 20 años · WiseTech Global</span>
+<span className="hidden sm:inline">Más de 20 años · WiseTech Global</span>
             </div>
+            <Link to="/proyectos" className="inline-flex items-center gap-2 bg-ink text-paper px-5 py-[11px] rounded-full text-[14px] font-medium hover:bg-black transition">
+              Explorar proyectos <span aria-hidden>→</span>
+            </Link>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Link to="/proyectos" className="inline-flex items-center gap-2 bg-ink text-paper px-5 py-[11px] rounded-full text-[14px] font-medium hover:bg-black transition">
-                Explorar proyectos <span aria-hidden>→</span>
-              </Link>
-              <a href="#proyectos" className="inline-flex items-center px-5 py-[11px] rounded-full border hairline text-[13px] bg-white/70 hover:bg-white transition">Ver showroom ↓</a>
-              <a href="https://wa.me/5491157642626?text=Hola%20Federico%2C%20vengo%20de%20tu%20página%20y%20quería%20contactarte%20por..." className="inline-flex items-center px-5 py-[11px] rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" aria-label="WhatsApp de Federico Lapido" target="_blank" rel="noopener noreferrer">
+              <a href="/cv" className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" target="_blank" rel="noopener noreferrer" aria-label="CV de Federico Lapido">
+                <svg viewBox="0 0 19 19" fill="currentColor" width="16" height="16" focusable="false">
+                  <path d="M9.356 1.85C5.05 1.85 1.57 5.356 1.57 9.694a7.84 7.84 0 0 0 5.324 7.44c.387.079.528-.168.528-.376 0-.182-.013-.805-.013-1.454-2.165.467-2.616-.935-2.616-.935-.349-.91-.864-1.143-.864-1.143-.71-.48.051-.48.051-.48.787.051 1.2.805 1.2.805.695 1.194 1.817.857 2.268.649.064-.507.27-.857.49-1.052-1.728-.182-3.545-.857-3.545-3.87 0-.857.31-1.558.8-2.104-.078-.195-.349-1.009-.077-2.078 0 0 .657-.208 2.14.805a7.5 7.5 0 0 1 1.946-.26c.657 0 1.328.092 1.946.26 1.483-1.013 2.14-.805 2.14-.805.426 1.078.155 1.883.078 2.078.502.546.799 1.247.799 2.104 0 3.013-1.818 3.675-3.558 3.87.284.247.528.714.528 1.454 0 1.052-.012 1.896-.012 2.156 0 .208.142.455.528.377a7.84 7.84 0 0 0 5.324-7.441c.013-4.338-3.48-7.844-7.773-7.844"/>
+                </svg>
+                CV
+              </a>
+              <a href="https://github.com/flapido" className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" target="_blank" rel="noopener noreferrer" aria-label="GitHub de Federico Lapido">
+                <svg viewBox="0 0 19 19" fill="currentColor" width="16" height="16" focusable="false">
+                  <path d="M9.356 1.85C5.05 1.85 1.57 5.356 1.57 9.694a7.84 7.84 0 0 0 5.324 7.44c.387.079.528-.168.528-.376 0-.182-.013-.805-.013-1.454-2.165.467-2.616-.935-2.616-.935-.349-.91-.864-1.143-.864-1.143-.71-.48.051-.48.051-.48.787.051 1.2.805 1.2.805.695 1.194 1.817.857 2.268.649.064-.507.27-.857.49-1.052-1.728-.182-3.545-.857-3.545-3.87 0-.857.31-1.558.8-2.104-.078-.195-.349-1.009-.077-2.078 0 0 .657-.208 2.14.805a7.5 7.5 0 0 1 1.946-.26c.657 0 1.328.092 1.946.26 1.483-1.013 2.14-.805 2.14-.805.426 1.078.155 1.883.078 2.078.502.546.799 1.247.799 2.104 0 3.013-1.818 3.675-3.558 3.87.284.247.528.714.528 1.454 0 1.052-.012 1.896-.012 2.156 0 .208.142.455.528.377a7.84 7.84 0 0 0 5.324-7.441c.013-4.338-3.48-7.844-7.773-7.844"/>
+                </svg>
+                GitHub
+              </a>
+              <a href="https://www.linkedin.com/in/federico-lapido" className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Federico Lapido">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" focusable="false">
+                  <path d="M15 11.593v2.806c0 .387.316.7 .7 .7h2.5c.387 0 .7-.313.7-.7V7.5c0-.387-.313-.7-.7-.7h-2.5c-.387 0-.7.313-.7.7v2.552m0-11.593a4.08 4.08 0 1 0 0 8.164 4.08 4.08 0 0 0 0-8.164ZM7.11 7.583a1.96 1.96 0 1 1 0 3.922 1.96 1.96 0 0 1 0-3.922Zm5.856 0a1.96 1.96 0 1 1 0 3.922 1.96 1.96 0 0 1 0-3.922Z"/>
+                </svg>
+                LinkedIn
+              </a>
+              <a href="https://wa.me/5491157642626?text=Hola%20Federico%2C%20vengo%20de%20tu%20p%C3%A1gina%20y%20quer%C3%ADa%20contactarte%20por..." className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de Federico Lapido">
                 <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" focusable="false">
                   <path d="M17.227 1.5a2.72 2.72 0 0 0-1.735-.951l-2.192.695a2.72 2.72 0 0 0-.6.868l.838 2.119a2.72 2.72 0 0 0 1.132 1.82l2.194.6a2.72 2.72 0 0 0 .909-.598l-.856-2.236a2.72 2.72 0 0 0-.604-.787l-2.26-.555a2.72 2.72 0 0 0-1.078-.1zM5.098 4.63a1.98 1.98 0 0 1 .038 2.966l2.16 1.56c.568.412.052.926-.823.823h-3.372l.608-2.156a1.98 1.98 0 0 1 2.028-1.833l2.16-1.56c.539-.39.023-.858-.786-.858h-1.288a1.98 1.98 0 0 1-1.978-1.978ZM9.853 1.5a2.22 2.22 0 0 1 1.558 0l2.187.685a2.22 2.22 0 0 1 .294 2.195l-1.25 2.66c-.168.355-.53.534-.839.307l-2.335-1.073a2.22 2.22 0 0 1-.117-2.255l2.186-.685a2.22 2.22 0 0 1 1.557 0l2.188.685c.302.001.587.013.839-.306l1.25-2.66a2.22 2.22 0 0 1 .294-2.195l-1.25-2.66c-.309-.537-.574-.717-.839-.306l-2.335 1.073Zm-5.044 0a2.22 2.22 0 1 0 0 4.44 2.22 2.22 0 0 0 0-4.44Z"/>
                 </svg>
@@ -274,9 +291,25 @@ export default function Home() {
             <div className="text-[13px] opacity-70 mt-1 max-w-[40ch] leading-relaxed">Sin marketing desesperado. Si algo de acá te sirve, escribí.</div>
           </div>
           <div className="flex flex-wrap gap-2 self-start md:self-center">
-            <a href="https://www.linkedin.com/in/federico-lapido" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full bg-white text-ink text-[13px] font-medium hover:bg-paper-2 transition">LinkedIn ↗</a>
-            <a href="https://github.com/flapido" target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-[13px] hover:bg-white/10 transition">GitHub ↗</a>
-            <a href="/cv" className="px-5 py-2.5 rounded-full border border-white/20 text-white text-[13px] hover:bg-white/10 transition">CV</a>
+            <a href="https://www.linkedin.com/in/federico-lapido" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" aria-label="LinkedIn de Federico Lapido">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" focusable="false">
+                <path d="M15 11.593v2.806c0 .387.316.7 .7 .7h2.5c.387 0 .7-.313.7-.7V7.5c0-.387-.313-.7-.7-.7h-2.5c-.387 0-.7.313-.7.7v2.552m0-11.593a4.08 4.08 0 1 0 0 8.164 4.08 4.08 0 0 0 0-8.164ZM7.11 7.583a1.96 1.96 0 1 1 0 3.922 1.96 1.96 0 0 1 0-3.922Zm5.856 0a1.96 1.96 0 1 1 0 3.922 1.96 1.96 0 0 1 0-3.922Z"/>
+              </svg>
+              LinkedIn
+            </a>
+            <a href="https://github.com/flapido" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" aria-label="GitHub de Federico Lapido">
+              <svg viewBox="0 0 19 19" fill="currentColor" width="16" height="16" focusable="false">
+                <path d="M9.356 1.85C5.05 1.85 1.57 5.356 1.57 9.694a7.84 7.84 0 0 0 5.324 7.44c.387.079.528-.168.528-.376 0-.182-.013-.805-.013-1.454-2.165.467-2.616-.935-2.616-.935-.349-.91-.864-1.143-.864-1.143-.71-.48.051-.48.051-.48.787.051 1.2.805 1.2.805.695 1.194 1.817.857 2.268.649.064-.507.27-.857.49-1.052-1.728-.182-3.545-.857-3.545-3.87 0-.857.31-1.558.8-2.104-.078-.195-.349-1.009-.077-2.078 0 0 .657-.208 2.14.805a7.5 7.5 0 0 1 1.946-.26c.657 0 1.328.092 1.946.26 1.483-1.013 2.14-.805 2.14-.805.426 1.078.155 1.883.078 2.078.502.546.799 1.247.799 2.104 0 3.013-1.818 3.675-3.558 3.87.284.247.528.714.528 1.454 0 1.052-.012 1.896-.012 2.156 0 .208.142.455.528.377a7.84 7.84 0 0 0 5.324-7.441c.013-4.338-3.48-7.844-7.773-7.844"/>
+              </svg>
+              GitHub
+            </a>
+            <a href="https://wa.me/5491157642626?text=Hola%20Federico%2C%20vengo%20de%20tu%20p%C3%A1gina%20y%20quer%C3%ADa%20contactarte%20por..." target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-paper transition-colors" aria-label="WhatsApp de Federico Lapido">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" focusable="false">
+                <path d="M17.227 1.5a2.72 2.72 0 0 0-1.735-.951l-2.192.695a2.72 2.72 0 0 0-.6.868l.838 2.119a2.72 2.72 0 0 0 1.132 1.82l2.194.6a2.72 2.72 0 0 0 .909-.598l-.856-2.236a2.72 2.72 0 0 0-.604-.787l-2.26-.555a2.72 2.72 0 0 0-1.078-.1zM5.098 4.63a1.98 1.98 0 0 1 .038 2.966l2.16 1.56c.568.412.052.926-.823.823h-3.372l.608-2.156a1.98 1.98 0 0 1 2.028-1.833l2.16-1.56c.539-.39.023-.858-.786-.858h-1.288a1.98 1.98 0 0 1-1.978-1.978ZM9.853 1.5a2.22 2.22 0 0 1 1.558 0l2.187.685a2.22 2.22 0 0 1 .294 2.195l-1.25 2.66c-.168.355-.53.534-.839.307l-2.335-1.073a2.22 2.22 0 0 1-.117-2.255l2.186-.685a2.22 2.22 0 0 1 1.557 0l2.188.685c.302.001.587.013.839-.306l1.25-2.66a2.22 2.22 0 0 1 .294-2.195l-1.25-2.66c-.309-.537-.574-.717-.839-.306l-2.335 1.073Zm-5.044 0a2.22 2.22 0 1 0 0 4.44 2.22 2.22 0 0 0 0-4.44Z"/>
+              </svg>
+              WhatsApp
+            </a>
+            <a href="/cv" className="flex items-center gap-2 px-4 py-2 rounded-full border border-brass/30 bg-brass/10 text-terracotta hover:bg-brass/20 hover:text-ink transition">CV</a>
           </div>
         </div>
         <div className="mt-3 text-center text-[11px] font-mono text-stone">Hecho a mano en Buenos Aires · Hospedable en tu propia PC · Sin neón</div>
