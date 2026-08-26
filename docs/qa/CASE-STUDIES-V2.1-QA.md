@@ -12,3 +12,7 @@ Fecha: 2026-08-26
 - `node run-qa.mjs`: PASS, 10 viewports × 11 rutas; incluye Legacy, Subastas y Archivo Digital.
 
 Capturas de evidencia de la matriz: `screenshots/v2/*-proyectos-legacy-web.png`, `*-proyectos-subastas.png` y `*-proyectos-archivo-digital.png`.
+
+## Producción
+
+Cloudflare Pages respondió 200 en las tres rutas. Chromium verificó cada una a 390×844 y 1440×900: imágenes completas, cero overflow, cero errores propios de consola y cero requests propios fallidos. La comprobación de texto en producción no encontró los identificadores excluidos ni nombres de material restringido.
