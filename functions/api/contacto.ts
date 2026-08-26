@@ -109,6 +109,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         { error: "No pude enviar el formulario en este momento." },
         502,
       );
+    const delivery = (await telegram.json().catch(() => null)) as {
+      ok?: boolean;
+    } | null;
+    if (!delivery?.ok)
+      return response(
+        { error: "No pude enviar el formulario en este momento." },
+        502,
+      );
   } catch {
     return response(
       { error: "No pude enviar el formulario en este momento." },

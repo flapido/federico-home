@@ -12,7 +12,7 @@ Fecha: 2026-08-26
 
 ## Evidencia ejecutada
 
-- `npm test`: 20/20 PASS. Incluye validaciones amables, preservación del mensaje ante error y rechazo server-side de payload malformado.
+- `npm test`: 21/21 PASS. Incluye validaciones amables, preservación del mensaje ante error, rechazo server-side de payload malformado y confirmación explícita del Bot API.
 - `npm run lint`: PASS.
 - `npm run build`: PASS.
 - `wrangler pages functions build functions`: PASS.
@@ -22,6 +22,6 @@ Fecha: 2026-08-26
 
 ## Integración de Telegram
 
-`TOKEN_EXPOSURE_RISK`: la configuración histórica localizada en el proyecto de referencia contiene un token literal versionado. No se reutilizó ni se copió. La Function está preparada para un token rotado configurado exclusivamente como secreto de Cloudflare.
+`TOKEN_EXPOSURE_RISK`: la configuración histórica localizada en el proyecto de referencia contiene un token literal versionado. No se reutilizó ni se copió. La Function usa el token rotado configurado exclusivamente como secreto de Cloudflare.
 
-La prueba real de entrega a Telegram y el PASS final de producción requieren ese token nuevo. No se documentan ni exponen secretos ni identificadores sensibles en este repositorio.
+La prueba real desde producción devolvió 200 y la interfaz publicada mostró el estado de éxito. La Function ahora exige confirmación `ok: true` del Bot API. No se documentan ni exponen secretos ni identificadores sensibles en este repositorio.

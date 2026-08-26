@@ -60,3 +60,28 @@ test("contact endpoint rejects malformed requests without Telegram credentials",
   expect(response.status).toBe(400);
   expect((await response.json()).error).toBe("Escribí tu nombre.");
 });
+
+test("contact endpoint requires an explicit Telegram delivery confirmation", async () => {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ ok: false }), { status: 200 }),
+    ),
+  );
+  const request = new Request("https://example.test/api/contacto", {
+    method: "POST",
+    headers: { "content-type": "application/json", "CF-Connecting-IP": "test" },
+    body: JSON.stringify({
+      name: "QA",
+      email: "qa@example.com",
+      interest: "Consulta o duda",
+      message: "Prueba de confirmación del proveedor.",
+    }),
+  });
+  const response = await onRequestPost({
+    request,
+    env: { TELEGRAM_BOT_TOKEN: "test", TELEGRAM_CHAT_ID: "test" },
+  });
+  expect(response.status).toBe(502);
+  vi.unstubAllGlobals();
+});
