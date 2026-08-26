@@ -117,5 +117,3 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
   return response({ ok: "true" });
 };
-
-export const onRequest = () => response({ error: "Método no permitido." }, 405);
