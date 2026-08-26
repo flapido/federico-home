@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { cv } from "../data/cv"
 import { useEffect, useRef, useState } from "react"
+import { trackEvent } from "../lib/analytics"
 
 const sections = [
   { title: "Quién soy", text: "Soy Federico Lapido, Senior Software Engineer. Me interesa el software que sostiene operaciones reales: el que integra sistemas, conserva reglas de negocio y necesita poder evolucionar con seguridad." },
@@ -38,7 +39,7 @@ function AboutAvatar() {
     if (reducedMotion || videoFailed || !videoRef.current) return
     const video = videoRef.current
     video.currentTime = 0
-    video.play().catch(() => setVideoFailed(true))
+    video.play().then(() => trackEvent("avatar_replay", "/about", "about")).catch(() => setVideoFailed(true))
   }
 
   if (reducedMotion || videoFailed) {

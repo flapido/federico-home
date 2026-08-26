@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from "react-router-dom"
 import { useState } from "react"
 import { cv } from "../data/cv"
+import VisitCounter from "./VisitCounter"
 
 const homeLinks = [
   { href: "/#experiencia", label: "Experiencia" },
@@ -72,6 +73,7 @@ export default function Layout() {
             <div>
               <div className="flex items-center gap-2.5"><span className="grid h-7 w-7 place-items-center rounded-[9px] bg-ink font-mono text-[9px] text-paper">FL</span><span className="font-display text-[17px]">Federico Lapido</span></div>
               <p className="mt-3 max-w-[52ch] text-[13px] leading-relaxed text-ink-light">Senior Software Engineer. Backend, arquitectura, integraciones y IA aplicada para construir y evolucionar software con criterio.</p>
+              <VisitCounter />
             </div>
             <div className="grid grid-cols-2 gap-6 text-[13px]">
               <div><div className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone">Explorar</div><div className="mt-3 flex flex-col gap-2"><a href="/#experiencia" className="hover:underline">Experiencia</a><a href="/#expertise" className="hover:underline">Expertise</a><Link to="/proyectos" className="hover:underline">Proyectos</Link><Link to="/soluciones" className="hover:underline">Soluciones</Link><Link to="/cv" className="hover:underline">CV</Link></div></div>

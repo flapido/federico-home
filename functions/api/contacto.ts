@@ -1,9 +1,12 @@
+import { normaliseSource, recordEvent, type D1Database } from "../_lib/analytics";
+
 interface Env {
   TELEGRAM_BOT_TOKEN?: string;
   TELEGRAM_CHAT_ID?: string;
+  ANALYTICS_DB?: D1Database;
 }
 
-type PagesContext<E> = { request: Request; env: E };
+type PagesContext<E> = { request: Request; env: E; waitUntil?: (promise: Promise<unknown>) => void };
 type PagesFunction<E> = (
   context: PagesContext<E>,
 ) => Response | Promise<Response>;
@@ -45,7 +48,7 @@ function withinRateLimit(request: Request) {
   return true;
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUntil }) => {
   if (!request.headers.get("content-type")?.includes("application/json"))
     return response({ error: "Formato de consulta inválido." }, 415);
   let payload: Record<string, unknown>;
@@ -123,5 +126,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       502,
     );
   }
+  const analytics = recordEvent(env.ANALYTICS_DB, "contact_submit_success", "/contacto", normaliseSource(origin)).catch(() => undefined);
+  if (waitUntil) waitUntil(analytics);
+  else await analytics;
   return response({ ok: "true" });
 };

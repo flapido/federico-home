@@ -8,11 +8,13 @@ import About from "./pages/About"
 import CV from "./pages/CV"
 import Solutions from "./pages/Solutions"
 import Contact from "./pages/Contact"
+import AnalyticsTracker from "./components/AnalyticsTracker"
 import NotFound from "./pages/NotFound"
 
 export default function App(){
   return (
     <BrowserRouter>
+      <AnalyticsTracker />
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />

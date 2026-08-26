@@ -14,6 +14,14 @@ Portfolio profesional de Federico Lapido. Es un hub estático para presentar exp
 
 La consulta de `/contacto` usa la Pages Function `functions/api/contacto.ts`. Para habilitar entrega real, Cloudflare Pages requiere los secretos server-side `TELEGRAM_BOT_TOKEN` y `TELEGRAM_CHAT_ID`; nunca deben usar prefijo `VITE_`, guardarse en Git ni aparecer en el bundle.
 
+## Analytics privacy-first
+
+Analytics V1 usa D1 mediante el binding `ANALYTICS_DB`. Guarda contadores agregados por día, evento, ruta y origen normalizado; no registra IPs, personas, cookies identificatorias, query strings ni contenido de formularios. Una visita es una sesión aproximada: `localStorage` evita volver a contar al mismo navegador durante 30 minutos; cada cambio de ruta registra `page_view`.
+
+El contador del footer comienza desde la activación del sistema, sin estimaciones históricas. El endpoint público acepta un único evento allowlisted por request y el éxito de contacto solo se contabiliza server-side después de la confirmación de Telegram.
+
+`/admin` y `/api/admin/*` permanecen bloqueados con 403 hasta que Cloudflare Access esté configurado. Nunca publicar el panel o sus endpoints sin Access real.
+
 ## Stack
 
 - Vite + React 19 + TypeScript + React Router 7
