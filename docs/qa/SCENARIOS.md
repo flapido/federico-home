@@ -223,7 +223,19 @@ CONTACT-02 · Validaciones amables, foco, etiquetas, `aria-describedby`, estado 
 CONTACT-03 · Origen contextual, WhatsApp, Email y LinkedIn usan enlaces públicos correctos · PASS · 2026-08-26
 CONTACT-04 · Endpoint Cloudflare valida y limita solicitudes server-side; honeypot sin persistencia de consultas · PASS · 2026-08-26
 CONTACT-05 · Matriz responsive 320/360/375/390/412/430/1024/1366/1440/1920 sin overflow ni errores propios · PASS · 2026-08-26
-CONTACT-06 · Entrega Telegram real con secreto rotado de producción · BLOCKED · 2026-08-26 · TOKEN_EXPOSURE_RISK; token histórico no reutilizado.
+CONTACT-06 · Entrega Telegram real con secreto rotado de producción · PASS · 2026-08-26
+
+# ANALYTICS-V1-2026-08-26
+
+AN-01 · Primera sesión registra una visita; refresh en 30 minutos no suma otra visita · PASS · 2026-08-26
+AN-02 · Navegación registra page_view normalizado y el contador público usa la suma D1 real · PASS · 2026-08-26
+AN-03 · Eventos públicos allowlisted no aceptan count arbitrario y no admiten contact_submit_success · PASS · 2026-08-26
+AN-04 · Contacto exitoso registra contact_submit_success server-side solo tras confirmación Telegram · PASS · 2026-08-26
+AN-05 · Clicks de WhatsApp, Email y LinkedIn son best effort y no bloquean la acción · PASS · 2026-08-26
+AN-06 · Autoplay del avatar no registra replay; dos clicks manuales registran exactamente dos replays · PASS · 2026-08-26
+AN-07 · Reduced motion muestra imagen estática y no habilita replay · PASS · 2026-08-26
+AN-08 · Footer counter es discreto, no muestra cero falso y no provoca overflow mobile/desktop · PASS · 2026-08-26
+AN-09 · /admin y /api/admin/* devuelven 403 sin Cloudflare Access; no exponen métricas · PASS · 2026-08-26
 
 # ABOUT-AVATAR-2026-08-25
 

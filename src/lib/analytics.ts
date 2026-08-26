@@ -12,7 +12,10 @@ const sourceFromPath = (path: string) => {
   return project === "legacy-web" || project === "subastas" || project === "archivo-digital" ? project : "other";
 };
 
+export const analyticsClientEnabled = () => import.meta.env.PROD || !["localhost", "127.0.0.1"].includes(window.location.hostname);
+
 export function trackEvent(event: AnalyticsEvent, path = window.location.pathname, source = sourceFromPath(path)) {
+  if (!analyticsClientEnabled()) return;
   const payload = JSON.stringify({ event, path, source });
   try {
     if (navigator.sendBeacon) {

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { analyticsClientEnabled } from "../lib/analytics";
 
 export default function VisitCounter() {
   const [total, setTotal] = useState<number | null>(null);
   useEffect(() => {
+    if (!analyticsClientEnabled()) return;
     let active = true;
     const load = () => void fetch("/api/analytics/visit-counter", { headers: { accept: "application/json" } })
       .then((response) => response.ok ? response.json() : Promise.reject())
