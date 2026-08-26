@@ -4,6 +4,8 @@ import LegacyPreview from "../previews/LegacyPreview"
 import PrepagaPreview from "../previews/PrepagaPreview"
 import TicketsPreview from "../previews/TicketsPreview"
 import WorkspacePreview from "../previews/WorkspacePreview"
+import ArchivePreview from "../previews/ArchivePreview"
+import CommercialEvidence from "../components/CommercialEvidence"
 import { projects, type CaseStudy, type Project } from "../data/projects"
 
 const previewByType = {
@@ -12,6 +14,7 @@ const previewByType = {
   prepaga: <PrepagaPreview />,
   legacy: <LegacyPreview />,
   workspace: <WorkspacePreview />,
+  archive: <ArchivePreview />,
 }
 
 function TextSection({ title, children }: { title: string; children: React.ReactNode }) {
@@ -41,6 +44,8 @@ export default function ProjectDetail() {
       <header className="mt-7 overflow-hidden rounded-[22px] border hairline bg-white"><div className="grid lg:grid-cols-[1.1fr_.9fr]"><div className="p-7 md:p-10"><div className="font-mono text-[10px] uppercase tracking-[.16em]" style={{ color: project.color }}>{project.subtitle}</div><h1 className="mt-4 font-display text-[42px] leading-[.94] tracking-[-.045em] md:text-[56px]">{project.title}</h1><p className="mt-5 max-w-[60ch] text-[15px] leading-relaxed text-ink-light">{project.description}</p><div className="mt-7 flex flex-wrap gap-2"><span className="rounded-full border hairline bg-paper-2 px-3 py-1.5 font-mono text-[10px]">{project.demoStatus}</span><span className="rounded-full border hairline bg-white px-3 py-1.5 text-[11px]">{project.status}</span><span className="rounded-full border hairline bg-white px-3 py-1.5 text-[11px]">Hub · Preview local</span></div></div><aside className="border-t hairline bg-paper-2/70 p-7 lg:border-l lg:border-t-0 md:p-10"><div className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Availability</div><p className="mt-4 font-display text-[25px] leading-tight">{isLocalDemo ? "Demo local, sin publicación" : "Preview con datos ficticios"}</p><p className="mt-3 text-[13px] leading-relaxed text-ink-light">{isLocalDemo ? "La demo pertenece a un proyecto independiente y está preparada localmente. Este hub no la publica ni la mantiene." : "La interacción que se ve aquí ayuda a entender el enfoque, pero no representa una demo oficial ni un sistema en producción."}</p><a href="#preview" className="mt-6 inline-block rounded-full bg-ink px-4 py-2.5 text-[13px] text-paper">Ver preview ↓</a></aside></div></header>
 
       <section className="mt-10"><div className="mb-7"><div className="font-mono text-[10px] uppercase tracking-[.16em] text-stone">Case study</div><h2 className="mt-2 font-display text-[32px] tracking-[-.035em]">Decisiones y evidencia disponible</h2></div><CaseStudy project={project} study={project.caseStudy} /></section>
+
+      <CommercialEvidence project={project} />
 
       <section id="preview" className="scroll-mt-20 mt-12 overflow-hidden rounded-[22px] border hairline bg-white"><div className="flex flex-col justify-between gap-3 border-b hairline bg-paper-2/70 px-6 py-4 sm:flex-row sm:items-center md:px-8"><div><div className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Interactive preview</div><h2 className="mt-1 font-display text-[20px]">Recorrido representativo</h2></div><span className="w-fit rounded-full border hairline bg-white px-3 py-1 font-mono text-[10px]">Datos ficticios · Hub</span></div><div className="p-4 sm:p-6 md:p-8">{previewByType[project.preview]}</div><div className="border-t hairline bg-white px-6 py-4 text-[12px] leading-relaxed text-ink-light">Esta preview vive en Federico Home y no importa código, datos ni integraciones de proyectos hermanos. {isLocalDemo ? "La demo independiente continúa disponible solo de forma local." : "No hay una demo externa declarada para este proyecto."}</div></section>
 

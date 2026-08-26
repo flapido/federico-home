@@ -1,11 +1,12 @@
 import { render, screen } from "@testing-library/react"
-import { MemoryRouter } from "react-router-dom"
+import { MemoryRouter, Route, Routes } from "react-router-dom"
 import About from "../pages/About"
 import CV from "../pages/CV"
 import Home from "../pages/Home"
 import Lab from "../pages/Lab"
 import NotFound from "../pages/NotFound"
 import Projects from "../pages/Projects"
+import ProjectDetail from "../pages/ProjectDetail"
 import Solutions from "../pages/Solutions"
 
 test("Home communicates senior positioning and primary paths", () => {
@@ -23,7 +24,15 @@ test("Projects lists case studies with honest statuses", () => {
   expect(screen.getByRole("heading", { name: /Proyectos con contexto/i })).toBeInTheDocument()
   expect(screen.getByText("Sistema de Subastas")).toBeInTheDocument()
   expect(screen.getByText("Company Workspace")).toBeInTheDocument()
+  expect(screen.getByText("Archivo Digital")).toBeInTheDocument()
   expect(screen.getAllByText("LOCAL_DEMO").length).toBeGreaterThan(0)
+})
+
+test("Commercial case studies retain visual evidence and safe CTAs", () => {
+  render(<MemoryRouter initialEntries={["/proyectos/legacy-web"]}><Routes><Route path="/proyectos/:slug" element={<ProjectDetail />} /></Routes></MemoryRouter>)
+  expect(screen.getByText(/De una pantalla fija/i)).toBeInTheDocument()
+  expect(screen.getByRole("img", { name: /sistema desktop legado/i })).toHaveAttribute("src", "/solutions/legacy/legacy-before.png")
+  expect(screen.getByRole("link", { name: /Quiero modernizar/i })).toHaveAttribute("href", "/soluciones#contacto-soluciones")
 })
 
 test("Solutions presents evidence, honest states and commercial contact", () => {

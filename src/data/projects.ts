@@ -25,7 +25,7 @@ export type Project = {
   color: string
   bg: string
   href: string
-  preview: "auction" | "tickets" | "prepaga" | "legacy" | "workspace"
+  preview: "auction" | "tickets" | "prepaga" | "legacy" | "workspace" | "archive"
   demoStatus: DemoStatus
   featured?: boolean
   caseStudy: CaseStudy
@@ -159,6 +159,32 @@ export const projects: Project[] = [
       quality: ["Intake y requirements review", "Senior design review sobre producto renderizado", "Verifier, QA funcional, regresión y gates"],
       aiUsage: "Los agentes aceleran tareas especializadas; las decisiones, límites, revisión y responsabilidad siguen bajo control humano.",
       evidence: ["Repositorio local con Operating Model, Agent Contracts, skills y gates.", "Este portfolio se desarrolla bajo ese proceso controlado."],
+    },
+  },
+  {
+    id: "archivo-digital",
+    slug: "archivo-digital",
+    title: "Archivo Digital",
+    subtitle: "Documentos, imágenes e información organizada",
+    description: "Una aplicación estática para recorrer fichas, categorías y documentos con una experiencia editorial.",
+    year: "Caso real · datos públicos",
+    status: "Evidencia de producto",
+    statusTone: "featured",
+    color: "#6B3430",
+    bg: "#FBF1EC",
+    href: "/proyectos/archivo-digital",
+    preview: "archive",
+    demoStatus: "PREVIEW",
+    featured: true,
+    caseStudy: {
+      overview: "Archivo Digital ordena documentos, imágenes e información en fichas navegables para que una colección se pueda recorrer y encontrar.",
+      problem: "Cuando el material vive disperso en carpetas, PDFs y planillas, consultarlo o compartirlo exige demasiados pasos.",
+      solution: "Un catálogo editorial con fichas, categorías, recursos asociados y visor de documentos. La evidencia usa un conjunto histórico público de Tucumán y excluye archivos privados.",
+      architecture: ["Sitio estático publicable", "Datos y assets por colección", "Rutas relativas y navegación por ficha"],
+      stack: ["HTML · CSS · JavaScript", "Fichas · categorías · visor PDF", "Responsive"],
+      decisions: ["Separar la plantilla de la información de cada colección.", "Usar solamente datos públicos o de prueba en la evidencia del portfolio."],
+      quality: ["QA visual desktop y mobile", "Recursos locales y navegación sin backend"],
+      evidence: ["Captura real de Acervo Tucumán con información histórica pública.", "La evidencia excluye archivos y datos privados."],
     },
   },
 ]

@@ -211,6 +211,9 @@ SOL-03 · Navegación desktop, mobile, footer y entrada de Home llegan a `/soluc
 SOL-04 · Capturas públicas de soluciones cargan con alt útil, lazy loading no crítico y sin requests fallidos · PASS · 2026-08-26
 SOL-05 · `/soluciones` no contiene Quiniela, enlaces ni assets asociados · PASS · 2026-08-26
 SOL-06 · Matriz 320/360/375/390/412/430/1024/1366/1440/1920 sin overflow, clipping ni errores propios de consola · PASS · 2026-08-26
+CASE-01 · Legacy → Web muestra antes/después real, migración progresiva y CTA comercial · PASS · 2026-08-26
+CASE-02 · Subastas muestra flujo comercial, adaptaciones y estado DEMO LOCAL sin URL inventada · PASS · 2026-08-26
+CASE-03 · Archivo Digital carga directo con evidencia pública de Tucumán, sin datos privados ni capacidades IA falsas · PASS · 2026-08-26
 
 # ABOUT-AVATAR-2026-08-25
 
