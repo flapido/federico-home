@@ -20,3 +20,5 @@ Cloudflare Pages respondió 200 en las tres rutas. Chromium verificó cada una a
 ## Ajuste visual — Archivo Digital
 
 La demostración ahora usa tres capturas QA reales y seguras del producto: listado con búsqueda/filtros, ficha pública y visor PDF multipágina con fixtures. Reemplaza por completo los bloques conceptuales; mantiene el badge `Datos de demostración` y copy orientado a visitante.
+
+La verificación posterior en producción confirmó a 390×844 y 1440×900 el título, badge y las tres capturas cargadas tras scroll; sin overflow, errores propios ni identificadores excluidos.
