@@ -216,6 +216,15 @@ CASE-02 · Subastas muestra flujo comercial, adaptaciones y estado DEMO LOCAL si
 CASE-03 · Archivo Digital carga directo con evidencia pública de Tucumán, sin datos privados ni capacidades IA falsas · PASS · 2026-08-26
 CASE-04 · Archivo Digital muestra catálogo, ficha y visor PDF reales; sin placeholders conceptuales ni copy interno · PASS · 2026-08-26
 
+# CONTACTO-V2.1-2026-08-26
+
+CONTACT-01 · `/contacto` muestra formulario breve y las tres alternativas directas, con WhatsApp prioritario · PASS · 2026-08-26
+CONTACT-02 · Validaciones amables, foco, etiquetas, `aria-describedby`, estado `aria-live` y mensaje preservado ante fallo · PASS · 2026-08-26
+CONTACT-03 · Origen contextual, WhatsApp, Email y LinkedIn usan enlaces públicos correctos · PASS · 2026-08-26
+CONTACT-04 · Endpoint Cloudflare valida y limita solicitudes server-side; honeypot sin persistencia de consultas · PASS · 2026-08-26
+CONTACT-05 · Matriz responsive 320/360/375/390/412/430/1024/1366/1440/1920 sin overflow ni errores propios · PASS · 2026-08-26
+CONTACT-06 · Entrega Telegram real con secreto rotado de producción · BLOCKED · 2026-08-26 · TOKEN_EXPOSURE_RISK; token histórico no reutilizado.
+
 # ABOUT-AVATAR-2026-08-25
 
 ABOUT-AV-01 · `/about` renderiza un único avatar MP4, muted, playsInline, metadata y sin controles/loop · PASS · 2026-08-25

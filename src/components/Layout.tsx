@@ -32,7 +32,7 @@ function Nav() {
 
         <div className="hidden items-center gap-1.5 md:flex">
           <HeaderLink to="/cv">CV</HeaderLink>
-          <a href="/#contacto" className="rounded-full bg-ink px-3.5 py-2 text-[12px] text-paper transition-colors hover:bg-ink-2">Contacto</a>
+          <Link to="/contacto" className="rounded-full bg-ink px-3.5 py-2 text-[12px] text-paper transition-colors hover:bg-ink-2">Contame tu idea</Link>
         </div>
 
         <button type="button" aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen(value => !value)} className="grid h-10 w-10 shrink-0 place-items-center rounded-full border hairline bg-white md:hidden">
@@ -48,7 +48,7 @@ function Nav() {
             <NavLink to="/lab" onClick={() => setOpen(false)} className="border-b hairline py-3">Lab</NavLink>
             <NavLink to="/about" onClick={() => setOpen(false)} className="border-b hairline py-3">Sobre mí</NavLink>
             <NavLink to="/cv" onClick={() => setOpen(false)} className="border-b hairline py-3">CV</NavLink>
-            <a href="/#contacto" className="border-b hairline py-3" onClick={() => setOpen(false)}>Contacto</a>
+            <NavLink to="/contacto" onClick={() => setOpen(false)} className="border-b hairline py-3">Contame tu idea</NavLink>
             <div className="flex flex-wrap gap-2 pt-4 text-[12px]">
               <a href={cv.links.github} target="_blank" rel="noopener noreferrer" className="rounded-full border hairline bg-white px-3 py-2">GitHub ↗</a>
               <a href={cv.links.linkedin} target="_blank" rel="noopener noreferrer" className="rounded-full border hairline bg-white px-3 py-2">LinkedIn ↗</a>
@@ -75,7 +75,7 @@ export default function Layout() {
             </div>
             <div className="grid grid-cols-2 gap-6 text-[13px]">
               <div><div className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone">Explorar</div><div className="mt-3 flex flex-col gap-2"><a href="/#experiencia" className="hover:underline">Experiencia</a><a href="/#expertise" className="hover:underline">Expertise</a><Link to="/proyectos" className="hover:underline">Proyectos</Link><Link to="/soluciones" className="hover:underline">Soluciones</Link><Link to="/cv" className="hover:underline">CV</Link></div></div>
-              <div><div className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone">Contacto</div><div className="mt-3 flex flex-col gap-2"><a href={cv.links.linkedin} target="_blank" rel="noopener noreferrer" className="hover:underline">LinkedIn ↗</a><a href={cv.links.github} target="_blank" rel="noopener noreferrer" className="hover:underline">GitHub ↗</a><a href={`mailto:${cv.links.email}`} className="hover:underline">Email</a></div></div>
+              <div><div className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone">Contacto</div><div className="mt-3 flex flex-col gap-2"><Link to="/contacto" className="hover:underline">Contame tu idea</Link><a href="https://wa.me/5491157642626?text=Hola%20Federico%2C%20vi%20tu%20portfolio%20y%20quer%C3%ADa%20hacerte%20una%20consulta." target="_blank" rel="noopener noreferrer" className="hover:underline">WhatsApp ↗</a><a href={cv.links.linkedin} target="_blank" rel="noopener noreferrer" className="hover:underline">LinkedIn ↗</a><a href={`mailto:${cv.links.email}`} className="hover:underline">Email</a></div></div>
             </div>
           </div>
           <div className="mt-8 flex flex-col justify-between gap-2 border-t hairline pt-5 font-mono text-[10px] text-stone sm:flex-row"><span>© {new Date().getFullYear()} Federico Lapido · Buenos Aires, Argentina</span><span>Portfolio profesional · Hub de proyectos independientes</span></div>

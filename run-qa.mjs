@@ -18,7 +18,7 @@ const viewports = [
   { name: "1440x900", width: 1440, height: 900 },
   { name: "1920x1080", width: 1920, height: 1080 },
 ]
-const routes = ["/", "/proyectos", "/proyectos/subastas", "/proyectos/legacy-web", "/proyectos/archivo-digital", "/proyectos/company-workspace", "/soluciones", "/lab", "/about", "/cv", "/ruta-inexistente"]
+const routes = ["/", "/contacto", "/proyectos", "/proyectos/subastas", "/proyectos/legacy-web", "/proyectos/archivo-digital", "/proyectos/company-workspace", "/soluciones", "/lab", "/about", "/cv", "/ruta-inexistente"]
 
 async function available() {
   try {

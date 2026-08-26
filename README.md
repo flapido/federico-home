@@ -10,6 +10,10 @@ Portfolio profesional de Federico Lapido. Es un hub estático para presentar exp
 - Case studies con estados honestos: `PREVIEW`, `LOCAL_DEMO` y `LIVE_DEMO`.
 - Accesibilidad base: HTML semántico, enlace para saltar al contenido, foco visible y soporte de reducción de movimiento.
 
+## Contacto server-side
+
+La consulta de `/contacto` usa la Pages Function `functions/api/contacto.ts`. Para habilitar entrega real, Cloudflare Pages requiere los secretos server-side `TELEGRAM_BOT_TOKEN` y `TELEGRAM_CHAT_ID`; nunca deben usar prefijo `VITE_`, guardarse en Git ni aparecer en el bundle.
+
 ## Stack
 
 - Vite + React 19 + TypeScript + React Router 7
