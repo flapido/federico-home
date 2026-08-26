@@ -11,7 +11,7 @@ export default function LegacyPreview(){
       <div className="relative rounded-[16px] border hairline overflow-hidden bg-white h-[320px] select-none">
         {/* Before */}
         <div className="absolute inset-0 bg-[#D8D2C4] p-4 flex flex-col">
-          <div className="text-[10px] font-mono tracking-widest uppercase text-stone">Antes · Desktop · 2008</div>
+          <div className="text-[10px] font-mono tracking-widest uppercase text-stone">Antes · Interfaz desktop</div>
           <div className="mt-3 flex-1 rounded-[10px] border-2 border-[#9A9590] bg-[#EFECE3] p-3 shadow-inner overflow-hidden">
             <div className="h-6 bg-[#9A9590] text-white text-[11px] font-mono flex items-center px-2">App.Legacy.exe — Sistema Viejo</div>
             <div className="mt-2 grid grid-cols-4 gap-1">
@@ -23,12 +23,12 @@ export default function LegacyPreview(){
               <span className="px-2 py-1 bg-[#9A9590] text-white text-[10px] font-mono">Aceptar</span>
               <span className="px-2 py-1 border border-[#9A9590] text-[10px] font-mono">Cancelar</span>
             </div>
-            <div className="mt-2 text-[9px] font-mono text-stone">Resolución fija · Sin responsive · Latencia alta</div>
+            <div className="mt-2 text-[9px] font-mono text-stone">Resolución fija · Interfaz acoplada</div>
           </div>
         </div>
         {/* After - clipped */}
         <div className="absolute inset-0 bg-white p-4 flex flex-col" style={{clipPath: `inset(0 ${100-pos}% 0 0)`}}>
-          <div className="text-[10px] font-mono tracking-widest uppercase text-stone">Después · Web Moderna</div>
+          <div className="text-[10px] font-mono tracking-widest uppercase text-stone">Después · Web moderna</div>
           <div className="mt-3 flex-1 rounded-[14px] border hairline bg-ink text-paper p-4 flex flex-col">
             <div className="flex items-center gap-2 text-[11px]"><span className="w-2 h-2 rounded-full bg-moss" /> Web · Responsive · Rápida</div>
             <div className="mt-3 grid grid-cols-3 gap-2">

@@ -83,8 +83,7 @@ export default function TicketsPreview(){
           <div className="text-[11px] tracking-widest uppercase opacity-70 font-mono">Resolución</div>
           <div className="font-display text-[16px] mt-1">Resolver sin ruido</div>
           <div className="text-[12px] opacity-80 mt-2 leading-relaxed">Prioridades visibles, estados claros, historial trazable. Visual antes que párrafos.</div>
-          <div className="mt-4 h-2 bg-white/20 rounded-full overflow-hidden"><div className="h-full w-[72%] bg-white rounded-full" /></div>
-          <div className="text-[11px] font-mono opacity-70 mt-1">72% tickets resueltos (simulado)</div>
+          <div className="mt-4 flex items-center gap-2 text-[11px] font-mono opacity-70"><span className="h-2 w-2 rounded-full bg-white" /> Estados representativos · datos ficticios</div>
         </div>
       </div>
     </div>

@@ -198,3 +198,20 @@ Vigente para Subastas y Legacy: cuando Cloudflare entregue una URL pública, cam
 El resto de proyectos conserva su flujo PREVIEW. Tras agregar fotos reales: retestar FOTO-01/02.
 
 Operado por: Company Workspace QA — 2026-08-23
+
+---
+
+# V2-RECHECK-2026-08-25
+
+V2-NAV-01 · Home muestra identidad, seniority, especialidades, 20+ años y CTA principal · PASS · 2026-08-25
+V2-NAV-02 · Menú móvil abre, muestra destinos y cierra sin quedar visible · PASS · 2026-08-25
+V2-NAV-03 · Technical Expertise navega a `/cv#skills` · PASS · 2026-08-25
+V2-PROJ-01 · Índice y case study Subastas cargan con estado LOCAL_DEMO honesto · PASS · 2026-08-25
+V2-PREV-01 · Slider Legacy → Web actualiza la comparación · PASS · 2026-08-25
+V2-CV-01 · CV muestra WiseTech y descarga PDF con respuesta 200 · PASS · 2026-08-25
+V2-ERR-01 · Ruta inexistente muestra 404 cuidada · PASS · 2026-08-25
+V2-RWD-01 · Rutas clave no presentan overflow horizontal en viewport móvil · PASS · 2026-08-25
+V2-RENDER-01 · Matriz Playwright 10 viewports × 8 rutas sin errores propios de consola · PASS · 2026-08-25
+V2-PRIV-01 · Bundle no expone secretos, teléfonos ni dominios placeholder · PASS · 2026-08-25
+
+Los escenarios V1 anteriores se conservan como historial de baseline; esta sección contiene únicamente comportamientos V2 realmente ejecutados en la reanudación.

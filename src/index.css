@@ -6,12 +6,12 @@
   --color-paper-3: #EDE6DA;
   --color-ink: #1C1E1B;
   --color-ink-2: #2D2F2D;
-  --color-ink-light: #6B6E6B;
-  --color-clay: #C07A5A;
-  --color-clay-dark: #A85A3A;
+  --color-ink-light: #5F625F;
+  --color-clay: #944A30;
+  --color-clay-dark: #7B4431;
   --color-brass: #C9A86A;
   --color-moss: #4A5A52;
-  --color-stone: #9A9590;
+  --color-stone: #67625D;
   --color-line: #E8E2D9;
   --font-display: "Fraunces", Georgia, serif;
   --font-sans: "Instrument Sans", system-ui, sans-serif;
@@ -33,6 +33,19 @@ body {
 /* focus */
 :focus-visible { outline: 2px solid var(--color-clay); outline-offset: 2px; }
 
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -5rem;
+  z-index: 60;
+  border-radius: .5rem;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  padding: .65rem .85rem;
+  font-size: .875rem;
+}
+.skip-link:focus { top: 1rem; }
+
 /* editorial paper texture */
 .paper-texture {
   background-image:
@@ -50,3 +63,28 @@ body {
 @keyframes fadeUp { from { opacity:0; transform: translateY(12px)} to {opacity:1; transform: translateY(0)} }
 @keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
 .animate-fadeUp { animation: fadeUp .7s ease both; }
+
+.workflow-grid {
+  display: grid;
+  gap: .75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.workflow-grid-compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+  .workflow-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .workflow-grid-compact { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}

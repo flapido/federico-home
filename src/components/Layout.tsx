@@ -1,46 +1,58 @@
-import { NavLink, Outlet, useLocation } from "react-router-dom"
+import { Link, NavLink, Outlet } from "react-router-dom"
 import { useState } from "react"
+import { cv } from "../data/cv"
+
+const homeLinks = [
+  { href: "/#experiencia", label: "Experiencia" },
+  { href: "/#expertise", label: "Expertise" },
+]
+
+function HeaderLink({ to, children }: { to: string; children: React.ReactNode }) {
+  return <NavLink to={to} className={({ isActive }) => `rounded-full px-3 py-2 transition-colors ${isActive && !to.includes("#") ? "bg-ink text-paper" : "text-ink-light hover:bg-paper-2 hover:text-ink"}`}>{children}</NavLink>
+}
 
 function Nav() {
   const [open, setOpen] = useState(false)
-  const loc = useLocation()
-  const isHome = loc.pathname === "/"
-
   return (
-    <header className={`sticky top-0 z-40 backdrop-blur-xl border-b hairline ${isHome ? "bg-[var(--color-paper)]/80" : "bg-[var(--color-paper)]/90"}`}>
-      <div className="max-w-[1280px] mx-auto px-6 md:px-8 h-[56px] flex items-center justify-between gap-4">
-        <NavLink to="/" className="flex items-center gap-3 group shrink-0">
-          <span className="w-7 h-7 rounded-[9px] bg-ink text-paper grid place-items-center text-[11px] font-mono tracking-widest border border-line group-hover:rotate-[-6deg] transition">FL</span>
-          <span className="font-display text-[17px] tracking-[-0.02em]">Federico</span>
-          <span className="hidden lg:inline text-[11px] tracking-[0.14em] uppercase text-stone border-l pl-3 ml-1 hairline">Casa digital · BA</span>
-        </NavLink>
+    <header className="sticky top-0 z-40 border-b hairline bg-paper/95 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-3 px-5 sm:px-6 md:px-8">
+        <Link to="/" className="group flex shrink-0 items-center gap-2.5" aria-label="Federico Lapido, inicio">
+          <span className="grid h-8 w-8 place-items-center rounded-[10px] bg-ink font-mono text-[10px] tracking-wide text-paper transition-transform group-hover:-rotate-3">FL</span>
+          <span className="font-display text-[17px] tracking-[-0.02em]">Federico Lapido</span>
+          <span className="hidden border-l hairline pl-3 text-[10px] uppercase tracking-[0.14em] text-stone lg:inline">Senior Software Engineer</span>
+        </Link>
 
-        <nav className="hidden md:flex items-center gap-1 text-[13px]" aria-label="Principal">
-          <NavLink to="/proyectos" className={({isActive})=> `px-3 py-1.5 rounded-full transition ${isActive ? "bg-ink text-paper" : "hover:bg-paper-3 text-ink-light hover:text-ink"}`}>Proyectos</NavLink>
-          <NavLink to="/lab" className={({isActive})=> `px-3 py-1.5 rounded-full transition ${isActive ? "bg-ink text-paper" : "hover:bg-paper-3 text-ink-light hover:text-ink"}`}>Lab</NavLink>
-          <NavLink to="/about" className={({isActive})=> `px-3 py-1.5 rounded-full transition ${isActive ? "bg-ink text-paper" : "hover:bg-paper-3 text-ink-light hover:text-ink"}`}>Sobre mí</NavLink>
+        <nav className="hidden items-center gap-0.5 text-[13px] md:flex" aria-label="Principal">
+          {homeLinks.map(link => <a key={link.href} href={link.href} className="rounded-full px-3 py-2 text-ink-light transition-colors hover:bg-paper-2 hover:text-ink">{link.label}</a>)}
+          <HeaderLink to="/proyectos">Proyectos</HeaderLink>
+          <HeaderLink to="/lab">Lab</HeaderLink>
+          <HeaderLink to="/about">Sobre mí</HeaderLink>
         </nav>
 
-        <nav className="hidden md:flex items-center gap-1 text-[12px]" aria-label="Secundario">
-          <NavLink to="/cv" className={({isActive})=> `px-3 py-1.5 rounded-full border hairline ${isActive ? "bg-paper-3" : "hover:bg-paper-2"}`}>CV</NavLink>
-          <a href="https://github.com/flapido" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-full border hairline bg-white hover:bg-paper-2">GitHub ↗</a>
-          <a href="https://www.linkedin.com/in/federico-lapido" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-full bg-ink text-paper hover:bg-black">LinkedIn ↗</a>
-        </nav>
+        <div className="hidden items-center gap-1.5 md:flex">
+          <HeaderLink to="/cv">CV</HeaderLink>
+          <a href="/#contacto" className="rounded-full bg-ink px-3.5 py-2 text-[12px] text-paper transition-colors hover:bg-ink-2">Contacto</a>
+        </div>
 
-        <button aria-label="Abrir menú" aria-expanded={open} onClick={()=>setOpen(v=>!v)} className="md:hidden w-9 h-9 rounded-full border hairline grid place-items-center shrink-0">
-          <span className="w-4 h-[1.5px] bg-ink block shadow-[0_5px_0_0_#1C1E1B,0_-5px_0_0_#1C1E1B]" />
+        <button type="button" aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen(value => !value)} className="grid h-10 w-10 shrink-0 place-items-center rounded-full border hairline bg-white md:hidden">
+          <span className="block h-[1.5px] w-4 bg-ink shadow-[0_5px_0_0_#1C1E1B,0_-5px_0_0_#1C1E1B]" />
         </button>
       </div>
       {open && (
-        <div className="md:hidden border-t hairline bg-paper px-6 py-4 flex flex-col gap-1 text-sm">
-          <NavLink onClick={()=>setOpen(false)} to="/proyectos" className="py-2.5 border-b hairline">Proyectos</NavLink>
-          <NavLink onClick={()=>setOpen(false)} to="/lab" className="py-2.5 border-b hairline">Lab</NavLink>
-          <NavLink onClick={()=>setOpen(false)} to="/about" className="py-2.5 border-b hairline">Sobre mí</NavLink>
-          <NavLink onClick={()=>setOpen(false)} to="/cv" className="py-2.5 border-b hairline">CV</NavLink>
-          <a href="https://github.com/flapido" target="_blank" rel="noopener noreferrer" className="py-2.5 flex justify-between">GitHub <span>↗</span></a>
-          <a href="https://www.linkedin.com/in/federico-lapido" target="_blank" rel="noopener noreferrer" className="py-2.5 flex justify-between">LinkedIn <span>↗</span></a>
-          <div className="text-[11px] font-mono text-stone mt-2">Buenos Aires, Argentina · Casa digital</div>
-        </div>
+        <nav id="mobile-navigation" className="border-t hairline bg-paper px-5 py-3 text-[15px] shadow-sm md:hidden" aria-label="Principal móvil">
+          <div className="mx-auto flex max-w-[1280px] flex-col">
+            {homeLinks.map(link => <a key={link.href} href={link.href} className="border-b hairline py-3" onClick={() => setOpen(false)}>{link.label}</a>)}
+            <NavLink to="/proyectos" onClick={() => setOpen(false)} className="border-b hairline py-3">Proyectos</NavLink>
+            <NavLink to="/lab" onClick={() => setOpen(false)} className="border-b hairline py-3">Lab</NavLink>
+            <NavLink to="/about" onClick={() => setOpen(false)} className="border-b hairline py-3">Sobre mí</NavLink>
+            <NavLink to="/cv" onClick={() => setOpen(false)} className="border-b hairline py-3">CV</NavLink>
+            <a href="/#contacto" className="border-b hairline py-3" onClick={() => setOpen(false)}>Contacto</a>
+            <div className="flex flex-wrap gap-2 pt-4 text-[12px]">
+              <a href={cv.links.github} target="_blank" rel="noopener noreferrer" className="rounded-full border hairline bg-white px-3 py-2">GitHub ↗</a>
+              <a href={cv.links.linkedin} target="_blank" rel="noopener noreferrer" className="rounded-full border hairline bg-white px-3 py-2">LinkedIn ↗</a>
+            </div>
+          </div>
+        </nav>
       )}
     </header>
   )
@@ -48,39 +60,23 @@ function Nav() {
 
 export default function Layout() {
   return (
-    <div className="min-h-screen flex flex-col paper-texture">
-      <a href="#contenido" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-ink text-paper px-3 py-1 text-sm rounded">Saltar al contenido</a>
+    <div className="paper-texture flex min-h-screen flex-col">
+      <a href="#contenido" className="skip-link">Saltar al contenido</a>
       <Nav />
-      <main id="contenido" className="flex-1">
-        <Outlet />
-      </main>
-      <footer className="border-t hairline mt-12 bg-white/60">
-        <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-8">
-          <div className="flex flex-col md:flex-row gap-8 justify-between">
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="w-6 h-6 rounded-[8px] bg-ink text-paper grid place-items-center text-[10px] font-mono">FL</span>
-                <span className="font-display text-[15px]">Federico Lapido</span>
-                <span className="hidden sm:inline text-[11px] text-stone">— Buenos Aires, Argentina</span>
-              </div>
-              <div className="text-ink-light mt-2 text-[13px] leading-relaxed max-w-[48ch]">Ideas convertidas en cosas que funcionan. Casa digital hecha a mano — proyectos con previews, Lab y CV.</div>
-              <div className="mt-3 flex gap-2 text-[11px] font-mono text-stone"><span>Fraunces + Instrument Sans</span><span>·</span><span>Papel #FDFBF7</span></div>
+      <main id="contenido" className="flex-1"><Outlet /></main>
+      <footer className="mt-14 border-t hairline bg-white/60">
+        <div className="mx-auto max-w-[1280px] px-5 py-9 sm:px-6 md:px-8">
+          <div className="grid gap-8 md:grid-cols-[1.25fr_.75fr]">
+            <div>
+              <div className="flex items-center gap-2.5"><span className="grid h-7 w-7 place-items-center rounded-[9px] bg-ink font-mono text-[9px] text-paper">FL</span><span className="font-display text-[17px]">Federico Lapido</span></div>
+              <p className="mt-3 max-w-[52ch] text-[13px] leading-relaxed text-ink-light">Senior Software Engineer. Backend, arquitectura, integraciones y IA aplicada para construir y evolucionar software con criterio.</p>
             </div>
-            <div className="text-[13px] leading-relaxed grid grid-cols-2 gap-6 md:gap-10">
-              <div>
-                <div className="font-mono text-[11px] tracking-widest uppercase text-stone">Explorar</div>
-                <div className="mt-2 flex flex-col gap-1"><a href="/proyectos" className="hover:underline underline-offset-4">Proyectos</a><a href="/lab" className="hover:underline underline-offset-4">Lab</a><a href="/about" className="hover:underline underline-offset-4">Sobre mí</a><a href="/cv" className="hover:underline underline-offset-4">CV</a></div>
-              </div>
-              <div>
-                <div className="font-mono text-[11px] tracking-widest uppercase text-stone">Contacto</div>
-                <div className="mt-2 flex flex-col gap-1"><a href="https://www.linkedin.com/in/federico-lapido" target="_blank" rel="noopener noreferrer" className="hover:underline underline-offset-4">LinkedIn ↗</a><a href="https://github.com/flapido" target="_blank" rel="noopener noreferrer" className="hover:underline underline-offset-4">GitHub ↗</a><a href="/cv" className="hover:underline underline-offset-4">Descargar CV</a></div>
-              </div>
+            <div className="grid grid-cols-2 gap-6 text-[13px]">
+              <div><div className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone">Explorar</div><div className="mt-3 flex flex-col gap-2"><a href="/#experiencia" className="hover:underline">Experiencia</a><a href="/#expertise" className="hover:underline">Expertise</a><Link to="/proyectos" className="hover:underline">Proyectos</Link><Link to="/cv" className="hover:underline">CV</Link></div></div>
+              <div><div className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone">Contacto</div><div className="mt-3 flex flex-col gap-2"><a href={cv.links.linkedin} target="_blank" rel="noopener noreferrer" className="hover:underline">LinkedIn ↗</a><a href={cv.links.github} target="_blank" rel="noopener noreferrer" className="hover:underline">GitHub ↗</a><a href={`mailto:${cv.links.email}`} className="hover:underline">Email</a></div></div>
             </div>
           </div>
-          <div className="mt-8 pt-6 border-t hairline flex flex-col md:flex-row gap-2 justify-between text-[11px] font-mono text-stone">
-            <span>© {new Date().getFullYear()} Federico Lapido — Hecho a mano, sin neón.</span>
-            <span>Hospedable en tu propia PC · <a href="/proyectos" className="underline">Showroom</a></span>
-          </div>
+          <div className="mt-8 flex flex-col justify-between gap-2 border-t hairline pt-5 font-mono text-[10px] text-stone sm:flex-row"><span>© {new Date().getFullYear()} Federico Lapido · Buenos Aires, Argentina</span><span>Portfolio profesional · Hub de proyectos independientes</span></div>
         </div>
       </footer>
     </div>

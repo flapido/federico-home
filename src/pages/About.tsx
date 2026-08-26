@@ -1,57 +1,21 @@
-export default function About(){
-  const hasProfile = true // cambia a true cuando exista la fotografía real — el img hará fallback automático
+import { Link } from "react-router-dom"
+import { cv } from "../data/cv"
+
+const sections = [
+  { title: "Quién soy", text: "Soy Federico Lapido, Senior Software Engineer. Me interesa el software que sostiene operaciones reales: el que integra sistemas, conserva reglas de negocio y necesita poder evolucionar con seguridad." },
+  { title: "Mi trayectoria", text: "Más de 20 años trabajando sobre backend, integraciones empresariales, facturación electrónica, calidad y diagnóstico de sistemas. La experiencia no reemplaza la curiosidad: le da contexto." },
+  { title: "Cómo pienso el software", text: "Empiezo por entender el comportamiento, las restricciones y el costo de cambiar. Busco soluciones claras, mantenibles y verificables antes que complejidad llamativa." },
+  { title: "Cómo evolucionó mi trabajo", text: "A la ingeniería de backend e integraciones sumé automatización e IA aplicada para acelerar análisis, documentación, pruebas y exploración, manteniendo la revisión humana en las decisiones importantes." },
+  { title: "Qué estoy construyendo actualmente", text: "Herramientas, procesos y experiencias que acercan la IA al trabajo real de ingeniería: con roles claros, evidencia, pruebas y control de calidad." },
+  { title: "Qué puedo aportar", text: "Criterio para sistemas existentes, capacidad de diagnóstico, integración entre plataformas, modernización gradual y una práctica concreta de calidad durante todo el ciclo de desarrollo." },
+]
+
+export default function About() {
   return (
-    <div className="max-w-[980px] mx-auto px-6 md:px-8 py-10">
-      <div className="grid md:grid-cols-[1.15fr_.85fr] gap-8 items-start">
-        <div>
-          <div className="inline-flex items-center gap-2 text-[11px] tracking-[0.14em] uppercase text-stone"><span className="w-6 h-px bg-line" /> Sobre mí</div>
-          <h1 className="font-display text-[34px] md:text-[42px] tracking-[-0.03em] leading-none mt-3">Construyo cosas.<br/><span className="italic font-[300]">Pruebo ideas.</span></h1>
-          <p className="text-[14px] leading-relaxed mt-4 text-ink-2 max-w-[52ch]">Me interesa entender cómo funcionan los sistemas y dejarlos mejor que como los encontré. Esta casa digital es donde muestro lo que hago — sin humo, con previews que podés probar.</p>
-          <p className="text-[13px] text-ink-light mt-3 leading-relaxed max-w-[60ch]">Buenos Aires, Argentina. Trabajo backend, integraciones y producto. Si querés detalle profesional, está el CV.</p>
-          <div className="mt-6 flex gap-2 text-[12px]">
-            <a href="/cv" className="px-4 py-2 rounded-full bg-ink text-paper">Ver CV →</a>
-            <a href="/proyectos" className="px-4 py-2 rounded-full border hairline bg-white">Proyectos</a>
-          </div>
-        </div>
-
-        <div className="rounded-[20px] border hairline bg-white overflow-hidden">
-          <div className="aspect-[4/3] bg-paper-2 grid place-items-center relative overflow-hidden">
-            <img src="/fotos/federico-profile.jpg" alt="Federico Lapido" className="absolute inset-0 w-full h-full object-cover object-position-50% 35%" onError={e=>{(e.target as HTMLImageElement).style.display='none'}} />
-            {!hasProfile && <div className="relative text-center p-6">
-              <div className="w-14 h-14 rounded-full border hairline bg-white grid place-items-center mx-auto font-display text-stone">FL</div>
-              <div className="font-mono text-[11px] tracking-widest uppercase text-stone mt-3">Foto real — placeholder</div>
-              <div className="text-[11px] text-stone mt-1">Reemplazar: <span className="font-mono bg-paper-2 px-1 rounded border hairline">/fotos/federico-profile.webp</span></div>
-            </div>}
-          </div>
-          <div className="px-5 py-4 border-t hairline flex items-center justify-between text-[11px]">
-            <span className="font-mono text-stone">Buenos Aires · 2026</span>
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-moss" /> Disponible para charlar</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8 grid md:grid-cols-3 gap-4">
-        {[
-          { title:"Intereses", desc:"Sistemas, herramientas que ahorran tiempo, IA aplicada con criterio." },
-          { title:"Lugares", desc:"Cafés para trabajar, calles para caminar, ciudades para volver." },
-          { title:"Objetos", desc:"Pequeñas historias — no biografía inventada." },
-        ].map(card=>(
-          <div key={card.title} className="rounded-[16px] border hairline bg-white overflow-hidden flex flex-col">
-            <div className="h-[120px] bg-paper-2 border-b hairline relative flex items-center justify-center px-4">
-            </div>
-            <div className="p-4 flex-1">
-              <div className="font-display text-[14px] leading-relaxed">{card.title}</div>
-              <div className="text-[12px] text-ink-light mt-1 leading-relaxed">{card.desc}</div>
-            </div>
-            <div className="border-t hairline border-white/10"></div>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-8 rounded-[16px] border hairline bg-paper-2 p-5 flex flex-col md:flex-row gap-4 justify-between">
-        <div className="text-[13px] leading-relaxed">¿Querés ver algo funcionando? <a href="/proyectos" className="underline decoration-line underline-offset-4">Explorá proyectos</a> o escribí via <a href="https://www.linkedin.com/in/federico-lapido" target="_blank" rel="noopener noreferrer" className="underline decoration-line underline-offset-4">LinkedIn</a>.</div>
-        <div className="text-[11px] font-mono text-stone self-start md:self-center">Sin biografías inventadas · Solo placeholders reemplazables</div>
-      </div>
+    <div className="mx-auto max-w-[1120px] px-5 py-10 sm:px-6 md:px-8 md:py-14">
+      <header className="grid items-center gap-8 md:grid-cols-[1fr_.78fr] md:gap-14"><div><div className="font-mono text-[10px] uppercase tracking-[.16em] text-stone">Sobre mí</div><h1 className="mt-3 font-display text-[43px] leading-[.94] tracking-[-.045em] md:text-[58px]">Ingeniería con contexto, <span className="italic">curiosidad y cuidado.</span></h1><p className="mt-5 max-w-[57ch] text-[15px] leading-relaxed text-ink-light">El recorrido profesional no es un listado de herramientas: es aprender a entender sistemas grandes, encontrar la causa real y cambiar con responsabilidad.</p><div className="mt-7 flex flex-wrap gap-2"><Link to="/cv" className="rounded-full bg-ink px-5 py-3 text-[13px] text-paper">Ver CV</Link><Link to="/proyectos" className="rounded-full border hairline bg-white px-5 py-3 text-[13px]">Explorar proyectos</Link></div></div><figure className="overflow-hidden rounded-[22px] border hairline bg-paper-2"><img src="/fotos/federico-profile.jpg" alt="Federico Lapido" className="aspect-[4/3] w-full object-cover object-[50%_28%]" /><figcaption className="flex justify-between px-5 py-3 font-mono text-[10px] uppercase tracking-[.13em] text-stone"><span>Buenos Aires</span><span>Software Engineering</span></figcaption></figure></header>
+      <div className="mt-12 grid gap-4 md:grid-cols-2">{sections.map((section, index) => <section key={section.title} className="rounded-[18px] border hairline bg-white p-6"><div className="font-mono text-[10px] text-clay-dark">0{index + 1}</div><h2 className="mt-4 font-display text-[22px] leading-none">{section.title}</h2><p className="mt-3 text-[13px] leading-relaxed text-ink-light">{section.text}</p></section>)}</div>
+      <section className="mt-8 rounded-[18px] border hairline bg-paper-2 p-6 md:flex md:items-center md:justify-between md:gap-8"><div><div className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Contacto profesional</div><p className="mt-2 text-[13px] leading-relaxed text-ink-light">Para conocer experiencia, proyectos y disponibilidad de contacto, están los canales profesionales y el CV descargable.</p></div><div className="mt-5 flex shrink-0 flex-wrap gap-2 md:mt-0"><a href={cv.links.linkedin} target="_blank" rel="noopener noreferrer" className="rounded-full border hairline bg-white px-4 py-2 text-[12px]">LinkedIn ↗</a><a href={cv.links.github} target="_blank" rel="noopener noreferrer" className="rounded-full border hairline bg-white px-4 py-2 text-[12px]">GitHub ↗</a></div></section>
     </div>
   )
 }

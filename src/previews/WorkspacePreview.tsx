@@ -1,14 +1,14 @@
-/** PREVIEW — Company Workspace — interacción orbital marketing. */
+/** PREVIEW — Company Workspace — proceso representativo, no una demo de producto. */
 import { useState } from "react"
 
 const roles = [
-  { id:"producto", name:"Producto", desc:"Define qué construir", icon:"◈", color:"#C07A5A" },
+  { id:"producto", name:"Producto", desc:"Convierte el mandato en alcance verificable", icon:"◈", color:"#C07A5A" },
   { id:"arquitectura", name:"Arquitectura", desc:"Límites y riesgos técnicos", icon:"⬢", color:"#2D2F2D" },
   { id:"diseño", name:"Diseño", desc:"Visual y experiencia", icon:"◎", color:"#C9A86A" },
-  { id:"desarrollo", name:"Desarrollo", desc:"Construye", icon:"▣", color:"#4A5A52" },
-  { id:"qa", name:"QA", desc:"Verifica", icon:"✓", color:"#6B6E6B" },
-  { id:"seguridad", name:"Seguridad", desc:"Privacidad y riesgo", icon:"⬔", color:"#7A6F66" },
-  { id:"release", name:"Release", desc:"Entrega", icon:"▲", color:"#A85A3A" },
+  { id:"desarrollo", name:"Desarrollo", desc:"Implementa y prueba el cambio", icon:"▣", color:"#4A5A52" },
+  { id:"verificacion", name:"Verificación", desc:"Valida de manera independiente", icon:"✓", color:"#6B6E6B" },
+  { id:"seguridad", name:"Seguridad", desc:"Evalúa privacidad y riesgo cuando aplica", icon:"⬔", color:"#7A6F66" },
+  { id:"gate", name:"Quality Gate", desc:"Cierra solo con evidencia aplicable", icon:"▲", color:"#A85A3A" },
 ]
 
 export default function WorkspacePreview(){
@@ -18,8 +18,8 @@ export default function WorkspacePreview(){
   return (
     <div>
       <div className="text-center">
-        <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-stone">Construí una empresa virtual para crear software</div>
-        <div className="font-display text-[18px] mt-1">7 roles · orquestados</div>
+        <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-stone">Proceso de ingeniería asistido por IA</div>
+        <div className="font-display text-[18px] mt-1">Roles separados · evidencia compartida</div>
       </div>
 
       <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -41,7 +41,7 @@ export default function WorkspacePreview(){
             </div>
             <span className="ml-auto text-[11px] px-2 py-1 rounded-full bg-paper-2 border hairline">Activo</span>
           </div>
-          <div className="mt-4 text-[13px] leading-relaxed text-ink-light">{a.desc} — sin párrafos largos, solo lo esencial. El flujo pasa de Producto → Arquitectura → Diseño → Desarrollo → QA → Seguridad → Release.</div>
+          <div className="mt-4 text-[13px] leading-relaxed text-ink-light">{a.desc}. El flujo pasa por requisitos, arquitectura, diseño, desarrollo, verificación, QA y controles según el riesgo.</div>
           <div className="mt-4 flex gap-2 text-[11px] font-mono">
             <span className="px-2 py-1 rounded-full bg-ink text-paper">Entrada → Salida</span>
             <span className="px-2 py-1 rounded-full border hairline">Documentado</span>
@@ -58,9 +58,9 @@ export default function WorkspacePreview(){
           <div className="mt-4 h-1.5 bg-line rounded-full overflow-hidden flex">
             <div className="bg-ink" style={{width: `${(roles.findIndex(x=>x.id===active)+1)/roles.length*100}%`}} />
           </div>
-          <div className="mt-2 text-[11px] font-mono text-stone">{roles.findIndex(x=>x.id===active)+1} / {roles.length} — orquestación secuencial</div>
+          <div className="mt-2 text-[11px] font-mono text-stone">{roles.findIndex(x=>x.id===active)+1} / {roles.length} — coordinación con límites humanos</div>
           <div className="mt-4 rounded-[12px] bg-white border hairline p-3 text-[11px] leading-relaxed">
-            <span className="font-medium">Company Workspace</span> no es un template. Es el sistema con el que se construyó esta misma casa digital.
+            <span className="font-medium">Company Workspace</span> coordina trabajo especializado con evidencias, revisiones y quality gates; no reemplaza la decisión humana.
           </div>
         </div>
       </div>
