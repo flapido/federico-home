@@ -44,6 +44,10 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="border-y hairline bg-paper-2/60">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-5 px-5 py-10 sm:px-6 md:flex-row md:items-center md:justify-between md:px-8"><div><div className="font-mono text-[10px] uppercase tracking-[.16em] text-clay-dark">Soluciones y servicios</div><h2 className="mt-2 font-display text-[28px] leading-none">Software que puedo adaptar a tu necesidad.</h2><p className="mt-2 max-w-[65ch] text-[13px] leading-relaxed text-ink-light">Sistemas de venta, modernización, archivos digitales, automatización e IA aplicada con foco en un problema concreto.</p></div><Link to="/soluciones" className="shrink-0 rounded-full bg-ink px-5 py-3 text-[13px] font-medium text-paper">Ver soluciones →</Link></div>
+      </section>
+
       <section aria-label="Impacto profesional" className="border-y hairline bg-white/70">
         <div className="mx-auto grid max-w-[1280px] grid-cols-2 divide-x divide-y divide-line sm:grid-cols-3 lg:grid-cols-6 lg:divide-y-0">
           {impactItems.map(([value, label]) => <div key={value} className="min-h-[98px] px-5 py-5 sm:px-6"><div className="font-mono text-[10px] tracking-[0.13em] text-clay-dark">{value}</div><div className="mt-2 font-display text-[15px] leading-tight text-ink-2">{label}</div></div>)}

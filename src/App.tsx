@@ -6,6 +6,7 @@ import ProjectDetail from "./pages/ProjectDetail"
 import Lab from "./pages/Lab"
 import About from "./pages/About"
 import CV from "./pages/CV"
+import Solutions from "./pages/Solutions"
 import NotFound from "./pages/NotFound"
 
 export default function App(){
@@ -16,6 +17,7 @@ export default function App(){
           <Route index element={<Home />} />
           <Route path="proyectos" element={<Projects />} />
           <Route path="proyectos/:slug" element={<ProjectDetail />} />
+          <Route path="soluciones" element={<Solutions />} />
           <Route path="lab" element={<Lab />} />
           <Route path="about" element={<About />} />
           <Route path="cv" element={<CV />} />

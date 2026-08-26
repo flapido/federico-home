@@ -16,6 +16,17 @@ La V2 fue implementada, corregida tras Senior Design Review y verificada de form
 - `docs/qa/QA-REPORT.md`
 - `docs/qa/SCENARIOS.md` bajo `V2-RECHECK-2026-08-25`
 
+## Addendum — Soluciones V2.1
+
+**PRODUCT_QUALITY_GATE: PASS**
+
+- [x] Ruta `/soluciones`, navegación y entrada de Home implementadas.
+- [x] Casos comerciales con estados honestos y evidencia visual curada.
+- [x] Sin URL pública inventada: Subastas y Legacy permanecen `DEMO LOCAL`.
+- [x] QA automático, funcional y visual de `/soluciones` PASS en 10 viewports.
+- [x] Seguridad/privacidad de nuevos assets revisada; sin secretos, datos personales ni cuentas autenticadas.
+- [x] Exclusión absoluta de Quiniela confirmada en código, assets y contenido renderizado.
+
 ## Puertas
 
 - [x] Intake, requirements y arquitectura — PASS; SPA estática, hub sin demos importadas.

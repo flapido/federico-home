@@ -25,6 +25,7 @@ function Nav() {
         <nav className="hidden items-center gap-0.5 text-[13px] md:flex" aria-label="Principal">
           {homeLinks.map(link => <a key={link.href} href={link.href} className="rounded-full px-3 py-2 text-ink-light transition-colors hover:bg-paper-2 hover:text-ink">{link.label}</a>)}
           <HeaderLink to="/proyectos">Proyectos</HeaderLink>
+          <HeaderLink to="/soluciones">Soluciones</HeaderLink>
           <HeaderLink to="/lab">Lab</HeaderLink>
           <HeaderLink to="/about">Sobre mí</HeaderLink>
         </nav>
@@ -43,6 +44,7 @@ function Nav() {
           <div className="mx-auto flex max-w-[1280px] flex-col">
             {homeLinks.map(link => <a key={link.href} href={link.href} className="border-b hairline py-3" onClick={() => setOpen(false)}>{link.label}</a>)}
             <NavLink to="/proyectos" onClick={() => setOpen(false)} className="border-b hairline py-3">Proyectos</NavLink>
+            <NavLink to="/soluciones" onClick={() => setOpen(false)} className="border-b hairline py-3">Soluciones</NavLink>
             <NavLink to="/lab" onClick={() => setOpen(false)} className="border-b hairline py-3">Lab</NavLink>
             <NavLink to="/about" onClick={() => setOpen(false)} className="border-b hairline py-3">Sobre mí</NavLink>
             <NavLink to="/cv" onClick={() => setOpen(false)} className="border-b hairline py-3">CV</NavLink>
@@ -72,7 +74,7 @@ export default function Layout() {
               <p className="mt-3 max-w-[52ch] text-[13px] leading-relaxed text-ink-light">Senior Software Engineer. Backend, arquitectura, integraciones y IA aplicada para construir y evolucionar software con criterio.</p>
             </div>
             <div className="grid grid-cols-2 gap-6 text-[13px]">
-              <div><div className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone">Explorar</div><div className="mt-3 flex flex-col gap-2"><a href="/#experiencia" className="hover:underline">Experiencia</a><a href="/#expertise" className="hover:underline">Expertise</a><Link to="/proyectos" className="hover:underline">Proyectos</Link><Link to="/cv" className="hover:underline">CV</Link></div></div>
+              <div><div className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone">Explorar</div><div className="mt-3 flex flex-col gap-2"><a href="/#experiencia" className="hover:underline">Experiencia</a><a href="/#expertise" className="hover:underline">Expertise</a><Link to="/proyectos" className="hover:underline">Proyectos</Link><Link to="/soluciones" className="hover:underline">Soluciones</Link><Link to="/cv" className="hover:underline">CV</Link></div></div>
               <div><div className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone">Contacto</div><div className="mt-3 flex flex-col gap-2"><a href={cv.links.linkedin} target="_blank" rel="noopener noreferrer" className="hover:underline">LinkedIn ↗</a><a href={cv.links.github} target="_blank" rel="noopener noreferrer" className="hover:underline">GitHub ↗</a><a href={`mailto:${cv.links.email}`} className="hover:underline">Email</a></div></div>
             </div>
           </div>

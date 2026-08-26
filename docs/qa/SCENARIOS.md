@@ -203,6 +203,15 @@ Operado por: Company Workspace QA — 2026-08-23
 
 # V2-RECHECK-2026-08-25
 
+# SOLUCIONES-V2.1-2026-08-26
+
+SOL-01 · `/soluciones` comunica software adaptable, problema, solución y CTA · PASS · 2026-08-26
+SOL-02 · Cards de soluciones muestran estado honesto, evidencia y adaptación sin enlaces de demo inventados · PASS · 2026-08-26
+SOL-03 · Navegación desktop, mobile, footer y entrada de Home llegan a `/soluciones` · PASS · 2026-08-26
+SOL-04 · Capturas públicas de soluciones cargan con alt útil, lazy loading no crítico y sin requests fallidos · PASS · 2026-08-26
+SOL-05 · `/soluciones` no contiene Quiniela, enlaces ni assets asociados · PASS · 2026-08-26
+SOL-06 · Matriz 320/360/375/390/412/430/1024/1366/1440/1920 sin overflow, clipping ni errores propios de consola · PASS · 2026-08-26
+
 # ABOUT-AVATAR-2026-08-25
 
 ABOUT-AV-01 · `/about` renderiza un único avatar MP4, muted, playsInline, metadata y sin controles/loop · PASS · 2026-08-25

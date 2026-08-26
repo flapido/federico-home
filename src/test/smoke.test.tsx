@@ -6,6 +6,7 @@ import Home from "../pages/Home"
 import Lab from "../pages/Lab"
 import NotFound from "../pages/NotFound"
 import Projects from "../pages/Projects"
+import Solutions from "../pages/Solutions"
 
 test("Home communicates senior positioning and primary paths", () => {
   render(<MemoryRouter><Home /></MemoryRouter>)
@@ -23,6 +24,15 @@ test("Projects lists case studies with honest statuses", () => {
   expect(screen.getByText("Sistema de Subastas")).toBeInTheDocument()
   expect(screen.getByText("Company Workspace")).toBeInTheDocument()
   expect(screen.getAllByText("LOCAL_DEMO").length).toBeGreaterThan(0)
+})
+
+test("Solutions presents evidence, honest states and commercial contact", () => {
+  render(<MemoryRouter><Solutions /></MemoryRouter>)
+  expect(screen.getByRole("heading", { name: /Software real para/i })).toBeInTheDocument()
+  expect(screen.getAllByText("DEMO LOCAL")).toHaveLength(2)
+  expect(screen.getByText("CASO REAL")).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: /Ver caso de subastas/i })).toHaveAttribute("href", "/proyectos/subastas")
+  expect(screen.queryByText(/Quiniela/i)).not.toBeInTheDocument()
 })
 
 test("Lab renders Engineering Lab and explicit experiment state", () => {
