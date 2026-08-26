@@ -43,6 +43,16 @@ La V2 fue implementada, corregida tras Senior Design Review y verificada de form
 - `node run-qa.mjs`: PASS, 10 viewports × 8 rutas, sin overflow ni errores propios de consola.
 - Verificación funcional Playwright: 8/8 escenarios PASS; consola limpia, sin requests fallidos propios.
 
+## Addendum — Avatar animado en `/about`
+
+- [x] Un único video se carga exclusivamente en `/about`, con `preload="metadata"`, muted, playsInline, sin loop ni controles.
+- [x] Autoplay una sola vez, permanencia del último frame y nueva reproducción al volver a la ruta.
+- [x] Fallback estático ante error/bloqueo y `prefers-reduced-motion: reduce`, conservando el layout.
+- [x] QA funcional, responsive y visual PASS; Home permanece sin avatar.
+- [x] Poster/fallback horizontal canónico `public/fotos/federico-about.jpg` (16:9), sin barras negras ni deformación.
+
+**PRODUCT_QUALITY_GATE: PASS**
+
 ## Límites
 
 No se ejecutaron commit, push, merge, deploy, release, publicación, DNS, producción, credenciales ni mensajes externos. LinkedIn queda fuera de aplicación: HTTP 999 bloquea el acceso no autenticado y no hay una sesión Chrome/Browser conectada en esta sesión.

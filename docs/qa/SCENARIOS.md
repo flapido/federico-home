@@ -203,6 +203,21 @@ Operado por: Company Workspace QA — 2026-08-23
 
 # V2-RECHECK-2026-08-25
 
+# ABOUT-AVATAR-2026-08-25
+
+ABOUT-AV-01 · `/about` renderiza un único avatar MP4, muted, playsInline, metadata y sin controles/loop · PASS · 2026-08-25
+ABOUT-AV-02 · Avatar inicia automáticamente, termina una sola vez y conserva el frame final · PASS · 2026-08-25
+ABOUT-AV-03 · Salir y volver a `/about` permite nueva reproducción sin reinicios por rerender · PASS · 2026-08-25
+ABOUT-AV-04 · Error de carga del MP4 muestra la foto estática sin romper layout · PASS · 2026-08-25
+ABOUT-AV-05 · `prefers-reduced-motion: reduce` muestra foto estática y no renderiza video · PASS · 2026-08-25
+ABOUT-AV-06 · Home no renderiza ni solicita `federico-avatar.mp4` · PASS · 2026-08-25
+ABOUT-AV-07 · `/about` mantiene dimensiones, proporción y overflow correcto en seis viewports · PASS · 2026-08-25
+
+# ABOUT-AVATAR-2026-08-26
+
+ABOUT-AV-08 · Poster y fallback canónicos `/fotos/federico-about.jpg` son 16:9 y el video usa `poster` + `aspect-video` sin letterboxing · PASS · 2026-08-26
+ABOUT-AV-09 · Matriz responsive ampliada (320, 360, 390, 430, 1024, 1366, 1440 y 1920) sin overflow ni recorte agresivo · PASS · 2026-08-26
+
 V2-NAV-01 · Home muestra identidad, seniority, especialidades, 20+ años y CTA principal · PASS · 2026-08-25
 V2-NAV-02 · Menú móvil abre, muestra destinos y cierra sin quedar visible · PASS · 2026-08-25
 V2-NAV-03 · Technical Expertise navega a `/cv#skills` · PASS · 2026-08-25

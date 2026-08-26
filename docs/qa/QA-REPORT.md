@@ -48,6 +48,12 @@ La memoria existente de V1 se conserva como historial. La cobertura V2 ejecutada
 
 La revisión estática V2 está en `docs/SECURITY-REVIEW-V2.md`. El sitio es una SPA estática sin backend, autenticación, uploads ni datos de clientes. Los únicos contactos públicos provienen del CV confirmado; no se exponen teléfonos, secretos, dominios placeholder, URLs internas ni código propietario en el bundle.
 
+## Avatar animado de Sobre mí
+
+QA funcional específico PASS (Playwright local): 7/7 escenarios. Se verificaron autoplay muted/playsInline, reproducción única con permanencia del frame final, nueva reproducción al volver a `/about`, fallback ante error de carga, `prefers-reduced-motion`, aislamiento de Home (sin render ni request del MP4), consola limpia y cero requests fallidos propios. La matriz responsive de 320×568, 390×844, 430×932, 1024×768, 1366×768 y 1920×1080 quedó sin overflow ni cambio de geometría relevante; capturas en `test-results/about-avatar-*.png`.
+
+Recheck 2026-08-26: poster/fallback actualizado a `public/fotos/federico-about.jpg` (1672×941, 16:9), video con `poster` y contenedor `aspect-video`; smoke visual Playwright en 8 viewports PASS.
+
 ## Demo Mode
 
 **NOT APPLICABLE / NOT AFFECTED.** Federico Home no tiene `docs/demo/manifest.json` y, por contrato, solo presenta previews y metadata de proyectos hermanos.
