@@ -1,0 +1,87 @@
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+type Period = { visits: number; pageViews: number; contacts: number; whatsapp: number; avatar: number };
+type Summary = {
+  periods: { today: Period; seven: Period; thirty: Period; total: { visits: number; contacts: number; avatar: number } };
+  interactions: { contacts: number; whatsapp: number; email: number; linkedin: number; demos: number; avatar: number };
+  avatar: { today: number; seven: number; thirty: number; total: number; aboutViews: number; rate: number };
+  contact: { views: number; submitted: number; whatsapp: number; email: number; linkedin: number; rate: number };
+  origins: { source: string; count: number }[];
+  pages: { path: string; count: number }[];
+  series: { date: string; visits: number; contacts: number }[];
+};
+
+const request = (path: string, init?: RequestInit) => fetch(path, { ...init, headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) }, credentials: "same-origin" });
+const formatPercent = (value: number) => new Intl.NumberFormat("es-AR", { style: "percent", maximumFractionDigits: 1 }).format(value);
+
+function Login({ onAuthenticated }: { onAuthenticated: () => void }) {
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [checking, setChecking] = useState(false);
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
+  const send = async () => {
+    setSending(true); setError("");
+    try {
+      const response = await request("/api/admin/request-code", { method: "POST", body: "{}" });
+      if (!response.ok) throw new Error((await response.json() as { error?: string }).error);
+      setSent(true);
+    } catch (issue) { setError(issue instanceof Error && issue.message ? issue.message : "No pude enviar un código en este momento."); }
+    finally { setSending(false); }
+  };
+  const verify = async (event: React.FormEvent) => {
+    event.preventDefault(); setChecking(true); setError("");
+    try {
+      const response = await request("/api/admin/verify-code", { method: "POST", body: JSON.stringify({ code }) });
+      if (!response.ok) throw new Error((await response.json() as { error?: string }).error);
+      onAuthenticated();
+    } catch (issue) { setError(issue instanceof Error && issue.message ? issue.message : "No pude validar el código."); }
+    finally { setChecking(false); }
+  };
+  return <main className="paper-texture grid min-h-screen place-items-center px-5 py-10">
+    <section className="w-full max-w-md border hairline bg-white p-6 shadow-[0_16px_45px_rgba(28,30,27,.08)] sm:p-8" aria-labelledby="admin-title">
+      <p className="font-mono text-[10px] uppercase tracking-[.16em] text-terracotta">Federico Home — Analytics</p>
+      <h1 id="admin-title" className="mt-3 font-display text-4xl tracking-[-.04em]">Panel privado</h1>
+      <p className="mt-3 max-w-[36ch] text-[15px] leading-relaxed text-ink-light">Accedé con un código de un solo uso. Se envía de forma privada y vence en unos minutos.</p>
+      {!sent ? <button type="button" onClick={send} disabled={sending} className="mt-7 w-full rounded-full bg-ink px-5 py-3 text-sm text-paper transition-colors hover:bg-ink-2 disabled:cursor-wait disabled:opacity-65">{sending ? "Enviando…" : "Enviar código"}</button> :
+        <form className="mt-7" onSubmit={verify} noValidate>
+          <p className="mb-4 text-sm text-ink-light">Te envié un código a Telegram.</p>
+          <label htmlFor="admin-code" className="text-sm font-medium">Código</label>
+          <input id="admin-code" value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))} inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} required autoFocus aria-describedby={error ? "admin-error" : undefined} className="mt-2 w-full border hairline bg-paper px-4 py-3 font-mono text-xl tracking-[.35em] outline-none transition focus:border-terracotta focus:ring-2 focus:ring-terracotta/20" />
+          <button type="submit" disabled={checking || code.length !== 6} className="mt-5 w-full rounded-full bg-ink px-5 py-3 text-sm text-paper transition-colors hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-55">{checking ? "Verificando…" : "Entrar"}</button>
+        </form>}
+      <p id="admin-error" className="mt-4 min-h-5 text-sm text-terracotta" aria-live="polite">{error}</p>
+    </section>
+  </main>;
+}
+
+function Chart({ series }: { series: Summary["series"] }) {
+  const points = useMemo(() => {
+    const maximum = Math.max(1, ...series.map((item) => item.visits));
+    return series.map((item, index) => `${(index / Math.max(1, series.length - 1)) * 100},${100 - (item.visits / maximum) * 88}`).join(" ");
+  }, [series]);
+  const total = series.reduce((sum, item) => sum + item.visits, 0);
+  return <section className="border hairline bg-white p-5 sm:p-6" aria-labelledby="visits-title"><div className="flex items-end justify-between gap-4"><div><p className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Actividad</p><h2 id="visits-title" className="mt-1 font-display text-2xl">Visitas por día</h2></div><span className="text-sm text-ink-light">Últimos 30 días</span></div><svg viewBox="0 0 100 100" preserveAspectRatio="none" className="mt-6 h-44 w-full overflow-visible" role="img" aria-label={`${total} visitas en los últimos 30 días`}><line x1="0" x2="100" y1="100" y2="100" stroke="currentColor" className="text-stone/40" vectorEffect="non-scaling-stroke" /><polyline fill="none" points={points} stroke="currentColor" className="text-terracotta" strokeWidth="2" vectorEffect="non-scaling-stroke" strokeLinejoin="round" strokeLinecap="round" /></svg><p className="mt-2 text-xs text-ink-light">{total} visitas registradas en el período.</p></section>;
+}
+
+function Dashboard({ summary, onLogout }: { summary: Summary; onLogout: () => void }) {
+  const cards: [string, Period][] = [["Hoy", summary.periods.today], ["Últimos 7 días", summary.periods.seven], ["Últimos 30 días", summary.periods.thirty]];
+  return <main className="paper-texture min-h-screen px-5 py-8 sm:px-8"><div className="mx-auto max-w-6xl"><header className="flex flex-wrap items-start justify-between gap-5 border-b hairline pb-7"><div><p className="font-mono text-[10px] uppercase tracking-[.16em] text-terracotta">Federico Home — Analytics</p><h1 className="mt-2 font-display text-4xl tracking-[-.04em]">Panel privado</h1></div><button type="button" onClick={onLogout} className="rounded-full border hairline bg-white px-4 py-2.5 text-sm transition hover:border-ink">Cerrar sesión</button></header>
+    <section className="mt-7 grid gap-4 md:grid-cols-3" aria-label="Resumen por período">{cards.map(([label, item]) => <article key={label} className="border hairline bg-white p-5"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">{label}</p><dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm"><div><dt className="text-ink-light">Visitas</dt><dd className="mt-0.5 font-display text-2xl">{item.visits}</dd></div><div><dt className="text-ink-light">Páginas vistas</dt><dd className="mt-0.5 font-display text-2xl">{item.pageViews}</dd></div><div><dt className="text-ink-light">Consultas</dt><dd className="mt-0.5 font-display text-2xl">{item.contacts}</dd></div><div><dt className="text-ink-light">WhatsApp</dt><dd className="mt-0.5 font-display text-2xl">{item.whatsapp}</dd></div><div><dt className="text-ink-light">Avatar</dt><dd className="mt-0.5 font-display text-2xl">{item.avatar}</dd></div></dl></article>)}</section>
+    <section className="mt-4 grid gap-4 lg:grid-cols-[1.3fr_.7fr]"><Chart series={summary.series} /><article className="border hairline bg-white p-5 sm:p-6"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Total</p><dl className="mt-4 space-y-3"><div className="flex justify-between gap-4"><dt>Visitas</dt><dd className="font-display text-2xl">{summary.periods.total.visits}</dd></div><div className="flex justify-between gap-4"><dt>Consultas recibidas</dt><dd className="font-display text-2xl">{summary.periods.total.contacts}</dd></div><div className="flex justify-between gap-4"><dt>Reproducciones manuales</dt><dd className="font-display text-2xl">{summary.periods.total.avatar}</dd></div></dl></article></section>
+    <section className="mt-4 grid gap-4 lg:grid-cols-2"><article className="border hairline bg-white p-5 sm:p-6"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Interacciones</p><h2 className="mt-1 font-display text-2xl">Contacto y recorridos</h2><dl className="mt-5 grid grid-cols-2 gap-4 text-sm">{[["Consultas enviadas", summary.interactions.contacts], ["WhatsApp", summary.interactions.whatsapp], ["Email", summary.interactions.email], ["LinkedIn", summary.interactions.linkedin], ["Demos", summary.interactions.demos], ["Avatar", summary.interactions.avatar]].map(([label, value]) => <div key={String(label)}><dt className="text-ink-light">{label}</dt><dd className="mt-1 font-display text-2xl">{value}</dd></div>)}</dl></article><article className="border hairline bg-white p-5 sm:p-6"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Contacto</p><h2 className="mt-1 font-display text-2xl">Interés recibido</h2><dl className="mt-5 grid grid-cols-2 gap-4 text-sm"><div><dt className="text-ink-light">Visitas a contacto</dt><dd className="mt-1 font-display text-2xl">{summary.contact.views}</dd></div><div><dt className="text-ink-light">Consultas</dt><dd className="mt-1 font-display text-2xl">{summary.contact.submitted}</dd></div><div><dt className="text-ink-light">Conversión aprox.</dt><dd className="mt-1 font-display text-2xl">{formatPercent(summary.contact.rate)}</dd></div><div><dt className="text-ink-light">Avatar / About</dt><dd className="mt-1 font-display text-2xl">{formatPercent(summary.avatar.rate)}</dd></div></dl></article></section>
+    <section className="mt-4 grid gap-4 lg:grid-cols-2"><article className="border hairline bg-white p-5 sm:p-6"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Páginas más vistas</p><ol className="mt-5 space-y-3">{summary.pages.map((page, index) => <li key={page.path} className="flex items-center justify-between gap-4 border-b hairline pb-3"><span><span className="mr-3 font-mono text-xs text-stone">{index + 1}</span>{page.path}</span><strong className="font-display text-xl">{page.count}</strong></li>)}</ol></article><article className="border hairline bg-white p-5 sm:p-6"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Origen de consultas</p><ul className="mt-5 space-y-3">{summary.origins.map((origin) => <li key={origin.source} className="flex items-center justify-between gap-4 border-b hairline pb-3"><span className="capitalize">{origin.source.replaceAll("-", " ")}</span><strong className="font-display text-xl">{origin.count}</strong></li>)}</ul></article></section>
+  </div></main>;
+}
+
+export default function Admin() {
+  const navigate = useNavigate();
+  const [summary, setSummary] = useState<Summary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const load = async () => { try { const response = await fetch("/api/admin/analytics/summary", { credentials: "same-origin" }); if (response.ok) setSummary(await response.json() as Summary); else setSummary(null); } finally { setLoading(false); } };
+  useEffect(() => { void load(); }, []);
+  const logout = async () => { await request("/api/admin/logout", { method: "POST", body: "{}" }); setSummary(null); navigate("/admin", { replace: true }); };
+  if (loading) return <main className="paper-texture grid min-h-screen place-items-center text-sm text-ink-light">Cargando…</main>;
+  return summary ? <Dashboard summary={summary} onLogout={() => { void logout(); }} /> : <Login onAuthenticated={() => { void load(); navigate("/admin/dashboard", { replace: true }); }} />;
+}

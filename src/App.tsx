@@ -10,12 +10,15 @@ import Solutions from "./pages/Solutions"
 import Contact from "./pages/Contact"
 import AnalyticsTracker from "./components/AnalyticsTracker"
 import NotFound from "./pages/NotFound"
+import Admin from "./pages/Admin"
 
 export default function App(){
   return (
     <BrowserRouter>
       <AnalyticsTracker />
       <Routes>
+        <Route path="admin" element={<Admin />} />
+        <Route path="admin/dashboard" element={<Admin />} />
         <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="proyectos" element={<Projects />} />

@@ -1,5 +1,5 @@
 export type D1Database = {
-  prepare(query: string): { bind(...values: unknown[]): { run(): Promise<unknown>; all<T>(): Promise<{ results: T[] }> } };
+  prepare(query: string): { bind(...values: unknown[]): { run(): Promise<{ meta?: { changes?: number } }>; all<T>(): Promise<{ results: T[] }> } };
 };
 
 export const eventTypes = [
@@ -18,7 +18,7 @@ export const publicEventTypes = eventTypes.filter((event) => event !== "contact_
 
 const validPaths = new Set(["/", "/soluciones", "/contacto", "/about", "/proyectos", "/lab", "/cv"]);
 const validProjects = new Set(["legacy-web", "subastas", "archivo-digital", "tickets", "prepaga", "company-workspace"]);
-const validSources = new Set(["home", "soluciones", "contacto", "legacy-web", "subastas", "archivo-digital", "about", "projects", "lab", "cv", "other"]);
+const validSources = new Set(["home", "soluciones", "contacto", "legacy-web", "subastas", "archivo-digital", "avatares-ia", "about", "projects", "lab", "cv", "other"]);
 
 export function normalisePath(value: unknown) {
   if (typeof value !== "string") return "";
