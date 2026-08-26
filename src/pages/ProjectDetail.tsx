@@ -37,6 +37,8 @@ export default function ProjectDetail() {
   if (!project) return <div className="mx-auto max-w-[720px] px-5 py-16 text-center"><div className="font-mono text-[11px] uppercase tracking-widest text-stone">404</div><h1 className="mt-2 font-display text-[32px]">Proyecto no encontrado</h1><Link to="/proyectos" className="mt-6 inline-block rounded-full bg-ink px-5 py-2.5 text-[13px] text-paper">Volver a proyectos</Link></div>
 
   const isLocalDemo = project.demoStatus === "LOCAL_DEMO"
+  const previewTitle = project.slug === "archivo-digital" ? "Archivo Digital en funcionamiento" : "Recorrido de demostración"
+  const previewFooter = project.slug === "archivo-digital" ? "Demostración con datos ficticios y públicos. El sistema permite organizar documentos, imágenes y archivos PDF en una experiencia simple y navegable." : "Demostración con datos ficticios para entender el flujo principal. La disponibilidad de cada demo se indica arriba de forma clara."
 
   return (
     <div className="mx-auto max-w-[1280px] px-5 py-8 sm:px-6 md:px-8 md:py-12">
@@ -47,7 +49,7 @@ export default function ProjectDetail() {
 
       <CommercialEvidence project={project} />
 
-      <section id="preview" className="scroll-mt-20 mt-12 overflow-hidden rounded-[22px] border hairline bg-white"><div className="flex flex-col justify-between gap-3 border-b hairline bg-paper-2/70 px-6 py-4 sm:flex-row sm:items-center md:px-8"><div><div className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Interactive preview</div><h2 className="mt-1 font-display text-[20px]">Recorrido representativo</h2></div><span className="w-fit rounded-full border hairline bg-white px-3 py-1 font-mono text-[10px]">Datos ficticios · Hub</span></div><div className="p-4 sm:p-6 md:p-8">{previewByType[project.preview]}</div><div className="border-t hairline bg-white px-6 py-4 text-[12px] leading-relaxed text-ink-light">Esta preview vive en Federico Home y no importa código, datos ni integraciones de proyectos hermanos. {isLocalDemo ? "La demo independiente continúa disponible solo de forma local." : "No hay una demo externa declarada para este proyecto."}</div></section>
+      <section id="preview" className="scroll-mt-20 mt-12 overflow-hidden rounded-[22px] border hairline bg-white"><div className="flex flex-col justify-between gap-3 border-b hairline bg-paper-2/70 px-6 py-4 sm:flex-row sm:items-center md:px-8"><div><div className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Demostración visual</div><h2 className="mt-1 font-display text-[20px]">{previewTitle}</h2></div><span className="w-fit rounded-full border hairline bg-white px-3 py-1 font-mono text-[10px]">Datos de demostración</span></div><div className="p-4 sm:p-6 md:p-8">{previewByType[project.preview]}</div><div className="border-t hairline bg-white px-6 py-4 text-[12px] leading-relaxed text-ink-light">{previewFooter}</div></section>
 
       <nav className="mt-8 flex justify-between text-[13px]"><Link to="/proyectos" className="underline decoration-line underline-offset-4">← Todos los proyectos</Link><Link to="/lab" className="underline decoration-line underline-offset-4">Engineering Lab →</Link></nav>
     </div>

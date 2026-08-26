@@ -214,6 +214,7 @@ SOL-06 · Matriz 320/360/375/390/412/430/1024/1366/1440/1920 sin overflow, clipp
 CASE-01 · Legacy → Web muestra antes/después real, migración progresiva y CTA comercial · PASS · 2026-08-26
 CASE-02 · Subastas muestra flujo comercial, adaptaciones y estado DEMO LOCAL sin URL inventada · PASS · 2026-08-26
 CASE-03 · Archivo Digital carga directo con evidencia pública de Tucumán, sin datos privados ni capacidades IA falsas · PASS · 2026-08-26
+CASE-04 · Archivo Digital muestra catálogo, ficha y visor PDF reales; sin placeholders conceptuales ni copy interno · PASS · 2026-08-26
 
 # ABOUT-AVATAR-2026-08-25
 

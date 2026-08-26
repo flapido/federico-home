@@ -16,3 +16,7 @@ Capturas de evidencia de la matriz: `screenshots/v2/*-proyectos-legacy-web.png`,
 ## Producción
 
 Cloudflare Pages respondió 200 en las tres rutas. Chromium verificó cada una a 390×844 y 1440×900: imágenes completas, cero overflow, cero errores propios de consola y cero requests propios fallidos. La comprobación de texto en producción no encontró los identificadores excluidos ni nombres de material restringido.
+
+## Ajuste visual — Archivo Digital
+
+La demostración ahora usa tres capturas QA reales y seguras del producto: listado con búsqueda/filtros, ficha pública y visor PDF multipágina con fixtures. Reemplaza por completo los bloques conceptuales; mantiene el badge `Datos de demostración` y copy orientado a visitante.
