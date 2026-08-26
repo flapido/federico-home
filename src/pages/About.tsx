@@ -34,6 +34,13 @@ function AboutAvatar() {
     playResult?.catch(() => setVideoFailed(true))
   }, [reducedMotion, videoFailed])
 
+  const replay = () => {
+    if (reducedMotion || videoFailed || !videoRef.current) return
+    const video = videoRef.current
+    video.currentTime = 0
+    video.play().catch(() => setVideoFailed(true))
+  }
+
   if (reducedMotion || videoFailed) {
     return <img src="/fotos/federico-about.jpg" alt="Federico Lapido" className="aspect-video w-full object-cover object-center" />
   }
@@ -48,9 +55,18 @@ function AboutAvatar() {
       muted
       playsInline
       preload="metadata"
+      tabIndex={0}
+      role="button"
+      aria-label="Reproducir nuevamente la presentación"
+      onClick={replay}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault()
+          replay()
+        }
+      }}
       onError={() => setVideoFailed(true)}
       onEnded={(event) => event.currentTarget.pause()}
-      aria-hidden="true"
     />
   )
 }
