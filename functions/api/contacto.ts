@@ -21,7 +21,7 @@ const allowedInterests = new Set([
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const recentRequests = new Map<string, number[]>();
 const rateWindowMs = 10 * 60 * 1000;
-const rateLimit = 5;
+const rateLimit = 10;
 
 const response = (body: Record<string, string>, status = 200) =>
   Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
