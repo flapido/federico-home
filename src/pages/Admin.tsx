@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import GuestbookAdmin from "../components/GuestbookAdmin";
 
 type Period = { visits: number; pageViews: number; contacts: number; whatsapp: number; avatar: number };
 type Summary = {
@@ -51,5 +52,5 @@ export default function Admin() {
   useEffect(() => { const refreshAfterReturn = () => { if (!document.hidden && summary && Date.now() - lastSuccessAt.current >= 60_000) void load(); }; document.addEventListener("visibilitychange", refreshAfterReturn); return () => document.removeEventListener("visibilitychange", refreshAfterReturn); }, [summary]);
   const logout = async () => { await request("/api/admin/logout", { method: "POST", body: "{}" }); setSummary(null); navigate("/admin", { replace: true }); };
   if (loading) return <main className="paper-texture grid min-h-screen place-items-center text-sm text-ink-light">Cargando…</main>;
-  return summary && lastUpdated ? <Dashboard summary={summary} lastUpdated={lastUpdated} updating={updating} onRefresh={() => { void load(true); }} onLogout={() => { void logout(); }} /> : <Login onAuthenticated={() => { void load().then(() => navigate("/admin/dashboard", { replace: true })); }} />;
+  return summary && lastUpdated ? <><Dashboard summary={summary} lastUpdated={lastUpdated} updating={updating} onRefresh={() => { void load(true); }} onLogout={() => { void logout(); }} /><div className="paper-texture px-5 pb-8 sm:px-8"><div className="mx-auto max-w-6xl"><GuestbookAdmin /></div></div></> : <Login onAuthenticated={() => { void load().then(() => navigate("/admin/dashboard", { replace: true })); }} />;
 }

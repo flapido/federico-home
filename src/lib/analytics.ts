@@ -1,9 +1,10 @@
-export type AnalyticsEvent = "visit" | "page_view" | "contact_open" | "whatsapp_click" | "email_click" | "linkedin_click" | "demo_click" | "avatar_replay" | "guide_impression" | "guide_accepted" | "guide_declined" | "guide_started" | "guide_restarted" | "guide_restart" | "guide_speed_change" | "guide_robot_call" | "guide_step_view" | "guide_paused" | "guide_resumed" | "guide_skipped_step" | "guide_completed" | "guide_exited" | "tour_avatar_view" | "guide_contact_click" | "guide_whatsapp_click" | "guestbook_open" | "guestbook_guest_selected" | "guestbook_reference_selected" | "guestbook_submit_success" | "reference_submit_success" | "guestbook_public_view" | "guide_guestbook_click" | "portfolio_share" | "reference_invite_share" | "reference_invite_copy" | "published_reference_share";
+export type AnalyticsEvent = "visit" | "page_view" | "contact_open" | "whatsapp_click" | "email_click" | "linkedin_click" | "demo_click" | "avatar_replay" | "guide_impression" | "guide_accepted" | "guide_declined" | "guide_started" | "guide_restarted" | "guide_restart" | "guide_speed_change" | "guide_robot_call" | "guide_step_view" | "guide_paused" | "guide_resumed" | "guide_skipped_step" | "guide_completed" | "guide_exited" | "tour_avatar_view" | "guide_contact_click" | "guide_whatsapp_click" | "guestbook_open" | "guestbook_guest_selected" | "guestbook_reference_selected" | "guestbook_submit_success" | "reference_submit_success" | "guestbook_public_view" | "guide_guestbook_click" | "portfolio_share" | "reference_invite_share" | "reference_invite_copy" | "published_reference_share" | "guestbook_clean" | "guestbook_review" | "guestbook_blocked";
 
 const sourceFromPath = (path: string) => {
   if (path === "/") return "home";
   if (path === "/soluciones") return "soluciones";
   if (path === "/contacto") return "contacto";
+  if (path === "/gracias") return "gracias";
   if (path === "/about") return "about";
   if (path === "/proyectos") return "projects";
   if (path === "/lab") return "lab";

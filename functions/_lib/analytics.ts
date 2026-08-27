@@ -19,9 +19,9 @@ export const eventTypes = [
 export type AnalyticsEvent = (typeof eventTypes)[number];
 export const publicEventTypes = eventTypes.filter((event) => event !== "contact_submit_success");
 
-const validPaths = new Set(["/", "/soluciones", "/contacto", "/about", "/proyectos", "/lab", "/cv"]);
+const validPaths = new Set(["/", "/soluciones", "/contacto", "/about", "/proyectos", "/lab", "/cv", "/gracias"]);
 const validProjects = new Set(["legacy-web", "subastas", "archivo-digital", "tickets", "prepaga", "company-workspace"]);
-const validSources = new Set(["home", "soluciones", "contacto", "legacy-web", "subastas", "archivo-digital", "avatares-ia", "avatar", "about", "projects", "lab", "cv", "x1", "x2", "x3", "other"]);
+const validSources = new Set(["home", "soluciones", "contacto", "gracias", "legacy-web", "subastas", "archivo-digital", "avatares-ia", "avatar", "about", "projects", "lab", "cv", "x1", "x2", "x3", "other"]);
 
 export function normalisePath(value: unknown) {
   if (typeof value !== "string") return "";
