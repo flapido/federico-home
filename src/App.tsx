@@ -13,11 +13,13 @@ import NotFound from "./pages/NotFound"
 import Admin from "./pages/Admin"
 import PortalGuide from "./components/PortalGuide"
 import Thanks from "./pages/Thanks"
+import SeoMeta from "./components/SeoMeta"
 
 export default function App(){
   return (
     <BrowserRouter>
       <AnalyticsTracker />
+      <SeoMeta />
       <PortalGuide />
       <Routes>
         <Route path="admin" element={<Admin />} />

@@ -1,2 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://federico-home.pages.dev/sitemap.xml
