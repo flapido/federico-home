@@ -12,6 +12,7 @@ import AnalyticsTracker from "./components/AnalyticsTracker"
 import NotFound from "./pages/NotFound"
 import Admin from "./pages/Admin"
 import PortalGuide from "./components/PortalGuide"
+import Thanks from "./pages/Thanks"
 
 export default function App(){
   return (
@@ -27,6 +28,7 @@ export default function App(){
           <Route path="proyectos/:slug" element={<ProjectDetail />} />
           <Route path="soluciones" element={<Solutions />} />
           <Route path="contacto" element={<Contact />} />
+          <Route path="gracias" element={<Thanks />} />
           <Route path="lab" element={<Lab />} />
           <Route path="about" element={<About />} />
           <Route path="cv" element={<CV />} />
