@@ -12,14 +12,14 @@ export const eventTypes = [
   "linkedin_click",
   "demo_click",
   "avatar_replay",
-  "guide_impression", "guide_accepted", "guide_declined", "guide_started", "guide_restarted", "guide_step_view", "guide_paused", "guide_resumed", "guide_skipped_step", "guide_completed", "guide_exited", "tour_avatar_view", "guide_contact_click", "guide_whatsapp_click",
+  "guide_impression", "guide_accepted", "guide_declined", "guide_started", "guide_restarted", "guide_restart", "guide_speed_change", "guide_robot_call", "guide_step_view", "guide_paused", "guide_resumed", "guide_skipped_step", "guide_completed", "guide_exited", "tour_avatar_view", "guide_contact_click", "guide_whatsapp_click",
 ] as const;
 export type AnalyticsEvent = (typeof eventTypes)[number];
 export const publicEventTypes = eventTypes.filter((event) => event !== "contact_submit_success");
 
 const validPaths = new Set(["/", "/soluciones", "/contacto", "/about", "/proyectos", "/lab", "/cv"]);
 const validProjects = new Set(["legacy-web", "subastas", "archivo-digital", "tickets", "prepaga", "company-workspace"]);
-const validSources = new Set(["home", "soluciones", "contacto", "legacy-web", "subastas", "archivo-digital", "avatares-ia", "avatar", "about", "projects", "lab", "cv", "other"]);
+const validSources = new Set(["home", "soluciones", "contacto", "legacy-web", "subastas", "archivo-digital", "avatares-ia", "avatar", "about", "projects", "lab", "cv", "x1", "x2", "x3", "other"]);
 
 export function normalisePath(value: unknown) {
   if (typeof value !== "string") return "";
