@@ -12,7 +12,7 @@ export const eventTypes = [
   "linkedin_click",
   "demo_click",
   "avatar_replay",
-  "guide_impression", "guide_accepted", "guide_declined", "guide_started", "guide_step_view", "guide_paused", "guide_resumed", "guide_skipped_step", "guide_completed", "guide_exited", "tour_avatar_view", "guide_contact_click", "guide_whatsapp_click",
+  "guide_impression", "guide_accepted", "guide_declined", "guide_started", "guide_restarted", "guide_step_view", "guide_paused", "guide_resumed", "guide_skipped_step", "guide_completed", "guide_exited", "tour_avatar_view", "guide_contact_click", "guide_whatsapp_click",
 ] as const;
 export type AnalyticsEvent = (typeof eventTypes)[number];
 export const publicEventTypes = eventTypes.filter((event) => event !== "contact_submit_success");
