@@ -42,6 +42,16 @@ function AboutAvatar() {
     video.play().then(() => trackEvent("avatar_replay", "/about", "about")).catch(() => setVideoFailed(true))
   }
 
+  useEffect(() => {
+    const playForGuide = () => {
+      if (reducedMotion || videoFailed || !videoRef.current) return
+      videoRef.current.currentTime = 0
+      void videoRef.current.play().catch(() => setVideoFailed(true))
+    }
+    document.addEventListener("guide:avatar-play", playForGuide)
+    return () => document.removeEventListener("guide:avatar-play", playForGuide)
+  }, [reducedMotion, videoFailed])
+
   if (reducedMotion || videoFailed) {
     return <img src="/fotos/federico-about.jpg" alt="Federico Lapido" className="aspect-video w-full object-cover object-center" />
   }
@@ -74,7 +84,7 @@ function AboutAvatar() {
 
 export default function About() {
   return (
-    <div className="mx-auto max-w-[1120px] px-5 py-10 sm:px-6 md:px-8 md:py-14">
+    <div data-tour-id="guide-avatar" tabIndex={-1} className="mx-auto max-w-[1120px] px-5 py-10 sm:px-6 md:px-8 md:py-14">
       <header className="grid items-center gap-8 md:grid-cols-[1fr_.78fr] md:gap-14"><div><div className="font-mono text-[10px] uppercase tracking-[.16em] text-stone">Sobre mí</div><h1 className="mt-3 font-display text-[43px] leading-[.94] tracking-[-.045em] md:text-[58px]">Ingeniería con contexto, <span className="italic">curiosidad y cuidado.</span></h1><p className="mt-5 max-w-[57ch] text-[15px] leading-relaxed text-ink-light">El recorrido profesional no es un listado de herramientas: es aprender a entender sistemas grandes, encontrar la causa real y cambiar con responsabilidad.</p><div className="mt-7 flex flex-wrap gap-2"><Link to="/cv" className="rounded-full bg-ink px-5 py-3 text-[13px] text-paper">Ver CV</Link><Link to="/proyectos" className="rounded-full border hairline bg-white px-5 py-3 text-[13px]">Explorar proyectos</Link></div></div><figure className="overflow-hidden rounded-[22px] border hairline bg-paper-2"><AboutAvatar /><figcaption className="flex justify-between px-5 py-3 font-mono text-[10px] uppercase tracking-[.13em] text-stone"><span>Buenos Aires</span><span>Software Engineering</span></figcaption></figure></header>
       <div className="mt-12 grid gap-4 md:grid-cols-2">{sections.map((section, index) => <section key={section.title} className="rounded-[18px] border hairline bg-white p-6"><div className="font-mono text-[10px] text-clay-dark">0{index + 1}</div><h2 className="mt-4 font-display text-[22px] leading-none">{section.title}</h2><p className="mt-3 text-[13px] leading-relaxed text-ink-light">{section.text}</p></section>)}</div>
       <section className="mt-8 rounded-[18px] border hairline bg-paper-2 p-6 md:flex md:items-center md:justify-between md:gap-8"><div><div className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Contacto profesional</div><p className="mt-2 text-[13px] leading-relaxed text-ink-light">Para conocer experiencia, proyectos y disponibilidad de contacto, están los canales profesionales y el CV descargable.</p></div><div className="mt-5 flex shrink-0 flex-wrap gap-2 md:mt-0"><a href={cv.links.linkedin} target="_blank" rel="noopener noreferrer" className="rounded-full border hairline bg-white px-4 py-2 text-[12px]">LinkedIn ↗</a><a href={cv.links.github} target="_blank" rel="noopener noreferrer" className="rounded-full border hairline bg-white px-4 py-2 text-[12px]">GitHub ↗</a></div></section>

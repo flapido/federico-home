@@ -1,4 +1,4 @@
-export type AnalyticsEvent = "visit" | "page_view" | "contact_open" | "whatsapp_click" | "email_click" | "linkedin_click" | "demo_click" | "avatar_replay";
+export type AnalyticsEvent = "visit" | "page_view" | "contact_open" | "whatsapp_click" | "email_click" | "linkedin_click" | "demo_click" | "avatar_replay" | "guide_impression" | "guide_accepted" | "guide_declined" | "guide_started" | "guide_step_view" | "guide_paused" | "guide_resumed" | "guide_skipped_step" | "guide_completed" | "guide_exited" | "tour_avatar_view" | "guide_contact_click" | "guide_whatsapp_click";
 
 const sourceFromPath = (path: string) => {
   if (path === "/") return "home";

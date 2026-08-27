@@ -11,11 +11,13 @@ import Contact from "./pages/Contact"
 import AnalyticsTracker from "./components/AnalyticsTracker"
 import NotFound from "./pages/NotFound"
 import Admin from "./pages/Admin"
+import PortalGuide from "./components/PortalGuide"
 
 export default function App(){
   return (
     <BrowserRouter>
       <AnalyticsTracker />
+      <PortalGuide />
       <Routes>
         <Route path="admin" element={<Admin />} />
         <Route path="admin/dashboard" element={<Admin />} />

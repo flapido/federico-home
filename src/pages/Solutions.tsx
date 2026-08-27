@@ -13,7 +13,7 @@ export default function Solutions() {
     description?.setAttribute("content", "Desarrollo de software a medida, modernización de sistemas, automatización, integraciones e IA aplicada. Demos y casos reales.")
   }, [])
 
-  return <div>
+  return <div data-tour-id="guide-soluciones" tabIndex={-1}>
     <section className="border-b hairline">
       <div className="mx-auto max-w-[1280px] px-5 py-14 sm:px-6 md:px-8 md:py-20">
         <div className="grid gap-10 lg:grid-cols-[1fr_.78fr] lg:items-end">

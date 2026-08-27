@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <div>
-      <section className="mx-auto max-w-[1280px] px-5 pb-8 pt-8 sm:px-6 md:px-8 md:pb-12 md:pt-12">
+      <section data-tour-id="guide-home" tabIndex={-1} className="mx-auto max-w-[1280px] px-5 pb-8 pt-8 sm:px-6 md:px-8 md:pb-12 md:pt-12">
         <div className="grid items-center gap-8 md:grid-cols-[1.22fr_.78fr] md:gap-12">
           <div className="max-w-[760px]">
             <div className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-stone"><span className="h-px w-7 bg-line" /> Buenos Aires, Argentina</div>

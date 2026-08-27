@@ -113,7 +113,7 @@ export default function Contact() {
     }
   };
   return (
-    <div className="mx-auto max-w-[1120px] px-5 py-10 sm:px-6 md:px-8 md:py-16">
+    <div data-tour-id="guide-contacto" tabIndex={-1} className="mx-auto max-w-[1120px] px-5 py-10 sm:px-6 md:px-8 md:py-16">
       <div className="grid gap-10 lg:grid-cols-[1.05fr_.95fr]">
         <section>
           <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.16em] text-clay-dark">

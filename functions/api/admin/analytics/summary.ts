@@ -17,6 +17,7 @@ export const onRequestGet = async ({ request, env }: Context) => {
   const period = (from: string) => ({
     visits: event(rows, "visit", from), pageViews: event(rows, "page_view", from), contacts: event(rows, "contact_submit_success", from), whatsapp: event(rows, "whatsapp_click", from), avatar: event(rows, "avatar_replay", from),
   });
+  const guide = (from: string) => ({ impressions: event(rows, "guide_impression", from), started: event(rows, "guide_started", from), completed: event(rows, "guide_completed", from), exited: event(rows, "guide_exited", from), avatar: event(rows, "tour_avatar_view", from), contact: event(rows, "guide_contact_click", from), whatsapp: event(rows, "guide_whatsapp_click", from) });
   const totals = Object.fromEntries(totalResult.results.map((row) => [row.event_type, Number(row.count)]));
   const dates = Array.from({ length: 30 }, (_, index) => day(29 - index));
   const series = dates.map((date) => ({ date, visits: event(rows, "visit", date), contacts: event(rows, "contact_submit_success", date) }));
@@ -29,6 +30,7 @@ export const onRequestGet = async ({ request, env }: Context) => {
   const avatarReplays = event(rows, "avatar_replay", thirty);
   return Response.json({
     periods: { today: period(today), seven: period(seven), thirty: period(thirty), total: { visits: totals.visit ?? 0, contacts: totals.contact_submit_success ?? 0, avatar: totals.avatar_replay ?? 0 } },
+    guide: { today: guide(today), seven: guide(seven), thirty: guide(thirty) },
     interactions: { contacts: totals.contact_submit_success ?? 0, whatsapp: totals.whatsapp_click ?? 0, email: totals.email_click ?? 0, linkedin: totals.linkedin_click ?? 0, demos: totals.demo_click ?? 0, avatar: totals.avatar_replay ?? 0 },
     avatar: { today: event(rows, "avatar_replay", today), seven: event(rows, "avatar_replay", seven), thirty: avatarReplays, total: totals.avatar_replay ?? 0, aboutViews, rate: aboutViews ? avatarReplays / aboutViews : 0 },
     contact: { views: contactViews, submitted: contactSubmits, whatsapp: event(rows, "whatsapp_click", thirty, "/contacto"), email: event(rows, "email_click", thirty, "/contacto"), linkedin: event(rows, "linkedin_click", thirty, "/contacto"), rate: contactViews ? contactSubmits / contactViews : 0 },
