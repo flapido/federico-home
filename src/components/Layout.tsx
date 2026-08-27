@@ -33,6 +33,7 @@ function Nav() {
 
         <div className="hidden items-center gap-1.5 md:flex">
           <HeaderLink to="/cv">CV</HeaderLink>
+          <HeaderLink to="/gracias">Gracias</HeaderLink>
           <Link to="/contacto" className="rounded-full bg-ink px-3.5 py-2 text-[12px] text-paper transition-colors hover:bg-ink-2">Contame tu idea</Link>
         </div>
 
@@ -50,6 +51,7 @@ function Nav() {
             <NavLink to="/about" onClick={() => setOpen(false)} className="border-b hairline py-3">Sobre mí</NavLink>
             <NavLink to="/cv" onClick={() => setOpen(false)} className="border-b hairline py-3">CV</NavLink>
             <NavLink to="/contacto" onClick={() => setOpen(false)} className="border-b hairline py-3">Contame tu idea</NavLink>
+            <NavLink to="/gracias" onClick={() => setOpen(false)} className="border-b hairline py-3">Gracias</NavLink>
             <div className="flex flex-wrap gap-2 pt-4 text-[12px]">
               <a href={cv.links.github} target="_blank" rel="noopener noreferrer" className="rounded-full border hairline bg-white px-3 py-2">GitHub ↗</a>
               <a href={cv.links.linkedin} target="_blank" rel="noopener noreferrer" className="rounded-full border hairline bg-white px-3 py-2">LinkedIn ↗</a>
