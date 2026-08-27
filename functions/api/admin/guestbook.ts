@@ -21,6 +21,10 @@ export const onRequestPost = async ({ request, env }: Context) => {
     await env.ANALYTICS_DB.prepare("DELETE FROM guestbook_entries WHERE id=?").bind(id).run();
     return Response.json({ ok: true }, { headers: { "Cache-Control": "no-store" } });
   }
+  if (body.action === "recover") {
+    await env.ANALYTICS_DB.prepare("UPDATE guestbook_entries SET status='pending', moderation='clean', moderation_reason=NULL WHERE id=?").bind(id).run();
+    return Response.json({ ok: true }, { headers: { "Cache-Control": "no-store" } });
+  }
   const status = String(body.status);
   if (!["approved", "private", "rejected", "pending"].includes(status)) return Response.json({ error: "Solicitud inválida." }, { status: 400 });
   if (status === "approved" && Number(existing.results[0].publication_consent) !== 1) return Response.json({ error: "No hay autorización para publicar." }, { status: 400 });
