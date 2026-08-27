@@ -5,10 +5,11 @@ type Filter = "pending" | "review" | "blocked" | "approved" | "private" | "rejec
 const referenceUrl = "https://federico-home.pages.dev/gracias?tipo=referencia";
 const whatsappMessage = "Hola! Estoy armando una sección de referencias profesionales en mi portfolio. Como trabajamos juntos, si te copa podés dejar unas palabras sobre esa experiencia acá:\n\n" + referenceUrl + "\n\nGracias!";
 
-export default function GuestbookAdmin() {
+export default function GuestbookAdmin({ refreshToken }: { refreshToken: number }) {
   const [entries, setEntries] = useState<Entry[]>([]), [filter, setFilter] = useState<Filter>("pending"), [kind, setKind] = useState<"all" | Entry["type"]>("all"), [busy, setBusy] = useState<number | null>(null), [notice, setNotice] = useState("");
   const load = async () => { const response = await fetch("/api/admin/guestbook", { credentials: "same-origin" }); if (response.ok) setEntries((await response.json() as { entries: Entry[] }).entries); };
-  useEffect(() => { void load(); }, []);
+  useEffect(() => { void load(); }, [filter, kind, refreshToken]);
+  useEffect(() => { const refreshOnReturn = () => { if (!document.hidden) void load(); }; document.addEventListener("visibilitychange", refreshOnReturn); return () => document.removeEventListener("visibilitychange", refreshOnReturn); }, []);
   const filtered = useMemo(() => entries.filter((entry) => (kind === "all" || entry.type === kind) && (filter === "review" || filter === "blocked" ? entry.moderation === filter : entry.status === filter)), [entries, filter, kind]);
   const update = async (id: number, status?: Entry["status"], action?: "delete") => { setBusy(id); setNotice(""); try { const response = await fetch("/api/admin/guestbook", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json" }, body: JSON.stringify({ id, status, action }) }); const body = await response.json() as { error?: string }; if (!response.ok) throw new Error(body.error || "No pude actualizar la entrada."); setNotice(action === "delete" ? "Entrada eliminada definitivamente." : "Estado actualizado."); await load(); } catch (error) { setNotice(error instanceof Error ? error.message : "No pude actualizar la entrada."); } finally { setBusy(null); } };
   const copy = async () => { try { await navigator.clipboard.writeText(referenceUrl); setNotice("Enlace copiado."); } catch { setNotice("No pude copiar el enlace."); } };
