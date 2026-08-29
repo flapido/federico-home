@@ -31,6 +31,30 @@ function CaseStudy({ project, study }: { project: Project; study: CaseStudy }) {
   return <div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr] lg:gap-12"><div className="space-y-6"><TextSection title="Overview"><p>{study.overview}</p></TextSection>{study.problem && <TextSection title="Problem"><p>{study.problem}</p></TextSection>}{study.solution && <TextSection title="Solution"><p>{study.solution}</p></TextSection>}{study.role && <TextSection title="My role"><p>{study.role}</p></TextSection>}{study.aiUsage && <TextSection title="AI usage"><p>{study.aiUsage}</p></TextSection>}</div><div className="space-y-6"><ListSection title="Architecture" values={study.architecture} /><ListSection title="Stack" values={study.stack} /><ListSection title="Engineering decisions" values={study.decisions} /><ListSection title="Quality" values={study.quality} /><ListSection title="Evidence" values={study.evidence} /><TextSection title="Current status"><p className="rounded-[12px] border hairline bg-paper-2 p-4 text-[13px]"><span className="font-mono text-[11px] text-clay-dark">{project.demoStatus}</span><br />{statusMessage}</p></TextSection></div></div>
 }
 
+function ArchiveReferences() {
+  return (
+    <section className="mt-12 rounded-[22px] border hairline bg-white p-6 md:p-8">
+      <div className="font-mono text-[10px] uppercase tracking-[.16em] text-stone">Referencias de implementación</div>
+      <h2 className="mt-2 font-display text-[30px] tracking-[-.035em]">Acervos digitales publicados</h2>
+      <p className="mt-3 max-w-[68ch] text-[14px] leading-relaxed text-ink-light">
+        Dos sitios construidos sobre este enfoque. El sistema ya está desarrollado y en ambos casos continúa la carga y organización del material.
+      </p>
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <a href="https://4efb4170.acervo-tucuman.pages.dev/" target="_blank" rel="noreferrer" className="group rounded-[16px] border hairline bg-paper-2 p-5 transition hover:-translate-y-0.5 hover:bg-white">
+          <div className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Archivo histórico</div>
+          <div className="mt-2 font-display text-[22px]">Tucumán · Museo Mitre</div>
+          <div className="mt-4 text-[13px] underline decoration-line underline-offset-4 group-hover:text-clay-dark">Abrir sitio ↗</div>
+        </a>
+        <a href="https://acervo-soledad-silveyra.pages.dev/" target="_blank" rel="noreferrer" className="group rounded-[16px] border hairline bg-paper-2 p-5 transition hover:-translate-y-0.5 hover:bg-white">
+          <div className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Archivo digital</div>
+          <div className="mt-2 font-display text-[22px]">Soledad Silveyra</div>
+          <div className="mt-4 text-[13px] underline decoration-line underline-offset-4 group-hover:text-clay-dark">Abrir sitio ↗</div>
+        </a>
+      </div>
+    </section>
+  )
+}
+
 export default function ProjectDetail() {
   const { slug } = useParams()
   const project = projects.find(item => item.slug === slug)
@@ -48,6 +72,8 @@ export default function ProjectDetail() {
       <section className="mt-10"><div className="mb-7"><div className="font-mono text-[10px] uppercase tracking-[.16em] text-stone">Case study</div><h2 className="mt-2 font-display text-[32px] tracking-[-.035em]">Decisiones y evidencia disponible</h2></div><CaseStudy project={project} study={project.caseStudy} /></section>
 
       <CommercialEvidence project={project} />
+
+      {project.slug === "archivo-digital" && <ArchiveReferences />}
 
       <section id="preview" data-tour-id={project.slug === "legacy-web" ? "guide-legacy" : project.slug === "subastas" ? "guide-subastas" : "guide-project"} tabIndex={-1} className="scroll-mt-20 mt-12 overflow-hidden rounded-[22px] border hairline bg-white"><div className="flex flex-col justify-between gap-3 border-b hairline bg-paper-2/70 px-6 py-4 sm:flex-row sm:items-center md:px-8"><div><div className="font-mono text-[10px] uppercase tracking-[.14em] text-stone">Demostración visual</div><h2 className="mt-1 font-display text-[20px]">{previewTitle}</h2></div><span className="w-fit rounded-full border hairline bg-white px-3 py-1 font-mono text-[10px]">Datos de demostración</span></div><div className="p-4 sm:p-6 md:p-8">{previewByType[project.preview]}</div><div className="border-t hairline bg-white px-6 py-4 text-[12px] leading-relaxed text-ink-light">{previewFooter}</div></section>
 
