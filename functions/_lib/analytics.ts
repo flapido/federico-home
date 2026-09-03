@@ -40,9 +40,53 @@ export function analyticsDay(date = new Date()) {
   return date.toISOString().slice(0, 10);
 }
 
+export function extractGeo(request: Request) {
+  return {
+    country: request.headers.get("CF-IPCountry")?.slice(0, 2) ?? "",
+    region: request.headers.get("CF-Region")?.slice(0, 128) ?? "",
+    city: request.headers.get("CF-City")?.slice(0, 128) ?? "",
+  };
+}
+
+export function extractReferrer(request: Request) {
+  return request.headers.get("referer")?.split("?")[0]?.slice(0, 256) ?? "";
+}
+
+export function userAgentHash(userAgent: string) {
+  let hash = 0;
+  for (let index = 0; index < userAgent.length; index++) {
+    hash = (hash << 5) - hash + userAgent.charCodeAt(index);
+    hash = hash & hash;
+  }
+  return Math.abs(hash).toString(16).padStart(8, "0");
+}
+
+export async function hashVisitorId(visitorId: string, secret: string) {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const signature = await crypto.subtle.sign("HMAC", key, encoder.encode(visitorId));
+  return Array.from(new Uint8Array(signature)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
 export async function recordEvent(db: D1Database | undefined, event: AnalyticsEvent, path: string, source: string, day = analyticsDay()) {
   if (!db || !normalisePath(path)) return;
   await db.prepare(`INSERT INTO analytics_event_totals (day, event_type, path, source, count)
     VALUES (?, ?, ?, ?, 1)
     ON CONFLICT(day, event_type, path, source) DO UPDATE SET count = count + 1`).bind(day, event, path, source).run();
+}
+
+export async function recordVisit(db: D1Database | undefined, event: AnalyticsEvent, path: string, source: string, request: Request, visitorId: string, secret: string) {
+  if (!db || !normalisePath(path)) return;
+  const geo = extractGeo(request);
+  const day = analyticsDay();
+  const created = Math.floor(Date.now() / 1000);
+  const visitorHash = await hashVisitorId(visitorId, secret);
+  await db.prepare(`INSERT INTO analytics_visits (created_at, day, event_type, path, source, country, region, city, referrer, user_agent_hash, visitor_hash)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).bind(
+    created, day, event, path, source,
+    geo.country, geo.region, geo.city,
+    extractReferrer(request),
+    userAgentHash(request.headers.get("user-agent") ?? ""),
+    visitorHash
+  ).run();
 }

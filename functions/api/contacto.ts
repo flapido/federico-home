@@ -1,9 +1,11 @@
 import { normaliseSource, recordEvent, type D1Database } from "../_lib/analytics";
+import { hasAdminSession } from "../_lib/admin-auth";
 
 interface Env {
   TELEGRAM_BOT_TOKEN?: string;
   TELEGRAM_CHAT_ID?: string;
   ANALYTICS_DB?: D1Database;
+  ADMIN_SESSION_SECRET?: string;
 }
 
 type PagesContext<E> = { request: Request; env: E; waitUntil?: (promise: Promise<unknown>) => void };
@@ -126,7 +128,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
       502,
     );
   }
-  const analytics = recordEvent(env.ANALYTICS_DB, "contact_submit_success", "/contacto", normaliseSource(origin)).catch(() => undefined);
+  const isOwner = env.ANALYTICS_DB && env.ADMIN_SESSION_SECRET && await hasAdminSession(request, env);
+  const analytics = isOwner ? Promise.resolve() : recordEvent(env.ANALYTICS_DB, "contact_submit_success", "/contacto", normaliseSource(origin)).catch(() => undefined);
   if (waitUntil) waitUntil(analytics);
   else await analytics;
   return response({ ok: "true" });

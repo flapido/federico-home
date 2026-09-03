@@ -1,7 +1,8 @@
 import { recordEvent, type D1Database } from "../_lib/analytics";
+import { hasAdminSession } from "../_lib/admin-auth";
 import { moderate } from "../_lib/moderation";
 
-type Env = { ANALYTICS_DB?: D1Database; TELEGRAM_BOT_TOKEN?: string; TELEGRAM_CHAT_ID?: string };
+type Env = { ANALYTICS_DB?: D1Database; TELEGRAM_BOT_TOKEN?: string; TELEGRAM_CHAT_ID?: string; ADMIN_SESSION_SECRET?: string };
 type Context = { request: Request; env: Env; waitUntil?: (value: Promise<unknown>) => void };
 const attempts = new Map<string, number[]>();
 const clean = (value: unknown, max: number) => typeof value === "string" ? value.trim().replace(/[\p{Cc}]/gu, " ").slice(0, max) : "";
@@ -27,7 +28,9 @@ export const onRequestPost = async ({ request, env, waitUntil }: Context) => {
   const status = moderation.level === "blocked" ? "rejected" : "pending";
   await env.ANALYTICS_DB.prepare("INSERT INTO guestbook_entries (type,name,relationship,company,linkedin_url,message,publication_consent,status,moderation,moderation_reason,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)").bind(type, name, relationship || null, company || null, linkedin || null, message, consent ? 1 : 0, status, moderation.level, moderation.reason || null, now).run();
   const event = type === "professional_reference" ? "reference_submit_success" as const : "guestbook_submit_success" as const;
-  const analytics = Promise.all([recordEvent(env.ANALYTICS_DB, event, "/gracias", type === "professional_reference" ? "other" : "contacto"), recordEvent(env.ANALYTICS_DB, `guestbook_${moderation.level}` as "guestbook_clean" | "guestbook_review" | "guestbook_blocked", "/gracias", "other")]).catch(() => undefined); if (waitUntil) waitUntil(analytics);
+  const isOwner = env.ANALYTICS_DB && env.ADMIN_SESSION_SECRET && await hasAdminSession(request, env);
+  const analytics = isOwner ? Promise.resolve() : Promise.all([recordEvent(env.ANALYTICS_DB, event, "/gracias", type === "professional_reference" ? "other" : "contacto"), recordEvent(env.ANALYTICS_DB, `guestbook_${moderation.level}` as "guestbook_clean" | "guestbook_review" | "guestbook_blocked", "/gracias", "other")]).catch(() => undefined);
+  if (waitUntil) waitUntil(analytics);
   if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) { const heading = moderation.level === "blocked" ? "MENSAJE BLOQUEADO" : moderation.level === "review" ? "⚠ NUEVO MENSAJE PARA REVISAR" : type === "professional_reference" ? "NUEVA REFERENCIA PROFESIONAL" : "NUEVO MENSAJE — Libro de visitas"; const text = [heading, "", `Nombre: ${name}`, `Tipo: ${type === "professional_reference" ? "Referencia" : "Saludo"}`, `Moderación: ${moderation.level === "clean" ? "OK" : moderation.level === "review" ? "REVISAR" : "BLOQUEADO"}`, moderation.reason && `Motivo: ${moderation.reason}`, "", "Mensaje:", message, "", `Publicación autorizada: ${consent ? "Sí" : "No"}`, `Estado: ${status === "pending" ? "Pendiente" : "Bloqueado"}`].filter(Boolean).join("\n"); const telegram = fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ chat_id: env.TELEGRAM_CHAT_ID, text }) }).catch(() => undefined); if (waitUntil) waitUntil(telegram); }
   return reply({ ok: "true" });
 };

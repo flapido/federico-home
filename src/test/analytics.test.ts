@@ -26,14 +26,15 @@ test("one visit is emitted per 30 minute browser window", () => {
   expect(isNewVisit(1_000 + 30 * 60 * 1000)).toBe(true);
 });
 
-test("analytics event endpoint accepts one allowlisted event without a caller count", async () => {
-  const { db, calls } = database();
-  const request = new Request("https://example.test/api/analytics/event", { method: "POST", headers: { "content-type": "application/json", "CF-Connecting-IP": "analytics-test" }, body: JSON.stringify({ event: "visit", path: "/soluciones", source: "soluciones", count: 5000 }) });
-  const response = await analyticsEvent({ request, env: { ANALYTICS_DB: db } });
-  expect(response.status).toBe(202);
-  expect(calls).toHaveLength(1);
-  expect(calls[0].at(-1)).toBe("soluciones");
-});
+  test("analytics event endpoint accepts one allowlisted event without a caller count", async () => {
+    const { db, calls } = database();
+    const request = new Request("https://example.test/api/analytics/event", { method: "POST", headers: { "content-type": "application/json", "CF-Connecting-IP": "analytics-test" }, body: JSON.stringify({ event: "visit", path: "/soluciones", source: "soluciones", count: 5000 }) });
+    const response = await analyticsEvent({ request, env: { ANALYTICS_DB: db, ADMIN_SESSION_SECRET: "secret" } });
+    expect(response.status).toBe(202);
+    expect(calls).toHaveLength(2);
+    expect(calls[0].at(-1)).toBe("soluciones");
+    expect(calls[1]).toHaveLength(11);
+  });
 
 test("contact success cannot be forged through the public analytics endpoint", async () => {
   const { db } = database();
