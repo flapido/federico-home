@@ -14,6 +14,7 @@ import Admin from "./pages/Admin"
 import PortalGuide from "./components/PortalGuide"
 import Thanks from "./pages/Thanks"
 import SeoMeta from "./components/SeoMeta"
+import Consola from "./pages/Consola"
 
 export default function App(){
   return (
@@ -24,6 +25,7 @@ export default function App(){
       <Routes>
         <Route path="admin" element={<Admin />} />
         <Route path="admin/dashboard" element={<Admin />} />
+        <Route path="consola" element={<Consola />} />
         <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="proyectos" element={<Projects />} />
