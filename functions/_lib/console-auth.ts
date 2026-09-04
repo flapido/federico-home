@@ -3,6 +3,7 @@ export type ConsoleEnv = {
   TELEGRAM_BOT_TOKEN?: string;
   TELEGRAM_CHAT_ID?: string;
   CONSOLE_SESSION_SECRET?: string;
+  AGENT_CONSOLE_NOTIFY_SECRET?: string;
 };
 
 export const CONSOLE_OTP_TTL_SECONDS = 5 * 60;
