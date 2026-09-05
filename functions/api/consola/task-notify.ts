@@ -24,6 +24,7 @@ type TaskNotifyPayload = {
   product_quality_gate?: string;
   short_summary?: string;
   pending?: string[];
+  event?: string;
 };
 
 function buildTelegramMessage(payload: TaskNotifyPayload): string | null {
@@ -110,6 +111,7 @@ export const onRequestPost = async ({ request, env }: Context) => {
     product_quality_gate: typeof body.product_quality_gate === "string" ? body.product_quality_gate.slice(0, 32) : "",
     short_summary: typeof body.short_summary === "string" ? body.short_summary.slice(0, 180) : "",
     pending: Array.isArray(body.pending) ? body.pending.map((item) => String(item).slice(0, 120)).slice(0, 10) : [],
+    event: typeof body.event === "string" ? body.event.slice(0, 80) : "status-change",
   });
 
   const expectedSignature = await secretHash(`${tsPart}:${normalized}`, env.AGENT_CONSOLE_NOTIFY_SECRET);
@@ -123,6 +125,32 @@ export const onRequestPost = async ({ request, env }: Context) => {
   }
 
   const text = sanitizeForTelegram(message);
+  // Opaque HMAC-derived key: D1 can atomically claim a delivery without
+  // retaining task metadata or allowing a replay to reach Telegram twice.
+  const idempotencyKey = await secretHash(
+    `${normalized.task_id}:${normalized.status}:${normalized.event}`,
+    env.AGENT_CONSOLE_NOTIFY_SECRET,
+  );
+  const now = unixNow();
+  const taskId = normalized.task_id || "-";
+  const status = normalized.status || "-";
+  let claimed = false;
+  const inserted = await env.ANALYTICS_DB.prepare(
+    "INSERT INTO console_task_notifications (task_id, status, sent_at, idempotency_key, delivery_state, attempt_count) VALUES (?, ?, ?, ?, 'pending', 1) ON CONFLICT DO NOTHING"
+  ).bind(taskId, status, now, idempotencyKey).run();
+  claimed = (inserted.meta?.changes ?? 0) === 1;
+  if (!claimed) {
+    const existing = await env.ANALYTICS_DB.prepare(
+      "SELECT delivery_state FROM console_task_notifications WHERE idempotency_key = ? LIMIT 1"
+    ).bind(idempotencyKey).all<{ delivery_state: string }>();
+    if (existing.results[0]?.delivery_state === "failed") {
+      const retry = await env.ANALYTICS_DB.prepare(
+        "UPDATE console_task_notifications SET delivery_state = 'pending', sent_at = ?, attempt_count = attempt_count + 1 WHERE idempotency_key = ? AND delivery_state = 'failed'"
+      ).bind(now, idempotencyKey).run();
+      claimed = (retry.meta?.changes ?? 0) === 1;
+    }
+    if (!claimed) return Response.json({ ok: true, deduplicated: true }, { status: 202, headers });
+  }
   try {
     const telegram = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
       method: "POST",
@@ -131,19 +159,21 @@ export const onRequestPost = async ({ request, env }: Context) => {
     });
     const payload = await telegram.json() as { ok?: boolean };
     if (!telegram.ok || payload.ok !== true) {
+      await env.ANALYTICS_DB.prepare(
+        "UPDATE console_task_notifications SET delivery_state = 'failed' WHERE idempotency_key = ? AND delivery_state = 'pending'"
+      ).bind(idempotencyKey).run();
       return Response.json({ error: "Telegram rechazó el envío." }, { status: 502, headers });
     }
 
     await env.ANALYTICS_DB.prepare(
-      "INSERT INTO console_task_notifications (task_id, status, sent_at) VALUES (?, ?, ?)"
-    ).bind(
-      typeof body.task_id === "string" ? body.task_id.slice(0, 64) : null,
-      (body.status || "").toUpperCase().slice(0, 32),
-      unixNow()
-    ).run();
+      "UPDATE console_task_notifications SET delivery_state = 'sent' WHERE idempotency_key = ? AND delivery_state = 'pending'"
+    ).bind(idempotencyKey).run();
 
     return Response.json({ ok: true }, headers);
   } catch {
+    await env.ANALYTICS_DB.prepare(
+      "UPDATE console_task_notifications SET delivery_state = 'failed' WHERE idempotency_key = ? AND delivery_state = 'pending'"
+    ).bind(idempotencyKey).run().catch(() => undefined);
     return Response.json({ error: "Error de red." }, { status: 502, headers });
   }
 };
