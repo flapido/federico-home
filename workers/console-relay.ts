@@ -86,9 +86,12 @@ export class ConsoleRelay {
   private async authorize(socket: SocketLike, message: RelayJsonMessage) {
     if (message.type !== "hello") return this.close(socket, 1008, "hello required");
     if (message.session !== this.relaySession) return this.close(socket, 1008, "session mismatch");
-    // Browsers must present the configured Pages origin. Agents are outbound
-    // WSS clients and deliberately have no Origin header.
-    if (message.role === "browser" && this.env.CONSOLE_RELAY_ALLOWED_ORIGIN && this.origins.get(socket) !== this.env.CONSOLE_RELAY_ALLOWED_ORIGIN) return this.close(socket, 1008, "origin denied");
+    // Browsers must present the configured Pages origin (fail-closed).
+    // Agents are outbound WSS clients and deliberately have no Origin header.
+    if (message.role === "browser") {
+      const allowedOrigin = this.env.CONSOLE_RELAY_ALLOWED_ORIGIN;
+      if (!allowedOrigin || this.origins.get(socket) !== allowedOrigin) return this.close(socket, 1008, "origin denied");
+    }
     if (message.role === "agent" && this.origins.get(socket)) return this.close(socket, 1008, "agent origin denied");
     const ok = message.role === "browser" ? (await verifyBrowserTicket(message.ticket ?? "", this.env.CONSOLE_RELAY_TICKET_SECRET)) === message.session : await verifyAgentHello(message, this.env.AGENT_CONSOLE_RELAY_SECRET);
     if (!ok) return this.close(socket, 1008, "authentication failed");
