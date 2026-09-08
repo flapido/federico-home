@@ -2,6 +2,7 @@ import {
   CONSOLE_OTP_ATTEMPT_LIMIT,
   CONSOLE_SESSION_TTL_SECONDS,
   constantTimeEqual,
+  hasSameOrigin,
   randomToken,
   secretHash,
   sessionCookie,
@@ -15,7 +16,8 @@ const headers = { "Cache-Control": "no-store" };
 const denied = () => Response.json({ error: "El código no es válido o ya venció." }, { status: 401, headers });
 
 export const onRequestPost = async ({ request, env }: Context) => {
-  if (!env.ANALYTICS_DB || !env.CONSOLE_OTP_SECRET) return denied();
+  if (!env.ANALYTICS_DB || !env.CONSOLE_OTP_SECRET || !env.CONSOLE_SESSION_SECRET) return denied();
+  if (!hasSameOrigin(request)) return Response.json({ error: "Solicitud inv\u00e1lida." }, { status: 403, headers });
   if (request.headers.get("content-type")?.toLowerCase().includes("application/json") !== true) return Response.json({ error: "Solicitud inválida." }, { status: 415, headers });
 
   let body: { code?: unknown };
@@ -43,7 +45,7 @@ export const onRequestPost = async ({ request, env }: Context) => {
   if ((consumed.meta?.changes ?? 0) !== 1) return denied();
 
   const token = randomToken();
-  await env.ANALYTICS_DB.prepare("INSERT INTO console_sessions (token_hash, created_at, expires_at) VALUES (?, ?, ?)").bind(await secretHash(token, env.CONSOLE_OTP_SECRET), now, now + CONSOLE_SESSION_TTL_SECONDS).run();
+  await env.ANALYTICS_DB.prepare("INSERT INTO console_sessions (token_hash, created_at, expires_at) VALUES (?, ?, ?)").bind(await secretHash(token, env.CONSOLE_SESSION_SECRET), now, now + CONSOLE_SESSION_TTL_SECONDS).run();
   return Response.json({ ok: true }, { headers: { ...headers, "Set-Cookie": sessionCookie(token) } });
 };
 

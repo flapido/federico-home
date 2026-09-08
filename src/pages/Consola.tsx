@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import RemoteTerminal from "../components/RemoteTerminal";
 
 type ConsoleStatus = {
   pc_online: boolean;
@@ -29,6 +30,13 @@ function ConsolePage() {
 
   const pcOnline = status?.pc_online ?? false;
   const agentOnline = status?.agent_console_online ?? false;
+
+  // A refresh keeps the HttpOnly Phase 1 cookie private while restoring UI state.
+  useEffect(() => {
+    void fetch("/api/consola/session", { credentials: "same-origin" })
+      .then((response) => { if (response.ok) setAuthState("authorized"); })
+      .catch(() => undefined);
+  }, []);
 
   // Idle timeout: 1 hour
   useEffect(() => {
@@ -193,16 +201,11 @@ function ConsolePage() {
           )}
 
           {authState === "authorized" && (
-            <section className="rounded-[18px] border border-white/10 bg-white/[0.03] p-6 sm:p-8" aria-labelledby="consola-title">
+            <section className="w-full max-w-4xl rounded-[18px] border border-white/10 bg-white/[0.03] p-6 sm:p-8" aria-labelledby="consola-title">
               <p className="font-mono text-[10px] uppercase tracking-[.16em] text-stone">Federico Home — Consola Remota</p>
               <h1 id="consola-title" className="mt-3 font-display text-3xl tracking-[-.04em]">Acceso autorizado</h1>
-              <p className="mt-3 max-w-[36ch] text-[13px] leading-relaxed text-stone">
-                Terminal remota pendiente de conexión.
-              </p>
-              <div className="mt-8 flex items-center gap-2">
-                <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-400" aria-hidden="true" />
-                <span className="text-xs text-stone">Sesión activa</span>
-              </div>
+              <p className="mt-3 max-w-[52ch] text-[13px] leading-relaxed text-stone">Sesión OTP activa. La conexión sólo usa el relay WSS; no publica servicios locales.</p>
+              <RemoteTerminal />
             </section>
           )}
 

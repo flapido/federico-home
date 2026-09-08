@@ -3,6 +3,7 @@ import {
   CONSOLE_OTP_REQUEST_WINDOW_SECONDS,
   CONSOLE_OTP_TTL_SECONDS,
   randomOtp,
+  hasSameOrigin,
   secretHash,
   unixNow,
   type ConsoleEnv,
@@ -15,6 +16,7 @@ const failure = () => Response.json({ error: "No pude enviar un código en este 
 
 export const onRequestPost = async ({ request, env }: Context) => {
   if (!env.ANALYTICS_DB || !env.CONSOLE_OTP_SECRET || !env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) return failure();
+  if (!hasSameOrigin(request)) return Response.json({ error: "Solicitud inv\u00e1lida." }, { status: 403, headers });
   if (request.headers.get("content-type")?.toLowerCase().includes("application/json") !== true) return Response.json({ error: "Solicitud inválida." }, { status: 415, headers });
   if (Number(request.headers.get("content-length") ?? "0") > 128) return Response.json({ error: "Solicitud inválida." }, { status: 400, headers });
 

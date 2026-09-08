@@ -1,0 +1,11 @@
+name = "federico-home-console-relay"
+main = "workers/console-relay.ts"
+compatibility_date = "2026-08-23"
+
+[[durable_objects.bindings]]
+name = "CONSOLE_RELAY"
+class_name = "ConsoleRelay"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["ConsoleRelay"]

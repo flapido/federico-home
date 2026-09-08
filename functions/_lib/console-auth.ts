@@ -4,6 +4,10 @@ export type ConsoleEnv = {
   TELEGRAM_CHAT_ID?: string;
   CONSOLE_SESSION_SECRET?: string;
   AGENT_CONSOLE_NOTIFY_SECRET?: string;
+  CONSOLE_RELAY_TICKET_SECRET?: string;
+  CONSOLE_RELAY_URL?: string;
+  CONSOLE_RELAY_SESSION_ID?: string;
+  ANALYTICS_DB?: D1Database;
 };
 
 export const CONSOLE_OTP_TTL_SECONDS = 5 * 60;
@@ -81,17 +85,33 @@ export function expiredSessionCookie() {
   return `${CONSOLE_SESSION_COOKIE}=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0`;
 }
 
-export async function hasConsoleSession(request: Request, env: ConsoleEnv) {
+/** Reject cross-site state changes. SameSite is defense in depth, not the check. */
+export function hasSameOrigin(request: Request) {
+  const origin = request.headers.get("Origin");
+  if (!origin) return false;
+  try {
+    return new URL(origin).origin === new URL(request.url).origin;
+  } catch {
+    return false;
+  }
+}
+
+export type ConsoleSession = { id: number; tokenHash: string };
+
+export async function getConsoleSession(request: Request, env: ConsoleEnv): Promise<ConsoleSession | null> {
   const token = readCookie(request, CONSOLE_SESSION_COOKIE);
-  if (!token || !env.CONSOLE_SESSION_SECRET || token.length > 256) return false;
-  const hash = await secretHash(token, env.CONSOLE_SESSION_SECRET);
-  // Reuse ANALYTICS_DB if available; otherwise fail closed
-  if (!env.ANALYTICS_DB) return false;
+  if (!token || !env.CONSOLE_SESSION_SECRET || token.length > 256 || !env.ANALYTICS_DB) return null;
+  const tokenHash = await secretHash(token, env.CONSOLE_SESSION_SECRET);
   const result = await env.ANALYTICS_DB
     .prepare("SELECT id FROM console_sessions WHERE token_hash = ? AND revoked_at IS NULL AND expires_at > ? LIMIT 1")
-    .bind(hash, unixNow())
+    .bind(tokenHash, unixNow())
     .all<{ id: number }>();
-  return result.results.length === 1;
+  const session = result.results[0];
+  return session ? { id: session.id, tokenHash } : null;
+}
+
+export async function hasConsoleSession(request: Request, env: ConsoleEnv) {
+  return (await getConsoleSession(request, env)) !== null;
 }
 
 export function restricted() {
