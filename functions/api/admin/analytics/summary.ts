@@ -6,7 +6,22 @@ type TotalRow = { event_type: string; count: number };
 type VisitRow = { created_at: number; day: string; event_type: string; path: string; source: string; country: string; region: string; city: string; referrer: string; user_agent_hash: string; visitor_hash: string };
 const event = (rows: Row[], type: string, from: string, path?: string) => rows.filter((row) => row.event_type === type && row.day >= from && (!path || row.path === path)).reduce((sum, row) => sum + Number(row.count), 0);
 const day = (offset: number) => { const value = new Date(); value.setUTCDate(value.getUTCDate() - offset); return value.toISOString().slice(0, 10); };
-const formatTime = (timestamp: number) => new Intl.DateTimeFormat("es-AR", { hour: "2-digit", minute: "2-digit" }).format(new Date(timestamp * 1000));
+const argentinaDate = new Intl.DateTimeFormat("es-AR", {
+  dateStyle: "long",
+  timeZone: "America/Argentina/Buenos_Aires",
+});
+const argentinaTime = new Intl.DateTimeFormat("es-AR", {
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h12",
+  timeZone: "America/Argentina/Buenos_Aires",
+});
+const formatTime = (timestamp: number) => {
+  const time = argentinaTime.formatToParts(new Date(timestamp * 1000));
+  const part = (type: Intl.DateTimeFormatPartTypes) => time.find((item) => item.type === type)?.value ?? "";
+  const dayPeriod = part("dayPeriod").replace(/[\u00a0\u202f]/g, " ").trim();
+  return `${argentinaDate.format(new Date(timestamp * 1000))}, ${part("hour")}:${part("minute")} ${dayPeriod}`;
+};
 
 function buildLocation(row: VisitRow) {
   const parts = [row.city, row.region, row.country].filter(Boolean);
