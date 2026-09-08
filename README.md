@@ -14,6 +14,10 @@ Portfolio profesional de Federico Lapido. Es un hub estático para presentar exp
 
 La consulta de `/contacto` usa la Pages Function `functions/api/contacto.ts`. Para habilitar entrega real, Cloudflare Pages requiere los secretos server-side `TELEGRAM_BOT_TOKEN` y `TELEGRAM_CHAT_ID`; nunca deben usar prefijo `VITE_`, guardarse en Git ni aparecer en el bundle.
 
+## Web Console Fase 2
+
+`/consola` conserva OTP por Telegram y la cookie HttpOnly de Fase 1. Tras autorizarse, xterm.js se conecta al relay WSS con un ticket efímero; un conector del PC inicia la conexión WSS saliente y adapta el protocolo al Agent Console local. No se publica ningún puerto localhost, Django ni `node-pty`. Variables, binding Durable Object, migración, protocolo y límites de seguridad: [docs/WEB-CONSOLE-PHASE2.md](docs/WEB-CONSOLE-PHASE2.md).
+
 ## Analytics privacy-first
 
 Analytics V1 usa D1 mediante el binding `ANALYTICS_DB`. Guarda contadores agregados por día, evento, ruta y origen normalizado; no registra IPs, personas, cookies identificatorias, query strings ni contenido de formularios. Una visita es una sesión aproximada: `localStorage` evita volver a contar al mismo navegador durante 30 minutos; cada cambio de ruta registra `page_view`.
