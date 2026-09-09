@@ -126,6 +126,12 @@ function ConsolePage() {
   const inputBg = isDark ? "bg-white/5" : "bg-paper";
   const inputBorder = isDark ? "border-white/10" : "hairline";
 
+  // OTP gates access only. The authenticated terminal must use the complete
+  // viewport instead of inheriting the compact authentication card.
+  if (authState === "authorized") {
+    return <div className="console-remote-page bg-[#0b0f17] text-[#d6e1f2]"><RemoteTerminal pcOnline={pcOnline} agentOnline={agentOnline} /></div>;
+  }
+
   return (
     <div className={`${bgClass} ${textClass} flex min-h-screen flex-col`}>
       <main className="flex flex-1 items-center justify-center px-5 py-10">
@@ -197,15 +203,6 @@ function ConsolePage() {
                   {loading ? "Verificando…" : "Entrar"}
                 </button>
               </form>
-            </section>
-          )}
-
-          {authState === "authorized" && (
-            <section className="w-full max-w-4xl rounded-[18px] border border-white/10 bg-white/[0.03] p-6 sm:p-8" aria-labelledby="consola-title">
-              <p className="font-mono text-[10px] uppercase tracking-[.16em] text-stone">Federico Home — Consola Remota</p>
-              <h1 id="consola-title" className="mt-3 font-display text-3xl tracking-[-.04em]">Acceso autorizado</h1>
-              <p className="mt-3 max-w-[52ch] text-[13px] leading-relaxed text-stone">Sesión OTP activa. La conexión sólo usa el relay WSS; no publica servicios locales.</p>
-              <RemoteTerminal />
             </section>
           )}
 

@@ -8,4 +8,4 @@ class_name = "ConsoleRelay"
 
 [[migrations]]
 tag = "v1"
-new_classes = ["ConsoleRelay"]
+new_sqlite_classes = ["ConsoleRelay"]
