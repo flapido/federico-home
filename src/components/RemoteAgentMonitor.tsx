@@ -267,7 +267,6 @@ export default function RemoteAgentMonitor({ pcOnline, agentOnline }: Props) {
   }, []);
 
   const refreshList = useCallback(async () => {
-    if (state !== "online") return;
     const requestId = generateRequestId();
     const frame = monitorListFrame(requestId);
     if (!send(frame)) return;
@@ -280,7 +279,10 @@ export default function RemoteAgentMonitor({ pcOnline, agentOnline }: Props) {
     } catch {
       // Ignore individual refresh failures
     }
-  }, [state, generateRequestId, send, waitForResponse]);
+  }, [generateRequestId, send, waitForResponse]);
+
+  const refreshListRef = useRef(refreshList);
+  useEffect(() => { refreshListRef.current = refreshList; }, [refreshList]);
 
   const fetchTaskOutput = useCallback(async (task: MonitorTask) => {
     if (state !== "online") return;
@@ -324,8 +326,6 @@ export default function RemoteAgentMonitor({ pcOnline, agentOnline }: Props) {
 
     const connect = async () => {
       if (stoppedRef.current) return;
-      setState("connecting");
-      setDetail("Conectando al relay…");
       try {
         const response = await fetch("/api/consola/relay-ticket", {
           method: "POST",
@@ -341,7 +341,7 @@ export default function RemoteAgentMonitor({ pcOnline, agentOnline }: Props) {
         ws.binaryType = "arraybuffer";
 
         ws.onopen = () => {
-          ws.send(JSON.stringify({ type: "hello", v: 1, role: "browser", session, ticket: relay.ticket }));
+          ws.send(JSON.stringify({ type: "hello", v: 1, role: "browser-monitor", session, ticket: relay.ticket }));
         };
 
         ws.onmessage = (event) => {
@@ -357,7 +357,7 @@ export default function RemoteAgentMonitor({ pcOnline, agentOnline }: Props) {
               if (stateRef.current !== "online") {
                 setState("online");
                 setDetail("Relay conectado. Cargando agentes…");
-                refreshList();
+                refreshListRef.current();
               }
               return;
             }
@@ -398,7 +398,7 @@ export default function RemoteAgentMonitor({ pcOnline, agentOnline }: Props) {
       socketRef.current?.close(1000, "page closed");
       socketRef.current = null;
     };
-  }, [refreshList]);
+  }, []);
 
   const emptyState = (
     <div className="remote-monitor-empty" aria-live="polite">

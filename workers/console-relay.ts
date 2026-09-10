@@ -72,30 +72,39 @@ export class ConsoleRelay {
     const message = parseRelayJson(data); if (!message) return this.close(socket, 1008, "invalid protocol frame");
     const current = [...this.peers.entries()].find(([, peer]) => peer === socket)?.[0];
     if (!current) return void this.authorize(socket, message);
-    const browserCommand = message.type === "terminal.open" || message.type === "terminal.input" || message.type === "terminal.resize" || message.type === "terminal.exit"
-      || message.type === "monitor.list" || message.type === "monitor.get" || message.type === "monitor.read";
+    const browserTerminalCommand = message.type === "terminal.open" || message.type === "terminal.input" || message.type === "terminal.resize" || message.type === "terminal.exit";
+    const browserMonitorCommand = message.type === "monitor.list" || message.type === "monitor.get" || message.type === "monitor.read";
     const agentResponse = message.type === "terminal.open" || message.type === "terminal.output" || message.type === "terminal.exit" || message.type === "error"
       || message.type === "monitor.list" || message.type === "monitor.get" || message.type === "monitor.read";
-    if (message.type === "hello" || (current === "browser" && !browserCommand && message.type !== "ping" && message.type !== "pong") || (current === "agent" && !agentResponse && message.type !== "ping" && message.type !== "pong")) return this.close(socket, 1008, "role violation");
-    if (current === "browser" && message.type === "terminal.open" && (message.session_id !== undefined || !Number.isInteger(message.cols) || !Number.isInteger(message.rows))) return this.close(socket, 1008, "invalid open request");
+    if (message.type === "hello" || (current === "browser-terminal" && !browserTerminalCommand && message.type !== "ping" && message.type !== "pong") || (current === "browser-monitor" && !browserMonitorCommand && message.type !== "ping" && message.type !== "pong") || (current === "agent" && !agentResponse && message.type !== "ping" && message.type !== "pong")) return this.close(socket, 1008, "role violation");
+    if (current === "browser-terminal" && message.type === "terminal.open" && (message.session_id !== undefined || !Number.isInteger(message.cols) || !Number.isInteger(message.rows))) return this.close(socket, 1008, "invalid open request");
     if (current === "agent" && message.type === "terminal.open" && !message.session_id) return this.close(socket, 1008, "open acknowledgement missing session");
     if (message.type === "ping") return this.send(socket, JSON.stringify({ type: "pong", at: message.at }));
     if (message.type === "pong") return;
     if (current === "agent" && message.type === "terminal.open" && message.session_id) this.localTerminalSession = message.session_id;
     if (current === "agent" && message.type === "terminal.exit") this.localTerminalSession = undefined;
-    this.forward(current === "browser" ? "agent" : "browser", data);
+    if (current === "browser-terminal" || current === "browser-monitor") {
+      this.forward("agent", data);
+    } else {
+      const terminal = this.peers.get("browser-terminal");
+      const monitor = this.peers.get("browser-monitor");
+      if (terminal) this.send(terminal, data);
+      if (monitor) this.send(monitor, data);
+    }
   }
   private async authorize(socket: SocketLike, message: RelayJsonMessage) {
     if (message.type !== "hello") return this.close(socket, 1008, "hello required");
     if (message.session !== this.relaySession) return this.close(socket, 1008, "session mismatch");
     // Browsers must present the configured Pages origin (fail-closed).
     // Agents are outbound WSS clients and deliberately have no Origin header.
-    if (message.role === "browser") {
+    if (message.role === "browser" || message.role === "browser-terminal" || message.role === "browser-monitor") {
       const allowedOrigin = this.env.CONSOLE_RELAY_ALLOWED_ORIGIN;
       if (!allowedOrigin || this.origins.get(socket) !== allowedOrigin) return this.close(socket, 1008, "origin denied");
     }
     if (message.role === "agent" && this.origins.get(socket)) return this.close(socket, 1008, "agent origin denied");
-    const ok = message.role === "browser" ? (await verifyBrowserTicket(message.ticket ?? "", this.env.CONSOLE_RELAY_TICKET_SECRET)) === message.session : await verifyAgentHello(message, this.env.AGENT_CONSOLE_RELAY_SECRET);
+    const ok = message.role === "browser" || message.role === "browser-terminal" || message.role === "browser-monitor"
+      ? (await verifyBrowserTicket(message.ticket ?? "", this.env.CONSOLE_RELAY_TICKET_SECRET)) === message.session
+      : await verifyAgentHello(message, this.env.AGENT_CONSOLE_RELAY_SECRET);
     if (!ok) return this.close(socket, 1008, "authentication failed");
     const prior = this.peers.get(message.role); if (prior) this.close(prior, 4001, "replaced by reconnect");
     this.peers.set(message.role, socket); this.send(socket, JSON.stringify({ type: "pong", at: Date.now() }));
@@ -103,7 +112,11 @@ export class ConsoleRelay {
   private onBinary(socket: SocketLike, data: unknown) {
     const role = [...this.peers.entries()].find(([, peer]) => peer === socket)?.[0];
     if (role !== "agent" || !(data instanceof ArrayBuffer) || data.byteLength < 2 || data.byteLength > MAX_RELAY_BINARY_BYTES || new Uint8Array(data)[0] !== 1) return this.close(socket, 1008, "binary role or size violation");
-    this.lastSeen.set(socket, Date.now()); this.forward("browser", data);
+    this.lastSeen.set(socket, Date.now());
+    const terminal = this.peers.get("browser-terminal");
+    const monitor = this.peers.get("browser-monitor");
+    if (terminal) this.send(terminal, data);
+    if (monitor) this.send(monitor, data);
   }
   private forward(role: RelayRole, data: string | ArrayBuffer) { const peer = this.peers.get(role); if (peer) this.send(peer, data); }
   private send(socket: SocketLike, data: string | ArrayBuffer) { if ((socket.bufferedAmount ?? 0) > RELAY_MAX_BUFFERED_BYTES) return this.close(socket, 1013, "backpressure"); try { socket.send(data); } catch { this.detach(socket); } }
@@ -115,14 +128,16 @@ export class ConsoleRelay {
     // A browser departure must explicitly close the local PTY through the
     // outbound sidecar so a replacement browser cannot inherit a stale task.
     // Monitor does NOT own the PTY; only terminal disconnect triggers terminal.exit.
-    if (role === "browser" && this.localTerminalSession) {
+    if (role === "browser-terminal" && this.localTerminalSession) {
       const agent = this.peers.get("agent");
       if (agent) this.send(agent, JSON.stringify({ type: "terminal.exit", session_id: this.localTerminalSession, reason: "browser_disconnected" }));
       this.localTerminalSession = undefined;
     }
     if (role === "agent") {
-      const browser = this.peers.get("browser");
-      if (browser) this.send(browser, JSON.stringify({ type: "error", code: "agent_disconnected", message: "Agent Console se desconectó." }));
+      const terminal = this.peers.get("browser-terminal");
+      const monitor = this.peers.get("browser-monitor");
+      if (terminal) this.send(terminal, JSON.stringify({ type: "error", code: "agent_disconnected", message: "Agent Console se desconectó." }));
+      if (monitor) this.send(monitor, JSON.stringify({ type: "error", code: "agent_disconnected", message: "Agent Console se desconectó." }));
       this.localTerminalSession = undefined;
     }
     if (!this.lastSeen.size && this.timer) { clearInterval(this.timer); this.timer = undefined; }

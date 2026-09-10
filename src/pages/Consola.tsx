@@ -164,11 +164,12 @@ function ConsolePage() {
           </div>
         </header>
         <main className="flex-1 min-h-0">
-          {viewMode === "terminal" ? (
+          <div className={viewMode === "terminal" ? "" : "hidden"}>
             <RemoteTerminal pcOnline={pcOnline} agentOnline={agentOnline} />
-          ) : (
+          </div>
+          <div className={viewMode === "monitor" ? "" : "hidden"}>
             <RemoteAgentMonitor pcOnline={pcOnline} agentOnline={agentOnline} />
-          )}
+          </div>
         </main>
       </div>
     );

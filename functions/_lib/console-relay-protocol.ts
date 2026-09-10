@@ -19,7 +19,7 @@ export const RELAY_MAX_BUFFERED_BYTES = 512 * 1024;
 export const BINARY_TERMINAL_OUTPUT = 1;
 export const MAX_MONITOR_READ_CHARS = 32768;
 
-export type RelayRole = "browser" | "agent";
+export type RelayRole = "browser" | "browser-monitor" | "agent";
 export type TerminalAgent = "powershell" | "kilo" | "opencode" | "codex" | "antigravity";
 export type MonitorState =
   | "WORKING"
@@ -112,22 +112,38 @@ export function parseRelayJson(raw: string): RelayJsonMessage | null {
   const msg = value as Record<string, unknown>;
   if (typeof msg.type !== "string") return null;
   if (msg.type === "hello") {
-    if (msg.v !== CONSOLE_RELAY_PROTOCOL_VERSION || (msg.role !== "browser" && msg.role !== "agent") || !isRelaySession(msg.session)) return null;
-    if (msg.role === "browser") return typeof msg.ticket === "string" && msg.ticket.length <= 2048 ? msg as RelayJsonMessage : null;
+    if (msg.v !== CONSOLE_RELAY_PROTOCOL_VERSION || (msg.role !== "browser" && msg.role !== "browser-terminal" && msg.role !== "browser-monitor" && msg.role !== "agent") || !isRelaySession(msg.session)) return null;
+    if (msg.role === "browser" || msg.role === "browser-terminal" || msg.role === "browser-monitor") return typeof msg.ticket === "string" && msg.ticket.length <= 2048 ? msg as RelayJsonMessage : null;
     return typeof msg.ts === "number" && Number.isSafeInteger(msg.ts) && isRelayNonce(msg.nonce) && typeof msg.signature === "string" && msg.signature.length <= 128 ? msg as RelayJsonMessage : null;
   }
   if (msg.type === "terminal.open") {
     const acknowledgement = msg.session_id !== undefined && identifier(msg.session_id);
-    return project(msg.project) && agents.has(msg.agent as TerminalAgent) && requestId(msg.request_id) && (acknowledgement || dimensions(msg)) ? msg as RelayJsonMessage : null;
+    const openRequest = dimensions(msg);
+    if (acknowledgement) {
+      return requestId(msg.request_id) ? msg as RelayJsonMessage : null;
+    }
+    return project(msg.project) && agents.has(msg.agent as TerminalAgent) && requestId(msg.request_id) && openRequest ? msg as RelayJsonMessage : null;
   }
   if (msg.type === "terminal.resize") return dimensions(msg) && identifier(msg.session_id) && requestId(msg.request_id) ? msg as RelayJsonMessage : null;
   if (msg.type === "terminal.input") return typeof msg.data === "string" && encodedByteLength(msg.data) <= MAX_RELAY_INPUT_BYTES && identifier(msg.session_id) && requestId(msg.request_id) ? msg as RelayJsonMessage : null;
   // v1 terminal output is the tagged binary frame; JSON output is rejected.
   if (msg.type === "terminal.output") return null;
   if (msg.type === "terminal.exit") return identifier(msg.session_id) && requestId(msg.request_id) && (msg.code === undefined || (Number.isInteger(msg.code) && Number(msg.code) >= 0 && Number(msg.code) <= 255)) && (msg.signal === undefined || (typeof msg.signal === "string" && msg.signal.length <= 64)) && (msg.reason === undefined || (typeof msg.reason === "string" && msg.reason.length <= 64)) ? msg as RelayJsonMessage : null;
-  if (msg.type === "monitor.list") return isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
-  if (msg.type === "monitor.get") return isTaskId(msg.task_id) && isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
-  if (msg.type === "monitor.read") return identifier(msg.session_id) && (msg.cursor === undefined || (Number.isSafeInteger(msg.cursor) && msg.cursor >= 0)) && (msg.max_chars === undefined || (Number.isSafeInteger(msg.max_chars) && msg.max_chars > 0 && msg.max_chars <= MAX_MONITOR_READ_CHARS)) && isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
+  if (msg.type === "monitor.list") {
+    const isResponse = Array.isArray(msg.tasks);
+    if (isResponse) return isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
+    return isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
+  }
+  if (msg.type === "monitor.get") {
+    const isResponse = typeof msg.task === "object" && msg.task !== null;
+    if (isResponse) return isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
+    return isTaskId(msg.task_id) && isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
+  }
+  if (msg.type === "monitor.read") {
+    const isResponse = typeof msg.result === "object" && msg.result !== null;
+    if (isResponse) return isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
+    return identifier(msg.session_id) && (msg.cursor === undefined || (Number.isSafeInteger(msg.cursor) && msg.cursor >= 0)) && (msg.max_chars === undefined || (Number.isSafeInteger(msg.max_chars) && msg.max_chars > 0 && msg.max_chars <= MAX_MONITOR_READ_CHARS)) && isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
+  }
   if (msg.type === "ping" || msg.type === "pong") return msg.at === undefined || (typeof msg.at === "number" && Number.isSafeInteger(msg.at)) ? msg as RelayJsonMessage : null;
   if (msg.type === "error") return typeof msg.code === "string" && msg.code.length <= 64 && (msg.message === undefined || (typeof msg.message === "string" && msg.message.length <= 256)) ? msg as RelayJsonMessage : null;
   return null;
