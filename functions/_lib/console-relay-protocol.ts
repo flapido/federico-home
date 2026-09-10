@@ -5,6 +5,9 @@
  * are terminal output only: byte 0 is 1 and the remaining bytes are UTF-8
  * terminal data.  This keeps keystrokes and control messages inspectable while
  * avoiding JSON/base64 expansion for terminal output.
+ *
+ * Monitor extension: read-only agent observation messages (monitor.list, monitor.get, monitor.read).
+ * These are completely separate from terminal.* messages and carry no mutators.
  */
 export const CONSOLE_RELAY_PROTOCOL_VERSION = 1;
 export const MAX_RELAY_JSON_BYTES = 16 * 1024;
@@ -14,9 +17,54 @@ export const RELAY_PING_INTERVAL_MS = 25_000;
 export const RELAY_IDLE_TIMEOUT_MS = 75_000;
 export const RELAY_MAX_BUFFERED_BYTES = 512 * 1024;
 export const BINARY_TERMINAL_OUTPUT = 1;
+export const MAX_MONITOR_READ_CHARS = 32768;
 
 export type RelayRole = "browser" | "agent";
 export type TerminalAgent = "powershell" | "kilo" | "opencode" | "codex" | "antigravity";
+export type MonitorState =
+  | "WORKING"
+  | "QUIET_WORKING"
+  | "WAITING_INPUT"
+  | "POSSIBLE_STALL"
+  | "DEAD_SESSION"
+  | "COMPLETED"
+  | "FAILED"
+  | "INTERRUPTED"
+  | "OUTPUT_LIMIT"
+  | "NEEDS_CONTINUE";
+export type MonitorTask = {
+  task_id: string;
+  session_id: string;
+  project: string;
+  agent: string;
+  status: string;
+  monitor_state: MonitorState;
+  started_at: string;
+  updated_at: string;
+  last_output_at: string | null;
+  last_progress_at: string | null;
+  output_sequence: number;
+  continuation_count: number;
+  files_changed_recently: boolean;
+  cpu_activity: string;
+  pid: number | null;
+  duration_ms: number;
+  branch: string | null;
+  read_only: boolean;
+  recommended_action: string;
+  process_alive: boolean;
+  session_alive: boolean;
+  current_activity: string | null;
+  last_output: string;
+};
+export type MonitorReadResult = {
+  session_id: string;
+  cursor: number;
+  next_cursor: number;
+  output: string;
+  truncated: boolean;
+  running: boolean;
+};
 export type RelayJsonMessage =
   | { type: "hello"; v: number; role: RelayRole; session: string; ticket?: string; ts?: number; nonce?: string; signature?: string }
   | { type: "terminal.open"; cols?: number; rows?: number; project: string; agent: TerminalAgent; request_id?: string; session_id?: string }
@@ -24,6 +72,12 @@ export type RelayJsonMessage =
   | { type: "terminal.resize"; cols: number; rows: number; session_id: string; request_id?: string }
   | { type: "terminal.output"; data: string; session_id: string; cursor?: number; truncated?: boolean }
   | { type: "terminal.exit"; session_id: string; code?: number; signal?: string; reason?: string; request_id?: string }
+  | { type: "monitor.list"; request_id?: string }
+  | { type: "monitor.get"; task_id: string; request_id?: string }
+  | { type: "monitor.read"; session_id: string; cursor?: number; max_chars?: number; request_id?: string }
+  | { type: "monitor.list"; tasks: MonitorTask[]; request_id?: string }
+  | { type: "monitor.get"; task: MonitorTask; request_id?: string }
+  | { type: "monitor.read"; result: MonitorReadResult; request_id?: string }
   | { type: "ping"; at?: number }
   | { type: "pong"; at?: number }
   | { type: "error"; code: string; message?: string };
@@ -32,10 +86,14 @@ const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder("utf-8", { fatal: true });
 const sessionPattern = /^[A-Za-z0-9_-]{16,128}$/u;
 const noncePattern = /^[A-Za-z0-9_-]{16,128}$/u;
+const uuidPattern = /^[0-9a-f-]{36}$/iu;
+const requestIdPattern = /^[A-Za-z0-9_-]{1,64}$/u;
 
 export function encodedByteLength(value: string) { return textEncoder.encode(value).byteLength; }
 export function isRelaySession(value: unknown): value is string { return typeof value === "string" && sessionPattern.test(value); }
 export function isRelayNonce(value: unknown): value is string { return typeof value === "string" && noncePattern.test(value); }
+function isRequestId(value: unknown): value is string { return value === undefined || (typeof value === "string" && requestIdPattern.test(value)); }
+function isTaskId(value: unknown): value is string { return typeof value === "string" && uuidPattern.test(value); }
 
 function dimensions(value: Record<string, unknown>) {
   return Number.isInteger(value.cols) && Number.isInteger(value.rows) && Number(value.cols) >= 1 && Number(value.cols) <= 500 && Number(value.rows) >= 1 && Number(value.rows) <= 500;
@@ -67,6 +125,9 @@ export function parseRelayJson(raw: string): RelayJsonMessage | null {
   // v1 terminal output is the tagged binary frame; JSON output is rejected.
   if (msg.type === "terminal.output") return null;
   if (msg.type === "terminal.exit") return identifier(msg.session_id) && requestId(msg.request_id) && (msg.code === undefined || (Number.isInteger(msg.code) && Number(msg.code) >= 0 && Number(msg.code) <= 255)) && (msg.signal === undefined || (typeof msg.signal === "string" && msg.signal.length <= 64)) && (msg.reason === undefined || (typeof msg.reason === "string" && msg.reason.length <= 64)) ? msg as RelayJsonMessage : null;
+  if (msg.type === "monitor.list") return isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
+  if (msg.type === "monitor.get") return isTaskId(msg.task_id) && isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
+  if (msg.type === "monitor.read") return identifier(msg.session_id) && (msg.cursor === undefined || (Number.isSafeInteger(msg.cursor) && msg.cursor >= 0)) && (msg.max_chars === undefined || (Number.isSafeInteger(msg.max_chars) && msg.max_chars > 0 && msg.max_chars <= MAX_MONITOR_READ_CHARS)) && isRequestId(msg.request_id) ? msg as RelayJsonMessage : null;
   if (msg.type === "ping" || msg.type === "pong") return msg.at === undefined || (typeof msg.at === "number" && Number.isSafeInteger(msg.at)) ? msg as RelayJsonMessage : null;
   if (msg.type === "error") return typeof msg.code === "string" && msg.code.length <= 64 && (msg.message === undefined || (typeof msg.message === "string" && msg.message.length <= 256)) ? msg as RelayJsonMessage : null;
   return null;

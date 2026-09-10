@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import RemoteTerminal from "../components/RemoteTerminal";
+import RemoteAgentMonitor from "../components/RemoteAgentMonitor";
 
 type ConsoleStatus = {
   pc_online: boolean;
@@ -11,6 +12,8 @@ type ConsoleStatus = {
 
 type AuthState = "idle" | "pending" | "sent" | "authorized" | "expired" | "error";
 
+type ViewMode = "terminal" | "monitor";
+
 const request = (path: string, init?: RequestInit) =>
   fetch(path, { ...init, headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) }, credentials: "same-origin" });
 
@@ -20,6 +23,7 @@ function ConsolePage() {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("terminal");
   const lastActivityRef = useRef(0);
   const statusTimer = useRef<number | null>(null);
   const idleTimer = useRef<number | null>(null);
@@ -129,7 +133,45 @@ function ConsolePage() {
   // OTP gates access only. The authenticated terminal must use the complete
   // viewport instead of inheriting the compact authentication card.
   if (authState === "authorized") {
-    return <div className="console-remote-page bg-[#0b0f17] text-[#d6e1f2]"><RemoteTerminal pcOnline={pcOnline} agentOnline={agentOnline} /></div>;
+    return (
+      <div className="console-remote-page bg-[#0b0f17] text-[#d6e1f2] min-h-screen flex flex-col">
+        <header className="console-view-header" aria-label="Vista de consola">
+          <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
+            <span className="console-view-brand"><span aria-hidden="true">{'>_'}</span> Consola Remota</span>
+            <nav className="console-view-tabs ml-auto flex items-center gap-1" role="tablist" aria-label="Modo de vista">
+              <button
+                role="tab"
+                aria-selected={viewMode === "terminal"}
+                onClick={() => setViewMode("terminal")}
+                className={`console-view-tab px-3 py-1.5 rounded-lg text-sm font-medium transition ${viewMode === "terminal" ? "bg-white/10 text-white" : "text-stone hover:text-white"}`}
+              >
+                Terminal
+              </button>
+              <button
+                role="tab"
+                aria-selected={viewMode === "monitor"}
+                onClick={() => setViewMode("monitor")}
+                className={`console-view-tab px-3 py-1.5 rounded-lg text-sm font-medium transition ${viewMode === "monitor" ? "bg-white/10 text-white" : "text-stone hover:text-white"}`}
+              >
+                Monitor
+              </button>
+            </nav>
+            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[.14em] text-stone">
+              <span>PC {pcOnline ? "ONLINE" : "OFFLINE"}</span>
+              <span aria-hidden="true">&middot;</span>
+              <span>Agent Console {agentOnline ? "ONLINE" : "OFFLINE"}</span>
+            </div>
+          </div>
+        </header>
+        <main className="flex-1 min-h-0">
+          {viewMode === "terminal" ? (
+            <RemoteTerminal pcOnline={pcOnline} agentOnline={agentOnline} />
+          ) : (
+            <RemoteAgentMonitor pcOnline={pcOnline} agentOnline={agentOnline} />
+          )}
+        </main>
+      </div>
+    );
   }
 
   return (

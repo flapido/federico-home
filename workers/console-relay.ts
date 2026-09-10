@@ -72,8 +72,10 @@ export class ConsoleRelay {
     const message = parseRelayJson(data); if (!message) return this.close(socket, 1008, "invalid protocol frame");
     const current = [...this.peers.entries()].find(([, peer]) => peer === socket)?.[0];
     if (!current) return void this.authorize(socket, message);
-    const browserCommand = message.type === "terminal.open" || message.type === "terminal.input" || message.type === "terminal.resize" || message.type === "terminal.exit";
-    const agentResponse = message.type === "terminal.open" || message.type === "terminal.output" || message.type === "terminal.exit" || message.type === "error";
+    const browserCommand = message.type === "terminal.open" || message.type === "terminal.input" || message.type === "terminal.resize" || message.type === "terminal.exit"
+      || message.type === "monitor.list" || message.type === "monitor.get" || message.type === "monitor.read";
+    const agentResponse = message.type === "terminal.open" || message.type === "terminal.output" || message.type === "terminal.exit" || message.type === "error"
+      || message.type === "monitor.list" || message.type === "monitor.get" || message.type === "monitor.read";
     if (message.type === "hello" || (current === "browser" && !browserCommand && message.type !== "ping" && message.type !== "pong") || (current === "agent" && !agentResponse && message.type !== "ping" && message.type !== "pong")) return this.close(socket, 1008, "role violation");
     if (current === "browser" && message.type === "terminal.open" && (message.session_id !== undefined || !Number.isInteger(message.cols) || !Number.isInteger(message.rows))) return this.close(socket, 1008, "invalid open request");
     if (current === "agent" && message.type === "terminal.open" && !message.session_id) return this.close(socket, 1008, "open acknowledgement missing session");
@@ -112,6 +114,7 @@ export class ConsoleRelay {
     for (const [peerRole, peer] of this.peers) if (peer === socket) this.peers.delete(peerRole);
     // A browser departure must explicitly close the local PTY through the
     // outbound sidecar so a replacement browser cannot inherit a stale task.
+    // Monitor does NOT own the PTY; only terminal disconnect triggers terminal.exit.
     if (role === "browser" && this.localTerminalSession) {
       const agent = this.peers.get("agent");
       if (agent) this.send(agent, JSON.stringify({ type: "terminal.exit", session_id: this.localTerminalSession, reason: "browser_disconnected" }));
