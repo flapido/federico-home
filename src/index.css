@@ -102,3 +102,41 @@ body {
 .remote-console-stage { position: relative; min-height: 0; overflow: hidden; background: #0b0f17; }.remote-console-terminal { position: absolute; inset: 0; padding: 5px 7px; overflow: hidden; }.remote-console-terminal .xterm { height: 100%; }.remote-console-empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; padding: 24px; color: #8c9ab1; font-size: 13px; text-align: center; pointer-events: none; }.remote-console-empty strong { color: #d6e1f2; font-weight: 500; }.remote-console-note { margin: 0; padding: 5px 9px; border-top: 1px solid #1c2433; background: #11161f; color: #6f7c93; font-size: 11px; line-height: 1.35; }
 @media (max-width: 720px) { .remote-console-toolbar { gap: 5px; padding: 6px; }.remote-console-brand { display: none; }.remote-console-divider { display: none; }.remote-console-project input { width: 130px; min-width: 110px; }.remote-console-agents { gap: 4px; }.remote-console-button { min-height: 32px; padding: 0 9px; }.remote-console-connection { display: none; }.remote-console-button-label { display: none; } }
 @media (max-width: 480px) { .remote-console-toolbar { flex-wrap: wrap; align-content: center; overflow-x: hidden; }.remote-console-project { flex: 1 1 130px; }.remote-console-project input { width: 100%; }.remote-console-agents { order: 3; flex: 1 0 100%; overflow-x: auto; padding-bottom: 1px; }.remote-console-spacer { display: none; }.remote-console-tabs { height: 34px; }.remote-console-tab { max-width: 72vw; }.remote-console-note { font-size: 10px; } }
+
+/* Console view header with tabs */
+.console-view-header { flex-shrink: 0; z-index: 10; }
+.console-view-brand { flex: 0 0 auto; font-size: 13px; font-weight: 600; letter-spacing: .4px; color: #e6edf7; white-space: nowrap; }.console-view-brand span { color: #5b8def; margin-right: 6px; }
+.console-view-tabs { display: flex; gap: 4px; }
+.console-view-tab { height: 28px; border: 1px solid #25324a; border-radius: 6px; background: #1a2231; color: #d6e1f2; padding: 0 12px; font: inherit; font-size: 12px; white-space: nowrap; cursor: pointer; }
+.console-view-tab:hover { background: #233047; }
+@media (max-width: 480px) { .console-view-header { padding: 4px; }.console-view-brand { display: none; } }
+
+/* Remote Agent Monitor: read-only agent observation */
+.remote-monitor-shell { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; height: 100%; width: 100%; background: #0b0f17; color: #d6e1f2; font-family: "Segoe UI", Inter, system-ui, sans-serif; overflow: hidden; }
+.remote-monitor-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 8px 12px; background: #11161f; border-bottom: 1px solid #1c2433; }
+.remote-monitor-brand { flex: 0 0 auto; font-size: 13px; font-weight: 600; letter-spacing: .4px; color: #e6edf7; white-space: nowrap; }.remote-monitor-brand span { color: #5b8def; margin-right: 6px; }
+.remote-monitor-divider { color: #2a3346; }
+.remote-monitor-status { color: #f0b860; font-size: 12px; padding: 0 4px; }.remote-monitor-status.is-online { color: #6fd28a; }.remote-monitor-status.is-error { color: #ff8c8c; }
+.remote-monitor-spacer { flex: 1 0 12px; }
+.remote-monitor-button { height: 30px; width: 30px; border: 1px solid #25324a; border-radius: 50%; background: #1a2231; color: #d6e1f2; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.remote-monitor-button:hover:not(:disabled) { background: #233047; }
+.remote-monitor-button:disabled { cursor: not-allowed; opacity: .5; }
+.remote-monitor-tabs { display: flex; align-items: stretch; height: 32px; background: #0e141d; border-bottom: 1px solid #1c2433; }
+.remote-monitor-tab { padding: 0 14px; border: 0; border-right: 1px solid #1c2433; border-top: 2px solid #5b8def; background: #0b0f17; color: #e6edf7; font: 12px inherit; }
+.remote-monitor-stage { position: relative; min-height: 0; overflow: hidden; background: #0b0f17; }
+.remote-monitor-grid { display: grid; gap: 12px; grid-template-columns: 1fr; padding: 12px; overflow-y: auto; }
+@media (min-width: 640px) { .remote-monitor-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .remote-monitor-grid { grid-template-columns: repeat(3, 1fr); } }
+.remote-monitor-empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; padding: 24px; color: #8c9ab1; font-size: 13px; text-align: center; pointer-events: none; }
+.remote-monitor-empty h3 { margin: 0; color: #d6e1f2; font-weight: 500; }
+.remote-monitor-note { margin: 0; padding: 8px 12px; border-top: 1px solid #1c2433; background: #11161f; color: #6f7c93; font-size: 11px; line-height: 1.35; text-align: center; }
+
+/* Agent card */
+.remote-monitor-grid article { display: flex; flex-direction: column; min-height: 0; }
+.remote-monitor-grid article > div:first-child { flex-shrink: 0; }
+.remote-monitor-grid article > div:last-child { margin-top: auto; }
+.remote-monitor-grid article button { width: 100%; }
+@media (min-width: 480px) { .remote-monitor-grid article button { width: auto; } }
+.remote-monitor-grid pre { margin: 0; font-family: "Fragment Mono", ui-monospace, monospace; white-space: pre-wrap; word-break: break-word; }
+
+@media (max-width: 480px) { .remote-monitor-toolbar { gap: 8px; padding: 6px 8px; }.remote-monitor-brand { font-size: 12px; }.remote-monitor-status { font-size: 11px; }.remote-monitor-tabs { height: 30px; }.remote-monitor-tab { padding: 0 10px; font-size: 11px; }.remote-monitor-grid { gap: 8px; padding: 8px; }.remote-monitor-note { font-size: 10px; padding: 6px 8px; } }

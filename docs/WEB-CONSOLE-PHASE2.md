@@ -41,7 +41,7 @@ Todo control es JSON UTF-8, máximo 16 KiB; `terminal.input.data` queda limitado
 
 1. Browser solicita `POST /api/consola/relay-ticket` con cookie OTP y mismo `Origin`; recibe `{url,ticket}` por 60 s. Pages sólo emite ese ticket tras validar la sesión OTP, pero lo firma contra `CONSOLE_RELAY_SESSION_ID` estable, que coincide con `WEB_CONSOLE_RELAY_SESSION` del sidecar.
 2. Ambos abren `wss://…/relay?session=<id-opaco>`. Browser manda `hello` con ticket. Agent manda `hello` con `ts`, `nonce` (16–128 base64url) y `signature = HMAC-SHA-256(base64url, "v1.agent.<session>.<ts>.<nonce>")` usando `AGENT_CONSOLE_RELAY_SECRET`.
-3. Relay responde `pong`; browser manda `terminal.open` con proyecto, agente y tamaño. El agent adapta esa orden al control loopback de Agent Console. El PTY real sigue allí.
+3. Relay responde `pong`; browser manda `terminal.open` con proyecto, agente y tamaño. El agent adapta esa orden al control loopback de Agent Console. El PTY real sigue allí. Cuando el relay envía `ping`, ambos peers devuelven `pong`; el navegador remoto lo hace explícitamente para no agotar el timeout de inactividad.
 
 ```json
 {"type":"hello","v":1,"role":"browser","session":"<CONSOLE_RELAY_SESSION_ID>","ticket":"…"}
@@ -71,7 +71,7 @@ La página usa xterm.js como renderer del navegador desde una URL CDN fijada a v
 
 ## Puerta de compatibilidad del sidecar
 
-La inspección de sólo lectura del bridge disponible en `company-workspace-tickets-web-console-phase2` confirmó `hello v=1 role=agent` firmado y output binario `0x01`, pero detectó que al crear no devuelve el ACK `terminal.open` con `session_id`. Antes de desplegar este relay v1, el sidecar debe añadir ese ACK tras crear la sesión local. Sin él, el browser no puede enviar input/resize. Esta entrega no modifica dicho worktree por diseño.
+El sidecar debe confirmar la creación con `terminal.open` y un `session_id` antes de aceptar input o resize. La implementación de referencia en `company-workspace-tickets-web-console-phase2` ya emite ese ACK y usa output binario `0x01`; el navegador remoto no acepta comandos libres ni abre listeners locales.
 
 ## Prueba local
 

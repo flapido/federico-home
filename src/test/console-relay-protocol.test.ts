@@ -6,6 +6,7 @@ describe("console relay protocol", () => {
   const session = "a".repeat(32);
   it("accepts bounded, versioned hello and terminal frames", () => {
     expect(parseRelayJson(JSON.stringify({ type: "hello", v: 1, role: "browser", session, ticket: "signed-ticket" }))).toMatchObject({ role: "browser" });
+    expect(parseRelayJson(JSON.stringify({ type: "hello", v: 1, role: "browser-monitor", session, ticket: "signed-ticket" }))).toMatchObject({ role: "browser-monitor" });
     expect(parseRelayJson(JSON.stringify({ type: "terminal.open", request_id: "open1", project: "federico-home", agent: "codex", cols: 120, rows: 30 }))).toMatchObject({ type: "terminal.open", project: "federico-home", agent: "codex" });
     expect(parseRelayJson(JSON.stringify({ type: "terminal.resize", session_id: "local-session-1", cols: 120, rows: 30 }))).toMatchObject({ type: "terminal.resize" });
     expect(parseRelayJson(JSON.stringify({ type: "terminal.resize", cols: 0, rows: 30 }))).toBeNull();
@@ -44,5 +45,15 @@ describe("console relay protocol", () => {
     expect(first.ticket).not.toBe(second.ticket);
     expect(`${first.url}.${first.ticket}`).not.toContain(firstOtpTokenHash);
     expect(`${second.url}.${second.ticket}`).not.toContain(secondOtpTokenHash);
+  });
+  it("accepts monitor request and response frames", () => {
+    expect(parseRelayJson(JSON.stringify({ type: "monitor.list", request_id: "req1" }))).toMatchObject({ type: "monitor.list" });
+    expect(parseRelayJson(JSON.stringify({ type: "monitor.list", tasks: [] }))).toMatchObject({ type: "monitor.list", tasks: [] });
+    expect(parseRelayJson(JSON.stringify({ type: "monitor.get", task_id: "11111111-1111-1111-1111-111111111111", request_id: "req2" }))).toMatchObject({ type: "monitor.get", task_id: "11111111-1111-1111-1111-111111111111" });
+    expect(parseRelayJson(JSON.stringify({ type: "monitor.get", task: { task_id: "11111111-1111-1111-1111-111111111111" } }))).toMatchObject({ type: "monitor.get", task: { task_id: "11111111-1111-1111-1111-111111111111" } });
+    expect(parseRelayJson(JSON.stringify({ type: "monitor.read", session_id: "local-session-1", cursor: 0, max_chars: 4096, request_id: "req3" }))).toMatchObject({ type: "monitor.read", session_id: "local-session-1" });
+    expect(parseRelayJson(JSON.stringify({ type: "monitor.read", result: { session_id: "local-session-1", cursor: 0, next_cursor: 5, output: "hello", truncated: false, running: true } }))).toMatchObject({ type: "monitor.read", result: { session_id: "local-session-1", running: true } });
+    expect(parseRelayJson(JSON.stringify({ type: "monitor.get", task_id: "bad" }))).toBeNull();
+    expect(parseRelayJson(JSON.stringify({ type: "monitor.read", result: "not-an-object" }))).toBeNull();
   });
 });

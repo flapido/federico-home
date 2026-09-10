@@ -216,6 +216,10 @@ CASE-02 · Subastas muestra flujo comercial, adaptaciones y estado DEMO LOCAL si
 CASE-03 · Archivo Digital carga directo con evidencia pública de Tucumán, sin datos privados ni capacidades IA falsas · PASS · 2026-08-26
 CASE-04 · Archivo Digital muestra catálogo, ficha y visor PDF reales; sin placeholders conceptuales ni copy interno · PASS · 2026-08-26
 
+# CONSOLA-REMOTA-2026-09-09
+
+CONSOLE-01 · OTP autorizado muestra shell remoto a viewport completo, controles de proyecto/agente y terminal adaptable; ping del relay recibe pong · BLOCKED · 2026-09-09
+
 # CONTACTO-V2.1-2026-08-26
 
 CONTACT-01 · `/contacto` muestra formulario breve y las tres alternativas directas, con WhatsApp prioritario · PASS · 2026-08-26
