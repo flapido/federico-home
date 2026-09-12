@@ -1,11 +1,49 @@
-import { render, screen, within } from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { cleanup, render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import Layout from "../components/Layout"
+import VisitCounter from "../components/VisitCounter"
+
+vi.mock("../lib/analytics", () => ({ analyticsClientEnabled: () => true }))
 
 function renderLayout() {
   return render(<MemoryRouter initialEntries={["/"]}><Routes><Route element={<Layout />}><Route index element={<div>Página de inicio</div>} /><Route path="proyectos" element={<div>Proyectos cargados</div>} /></Route></Routes></MemoryRouter>)
 }
+
+describe("VisitCounter resilience", () => {
+  beforeEach(() => localStorage.clear())
+  afterEach(() => { vi.unstubAllGlobals(); localStorage.clear(); cleanup() })
+
+  test("retains the last known count while the endpoint is unavailable", async () => {
+    localStorage.setItem("fh:visit-counter:last-known", JSON.stringify({ value: 1234, ts: Date.now() }))
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: "No disponible." }), { status: 503, headers: { "content-type": "application/json" } })))
+    render(<VisitCounter />)
+    expect(await screen.findByText(/Nº 1\.234/)).toBeInTheDocument()
+  })
+
+  test("does not display expired cache when the endpoint is unavailable", async () => {
+    localStorage.setItem("fh:visit-counter:last-known", JSON.stringify({ value: 9999, ts: Date.now() - 11 * 60 * 1000 }))
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: "No disponible." }), { status: 503, headers: { "content-type": "application/json" } })))
+    render(<VisitCounter />)
+    expect(screen.queryByText(/Nº/)).not.toBeInTheDocument()
+  })
+
+  test("clears the cache when the endpoint returns a valid zero total", async () => {
+    localStorage.setItem("fh:visit-counter:last-known", JSON.stringify({ value: 1234, ts: Date.now() }))
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ total: 0 }), { status: 200, headers: { "content-type": "application/json" } })))
+    render(<VisitCounter />)
+    await vi.waitFor(() => expect(localStorage.getItem("fh:visit-counter:last-known")).toBeNull())
+    expect(screen.queryByText(/Nº/)).not.toBeInTheDocument()
+  })
+
+  test("renders and stores a fresh valid count", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ total: 5678 }), { status: 200, headers: { "content-type": "application/json" } })))
+    render(<VisitCounter />)
+    expect(await screen.findByText(/Nº 5\.678/)).toBeInTheDocument()
+    expect(JSON.parse(localStorage.getItem("fh:visit-counter:last-known") ?? "null")).toMatchObject({ value: 5678 })
+  })
+})
 
 test("layout exposes a skip link and verified professional contact", () => {
   renderLayout()

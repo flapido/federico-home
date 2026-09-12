@@ -1,6 +1,9 @@
+import { afterEach, test, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import About from "../pages/About";
+import Admin from "../pages/Admin";
 import CV from "../pages/CV";
 import Home from "../pages/Home";
 import Lab from "../pages/Lab";
@@ -9,6 +12,33 @@ import Projects from "../pages/Projects";
 import ProjectDetail from "../pages/ProjectDetail";
 import Solutions from "../pages/Solutions";
 import Contact from "../pages/Contact";
+
+afterEach(() => vi.unstubAllGlobals());
+
+test("Admin keeps OTP errors human-readable when the endpoint returns HTML", async () => {
+  const user = userEvent.setup();
+  vi.stubGlobal("fetch", vi.fn()
+    .mockResolvedValueOnce(new Response(JSON.stringify({ error: "Acceso restringido." }), { status: 403, headers: { "content-type": "application/json" } }))
+    .mockResolvedValueOnce(new Response("<!doctype html><title>Unavailable</title>", { status: 503, headers: { "content-type": "text/html" } })));
+  render(<MemoryRouter><Admin /></MemoryRouter>);
+  await user.click(await screen.findByRole("button", { name: "Enviar código" }));
+  expect(await screen.findByText("No pude enviar un código en este momento.")).toBeInTheDocument();
+  expect(screen.queryByText(/Unexpected token|valid JSON/i)).not.toBeInTheDocument();
+});
+
+test("Admin keeps OTP verification errors human-readable when the endpoint returns HTML", async () => {
+  const user = userEvent.setup();
+  vi.stubGlobal("fetch", vi.fn()
+    .mockResolvedValueOnce(new Response(JSON.stringify({ error: "Acceso restringido." }), { status: 403, headers: { "content-type": "application/json" } }))
+    .mockResolvedValueOnce(new Response(JSON.stringify({ ok: true }), { status: 200, headers: { "content-type": "application/json" } }))
+    .mockResolvedValueOnce(new Response("Unavailable", { status: 503, headers: { "content-type": "text/plain" } })));
+  render(<MemoryRouter><Admin /></MemoryRouter>);
+  await user.click(await screen.findByRole("button", { name: "Enviar código" }));
+  await user.type(await screen.findByLabelText("Código"), "123456");
+  await user.click(screen.getByRole("button", { name: "Entrar" }));
+  expect(await screen.findByText("No pude validar el código.")).toBeInTheDocument();
+  expect(screen.queryByText(/Unexpected token|valid JSON/i)).not.toBeInTheDocument();
+});
 
 test("Home communicates senior positioning and primary paths", () => {
   render(

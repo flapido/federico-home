@@ -1,5 +1,6 @@
 import { normalisePath, normaliseSource, recordEvent } from "../../functions/_lib/analytics";
 import { onRequestPost as analyticsEvent } from "../../functions/api/analytics/event";
+import { onRequestGet as visitCounter } from "../../functions/api/analytics/visit-counter";
 import { isNewVisit } from "../lib/analytics";
 
 function database() {
@@ -26,7 +27,15 @@ test("one visit is emitted per 30 minute browser window", () => {
   expect(isNewVisit(1_000 + 30 * 60 * 1000)).toBe(true);
 });
 
-  test("analytics event endpoint accepts one allowlisted event without a caller count", async () => {
+test("visit counter response is edge-cacheable without changing its total contract", async () => {
+  const { db } = database();
+  const response = await visitCounter({ env: { ANALYTICS_DB: db } });
+  expect(response.status).toBe(200);
+  expect(await response.json()).toEqual({ total: 0 });
+  expect(response.headers.get("Cache-Control")).toBe("public, s-maxage=60, stale-while-revalidate=300");
+});
+
+test("analytics event endpoint accepts one allowlisted event without a caller count", async () => {
     const { db, calls } = database();
     const request = new Request("https://example.test/api/analytics/event", { method: "POST", headers: { "content-type": "application/json", "CF-Connecting-IP": "analytics-test" }, body: JSON.stringify({ event: "visit", path: "/soluciones", source: "soluciones", count: 5000 }) });
     const response = await analyticsEvent({ request, env: { ANALYTICS_DB: db, ADMIN_SESSION_SECRET: "secret" } });
