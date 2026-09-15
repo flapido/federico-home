@@ -75,7 +75,7 @@ export default function RemoteTerminal({ pcOnline, agentOnline }: Props) {
         const session = new URL(relay.url).searchParams.get("session");
         if (!session) throw new Error("El relay no devolvió una sesión válida.");
         const ws = new WebSocket(relay.url); socketRef.current = ws; ws.binaryType = "arraybuffer";
-        ws.onopen = () => ws.send(JSON.stringify({ type: "hello", v: 1, role: "browser", session, ticket: relay.ticket }));
+        ws.onopen = () => ws.send(JSON.stringify({ type: "hello", v: 1, role: "browser-terminal", session, ticket: relay.ticket }));
         ws.onmessage = (event) => {
           if (typeof event.data !== "string") {
             if (!validBinaryTerminalOutput(event.data)) { ws.close(1008, "invalid binary relay frame"); return; }

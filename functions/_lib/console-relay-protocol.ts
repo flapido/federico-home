@@ -19,7 +19,7 @@ export const RELAY_MAX_BUFFERED_BYTES = 512 * 1024;
 export const BINARY_TERMINAL_OUTPUT = 1;
 export const MAX_MONITOR_READ_CHARS = 32768;
 
-export type RelayRole = "browser" | "browser-monitor" | "agent";
+export type RelayRole = "browser" | "browser-terminal" | "browser-monitor" | "agent";
 export type TerminalAgent = "powershell" | "kilo" | "opencode" | "codex" | "antigravity";
 export type MonitorState =
   | "WORKING"
