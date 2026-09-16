@@ -29,10 +29,13 @@ test("one visit is emitted per 30 minute browser window", () => {
 
 test("visit counter response is edge-cacheable without changing its total contract", async () => {
   const { db } = database();
-  const response = await visitCounter({ env: { ANALYTICS_DB: db } });
+  const request = new Request("https://example.test/api/analytics/visit-counter", {
+    headers: { "CF-Connecting-IP": "test-ip" }
+  });
+  const response = await visitCounter({ request, env: { ANALYTICS_DB: db } });
   expect(response.status).toBe(200);
   expect(await response.json()).toEqual({ total: 0 });
-  expect(response.headers.get("Cache-Control")).toBe("public, s-maxage=60, stale-while-revalidate=300");
+  expect(response.headers.get("Cache-Control")).toBe("public, max-age=30, s-maxage=60, stale-while-revalidate=300");
 });
 
 test("analytics event endpoint accepts one allowlisted event without a caller count", async () => {
@@ -40,9 +43,12 @@ test("analytics event endpoint accepts one allowlisted event without a caller co
     const request = new Request("https://example.test/api/analytics/event", { method: "POST", headers: { "content-type": "application/json", "CF-Connecting-IP": "analytics-test" }, body: JSON.stringify({ event: "visit", path: "/soluciones", source: "soluciones", count: 5000 }) });
     const response = await analyticsEvent({ request, env: { ANALYTICS_DB: db, ADMIN_SESSION_SECRET: "secret" } });
     expect(response.status).toBe(202);
-    expect(calls).toHaveLength(2);
+    // recordEvent + recordVisit + incrementSiteTotal
+    expect(calls).toHaveLength(3);
     expect(calls[0].at(-1)).toBe("soluciones");
     expect(calls[1]).toHaveLength(11);
+    // Third call is incrementSiteTotal
+    expect(calls[2]).toEqual(["visit_total", (await import("../../functions/_lib/analytics")).analyticsDay()]);
   });
 
 test("contact success cannot be forged through the public analytics endpoint", async () => {

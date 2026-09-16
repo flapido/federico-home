@@ -32,31 +32,35 @@ export default function VisitCounter() {
   useEffect(() => {
     if (!analyticsClientEnabled()) return;
     let active = true;
-    const load = () => void fetch("/api/analytics/visit-counter", { headers: { accept: "application/json" } })
-      .then((response) => {
-        if (!response.ok) return Promise.reject(new Error(`HTTP ${response.status}`));
-        return response.json();
-      })
-      .then((data: { total?: unknown }) => {
-        const value = Number(data.total);
-        if (active && Number.isSafeInteger(value) && value >= 0) {
-          if (value > 0) {
-            setTotal(value);
-            writeCache(value);
-          } else {
-            setTotal(null);
-            clearCache();
+    let loadAttempted = false;
+    const load = () => {
+      if (loadAttempted) return;
+      loadAttempted = true;
+      void fetch("/api/analytics/visit-counter", { headers: { accept: "application/json" } })
+        .then((response) => {
+          if (!response.ok) return Promise.reject(new Error(`HTTP ${response.status}`));
+          return response.json();
+        })
+        .then((data: { total?: unknown }) => {
+          const value = Number(data.total);
+          if (active && Number.isSafeInteger(value) && value >= 0) {
+            if (value > 0) {
+              setTotal(value);
+              writeCache(value);
+            } else {
+              setTotal(null);
+              clearCache();
+            }
           }
-        }
-      })
-      .catch((err) => {
-        if (import.meta.env.DEV) console.warn("[VisitCounter] fetch failed:", err);
-        const cached = readCache();
-        if (active && cached !== null) setTotal(cached);
-      });
+        })
+        .catch((err) => {
+          if (import.meta.env.DEV) console.warn("[VisitCounter] fetch failed:", err);
+          const cached = readCache();
+          if (active && cached !== null) setTotal(cached);
+        });
+    };
     load();
-    const retry = window.setTimeout(load, 700);
-    return () => { active = false; window.clearTimeout(retry); };
+    return () => { active = false; };
   }, []);
   if (!total) return null;
   return <p className="mt-3 max-w-[34ch] text-[11px] leading-relaxed text-stone">Gracias por pasar por acá. Sos la visita Nº {new Intl.NumberFormat("es-AR").format(total)}.</p>;

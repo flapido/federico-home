@@ -75,6 +75,14 @@ export async function recordEvent(db: D1Database | undefined, event: AnalyticsEv
     ON CONFLICT(day, event_type, path, source) DO UPDATE SET count = count + 1`).bind(day, event, path, source).run();
 }
 
+export async function incrementSiteTotal(db: D1Database | undefined, key = "visit_total") {
+  if (!db) return;
+  const updated = analyticsDay();
+  await db.prepare(`INSERT INTO analytics_site_totals (key, value, updated_at)
+    VALUES (?, 1, ?)
+    ON CONFLICT(key) DO UPDATE SET value = value + 1, updated_at = excluded.updated_at`).bind(key, updated).run();
+}
+
 export async function recordVisit(db: D1Database | undefined, event: AnalyticsEvent, path: string, source: string, request: Request, visitorId: string, secret: string) {
   if (!db || !normalisePath(path)) return;
   const geo = extractGeo(request);
@@ -89,4 +97,7 @@ export async function recordVisit(db: D1Database | undefined, event: AnalyticsEv
     userAgentHash(request.headers.get("user-agent") ?? ""),
     visitorHash
   ).run();
+  if (event === "visit") {
+    await incrementSiteTotal(db);
+  }
 }

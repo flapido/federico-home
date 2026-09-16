@@ -75,11 +75,14 @@ describe("analytics visits privacy and owner exclusion", () => {
       },
     });
     await recordVisit(db, "visit", "/proyectos/archivo-digital", "archivo-digital", request, "visitor-1", "secret");
-    expect(calls).toHaveLength(1);
+    // recordVisit + incrementSiteTotal
+    expect(calls).toHaveLength(2);
     const bound = calls[0] as unknown[];
     expect(bound[1]).toBe((await import("../../functions/_lib/analytics")).analyticsDay());
     expect(bound[2]).toBe("visit");
     expect(bound[10]).toBe(await hashVisitorId("visitor-1", "secret"));
+    // Second call is incrementSiteTotal
+    expect(calls[1]).toEqual(["visit_total", (await import("../../functions/_lib/analytics")).analyticsDay()]);
   });
 
   it("owner session is completely excluded from analytics and visitor cookie", async () => {
@@ -112,9 +115,12 @@ describe("analytics visits privacy and owner exclusion", () => {
     });
     const response = await analyticsEvent({ request, env: { ANALYTICS_DB: db, ADMIN_SESSION_SECRET: "secret" } });
     expect(response.status).toBe(202);
-    expect(calls).toHaveLength(2);
+    // recordEvent + recordVisit + incrementSiteTotal
+    expect(calls).toHaveLength(3);
     expect(calls[0].at(-1)).toBe("soluciones"); // recordEvent source
     expect(calls[1]).toHaveLength(11); // recordVisit has 11 bound values
+    // Third call is incrementSiteTotal
+    expect(calls[2]).toEqual(["visit_total", (await import("../../functions/_lib/analytics")).analyticsDay()]);
     expect(response.headers.get("Set-Cookie")).toContain("fh_visitor_id=");
   });
 
@@ -131,8 +137,11 @@ describe("analytics visits privacy and owner exclusion", () => {
     });
     const response = await analyticsEvent({ request, env: { ANALYTICS_DB: db, ADMIN_SESSION_SECRET: "secret" } });
     expect(response.status).toBe(202);
-    expect(calls).toHaveLength(2);
+    // recordEvent + recordVisit + incrementSiteTotal
+    expect(calls).toHaveLength(3);
     expect(calls[1][10]).toBe(await hashVisitorId("existing-id", "secret"));
+    // Third call is incrementSiteTotal
+    expect(calls[2]).toEqual(["visit_total", (await import("../../functions/_lib/analytics")).analyticsDay()]);
     expect(response.headers.get("Set-Cookie")).toBeNull();
   });
 });
