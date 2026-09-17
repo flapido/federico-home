@@ -4,6 +4,10 @@ import { analyticsClientEnabled } from "../lib/analytics";
 const CACHE_KEY = "fh:visit-counter:last-known";
 const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
+function isVisitCounterEnabled() {
+  return import.meta.env.VITE_ENABLE_VISIT_COUNTER === "true";
+}
+
 function readCache(): number | null {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
@@ -29,8 +33,9 @@ function clearCache() {
 
 export default function VisitCounter() {
   const [total, setTotal] = useState<number | null>(null);
+  const enabled = isVisitCounterEnabled();
   useEffect(() => {
-    if (!analyticsClientEnabled()) return;
+    if (!enabled || !analyticsClientEnabled()) return;
     let active = true;
     let loadAttempted = false;
     const load = () => {
@@ -61,7 +66,7 @@ export default function VisitCounter() {
     };
     load();
     return () => { active = false; };
-  }, []);
-  if (!total) return null;
+  }, [enabled]);
+  if (!enabled || !total) return null;
   return <p className="mt-3 max-w-[34ch] text-[11px] leading-relaxed text-stone">Gracias por pasar por acá. Sos la visita Nº {new Intl.NumberFormat("es-AR").format(total)}.</p>;
 }

@@ -9,6 +9,6 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/test/setup.ts',
-    exclude: ['**/consola-playwright.test.ts'],
+    exclude: ['**/node_modules/**', '**/consola-playwright.test.ts'],
   },
 } as any)

@@ -267,4 +267,13 @@ V2-RWD-01 · Rutas clave no presentan overflow horizontal en viewport móvil · 
 V2-RENDER-01 · Matriz Playwright 10 viewports × 8 rutas sin errores propios de consola · PASS · 2026-08-25
 V2-PRIV-01 · Bundle no expone secretos, teléfonos ni dominios placeholder · PASS · 2026-08-25
 
+# VISIT-COUNTER-PAUSE-2026-09-17
+
+VC-01 · `VITE_ENABLE_VISIT_COUNTER=false` oculta el contador público y genera 0 solicitudes a `/api/analytics/visit-counter` · PASS · 2026-09-17
+VC-02 · `VITE_ENABLE_VISIT_COUNTER=true` restaura el fetch único, el render y la caché existentes · PASS · 2026-09-17
+VC-03 · Con el contador deshabilitado, el footer conserva navegación, contacto y contenido profesional · PASS · 2026-09-17
+VC-04 · El registro de eventos analytics conserva sus llamadas y exclusiones existentes · PASS · 2026-09-17
+
+Los escenarios históricos AN-02 y AN-08 quedan cubiertos por esta sección para el comportamiento actual; el endpoint y la materialización se conservan sin cambios.
+
 Los escenarios V1 anteriores se conservan como historial de baseline; esta sección contiene únicamente comportamientos V2 realmente ejecutados en la reanudación.
