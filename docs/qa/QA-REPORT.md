@@ -63,3 +63,44 @@ Recheck 2026-08-26: poster/fallback actualizado a `public/fotos/federico-about.j
 - La sesión LinkedIn viva no fue consultada: LinkedIn bloquea HTTP con 999 y no hay Browser/Chrome autenticado conectado.
 - No se hicieron cambios, publicaciones ni mensajes en LinkedIn.
 - `DIAGNOSTICO.md` es un archivo no rastreado preexistente y queda fuera del bundle y del alcance modificado.
+
+---
+
+## Revisión de release readiness — foto de perfil (2026-09-25)
+
+Alcance estricto: único cambio de producto local en `public/fotos/federico-profile.jpg`. Los archivos de CV y el resto del sitio permanecen en `HEAD`.
+
+### Resultado
+
+**PRODUCT_QUALITY_GATE: PASS** para el cambio de foto de perfil.
+
+### Automatizado
+
+| Comando | Resultado |
+|---|---|
+| `npm run lint` | PASS — 4 advertencias preexistentes, sin errores. |
+| `npm test` | PASS — 16 archivos, 75 tests. |
+| `npm run build` | PASS — `tsc -b && vite build` completado. |
+
+### QA funcional y de recursos
+
+- `GET /` y `GET /cv`: HTTP 200 en servidor local.
+- `/fotos/federico-profile.jpg`: cargó correctamente en Inicio y CV (`complete=true`, `naturalWidth=1122`, `naturalHeight=1402`).
+- No hubo `requestfailed` para recursos locales; el único recurso externo observado fue Google Fonts.
+
+### QA visual responsive
+
+Evidencia Playwright real externa, sobre el mismo working tree y servidor local, inspeccionada manualmente:
+
+| Ruta | Desktop | Tablet | Móvil | Resultado |
+|---|---|---|---|---|
+| `/` | `home-desktop.png` | `home-tablet.png` | `home-mobile.png` | PASS |
+| `/cv` | `cv-desktop.png` | `cv-tablet.png` | `cv-mobile.png` | PASS |
+
+Capturas: `C:\\Dev\\Projects\\.company-workspace\\{home,cv}-{desktop,tablet,mobile}.png`.
+
+La foto profesional se muestra correctamente en ambos usos existentes. No se observaron overflow, recortes rotos, solapamientos ni regresiones de layout en las seis capturas.
+
+### Límites de release
+
+PQG es PASS. No se realizó commit, push, deploy ni release; esos pasos requieren autorización independiente.
